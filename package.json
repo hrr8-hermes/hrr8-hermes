@@ -1,0 +1,22 @@
+{
+  "name": "raucous-running-and-rampaging-robot-racer-rally",
+  "version": "1.0.0",
+  "description": "A fast-paced many-explosion robot racer game.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrr8-hermes/hrr8-hermes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hrr8-hermes/hrr8-hermes/issues"
+  },
+  "homepage": "https://github.com/hrr8-hermes/hrr8-hermes#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
