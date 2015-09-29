@@ -7,6 +7,7 @@ function Game(id, io, map) {
   this.map = map;
   this.players = [];
   this.io = io;
+  this.maxPlayers = 8;
 };
 
 //Adds a Player to the Game with there socket id.
