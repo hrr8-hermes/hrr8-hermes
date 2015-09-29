@@ -21,9 +21,16 @@ loadMap('server/assets/testImage.png');
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
 
+
   //Eventually decided what game to put them into
   //For now add to first game
   game.addPlayer(socket.id);
+
+  //Use this id to get id for player game id
+  var gameId = game.id;
+
+
+
 
   //Gets the recently added player from game object
   var p = game.getPlayer(socket.id);
@@ -41,16 +48,16 @@ io.on('connection', function(socket) {
   });
   //When a client collides with wall confirm with server.
   socket.on('possibleWallCollision', function(data) {
-    getGame(data.gid).checkWallCollision(data);
+    getGame(gameId).checkWallCollision(data);
   });
 
   //Handle when a player disconnects from server
   socket.on('disconnect', function() {
-    getGameBySocketId(socket.id).removePlayer(socket.id);
+    getGame(gameId).removePlayer(socket.id);
   });
   //When someone colides with a player on client check if it really happened with truthy people
   socket.on('collision', function(data) {
-    getGame(data.player1.gid).collision(data);
+    getGame(gameId).collision(data);
 
   });
 });
