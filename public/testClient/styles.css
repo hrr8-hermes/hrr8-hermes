@@ -1,0 +1,19 @@
+.square {
+  width: 2px;
+  height: 2px;
+/*  border: solid blue;*/
+  background-color: green;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+}
+
+canvas {
+  background: transparent;
+}
+/*.wrap {
+  height: 100%;
+  overflow: hidden;
+}*/
