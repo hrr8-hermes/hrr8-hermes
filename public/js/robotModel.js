@@ -3,7 +3,7 @@ states.running = new Running();
 // states.death = new Death(); 
 // states.outOfEnergy = new outOfEnergy(); 
 
-function Robot(id, pos,mesh,skeleton) {
+function Robot(id,pos,mesh,skeleton) {
 
   this.id = id;
   this.accelerationForward = 1; //in seconds
@@ -48,13 +48,6 @@ Robot.prototype.stopRunning = function(){
   this.isRunning = false;
 };
 
-// bob = new Robot();
-// bob.setState(states.running);
-// sam.enterState(states.running);  
-
-//renderLoop
-// bob.update
-
 function Running(){
   this.isRunning = false; 
   this.isBoosting = false; 
@@ -63,10 +56,10 @@ function Running(){
 Running.prototype._input = function(inputObj){
   var x = 0;
   var z = 0;  
-  x+=inputObj.X_PLUS; 
-  x-=inputObj.X_MINUS; 
-  z+=inputObj.Z_PLUS * 1;
-  z-=inputObj.Z_MINUS * 0.6; 
+  x+=inputObj.RIGHT; 
+  x-=inputObj.LEFT; 
+  z+=inputObj.FORWARD * 1;
+  z-=inputObj.BACK * 0.6; 
   var currentInput = []; 
   currentInput[0] = new BABYLON.Vector3(z*-1,0,0); 
   currentInput[1] = x; 
@@ -103,7 +96,6 @@ Running.prototype._runCheck = function(robot){
 Running.prototype.update = function(robot,inputObj){
   var parsedInput = this._input(inputObj); 
   this.run(robot, parsedInput); 
-  //robot.pivot.lookAt(robot.pivot.position.add(robot.velocity), 0, 0, 0);
 };
 
 Running.prototype.enterState = function() {
@@ -114,6 +106,3 @@ Running.prototype.exitState = function() {
 
 };
 
-//render loop
-  //robot.input(inputObj)
-  //robot.update()
