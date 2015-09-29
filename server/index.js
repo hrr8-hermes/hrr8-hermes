@@ -21,10 +21,13 @@ loadMap('server/assets/testImage.png');
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
 
-
-  //Eventually decided what game to put them into
-  //For now add to first game
-  game.addPlayer(socket.id);
+  //Set the player to the first open game.
+  for(var i = 0; i < games.length; i++) {
+   if(games[i].maxPlayers > games[i].players.length) {
+      games[i].addPlayer(socket.id);
+      break;
+   } 
+  }
 
   //Use this id to get id for player game id
   var gameId = game.id;
