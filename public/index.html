@@ -2,7 +2,9 @@
 <html>
 <head>
 <title>robot playgrond</title>
+<script src="/socket.io/socket.io.js"></script>
 <script src="js/external/babylon.2.2.js"></script>
+<script src="js/loader.js"></script>
 <script src="js/robotModel.js"></script>
 <script type="text/javascript">
 </script>
@@ -24,6 +26,11 @@ html,body {
 <body>
 <canvas id="renderCanvas"></canvas>
 <script>
+var socket = io();
+socket.on('connection', function() {
+  console.log('Connected');
+});
+
 var USER_INPUT = {};
 USER_INPUT['FORWARD'] = 0;
 USER_INPUT['BACK'] = 0;
@@ -44,6 +51,7 @@ window.addEventListener('keydown', function(e) {
       USER_INPUT['BACK'] = 1;
       break;
     }
+  //socket.emit('move',USER_INPUT);
 });
 window.addEventListener('keyup', function(e) {
   switch (e.keyCode) {
@@ -60,56 +68,40 @@ window.addEventListener('keyup', function(e) {
       USER_INPUT['BACK'] = 0;
       break;
     }
+  //socket.emit('move',USER_INPUT);
 });
 
+// BABYLON setup
 var canvas = document.getElementById('renderCanvas');
 var engine = new BABYLON.Engine(canvas,true);
 var scene = new BABYLON.Scene(engine);
 
-var robotMesh;
-var groundMat = new BABYLON.StandardMaterial('groundmat', scene);
-groundMat.alpha = 1;
-groundMat.backFaceCulling = true;
-groundMat.specularPower = 64;
-groundMat.useSpecularOverAlpha = true;
-groundMat.useAlphaFromDiffuseTexture = false;
-groundMat.diffuseColor = new BABYLON.Color3(1.00, 1.00, 1.00);
-groundMat_diffuseTexture = new BABYLON.Texture('Assets/seamless_ground_texture.jpg', scene);
-groundMat_diffuseTexture.uScale = 0.1;
-groundMat_diffuseTexture.vScale = 0.1;
-groundMat_diffuseTexture.coordinatesMode = 0;
-groundMat_diffuseTexture.uOffset = 0;
-groundMat_diffuseTexture.vOffset = 0;
-groundMat_diffuseTexture.uAng = 0;
-groundMat_diffuseTexture.vAng = 0;
-groundMat_diffuseTexture.level = 1;
-groundMat_diffuseTexture.coordinatesIndex = 0;
-groundMat_diffuseTexture.hasAlpha = false;
-groundMat_diffuseTexture.getAlphaFromRGB = false;
+// files to load
+var assets = [
+{ 'name' : 'Skitter',
+    'file' : 'Assets/enemy@idleRun.babylon' },
+{ 'name' : 'Plane001',
+    'file' : "Assets/testEnv.babylon" },
+{ 'name' : 'Cylinder014',
+    'file' : 'Assets/testEnv.babylon' }
+];
 
-groundMat.diffuseTexture = groundMat_diffuseTexture;
+// preload assets
+loadAssets(assets,0.02,scene,false,readyGo);
 
-BABYLON.SceneLoader.ImportMesh('','Assets/','testEnv.babylon', scene, function(envMeshes) {
-  envMeshes[0].material = groundMat;
-  envMeshes[1].position = new BABYLON.Vector3(200,0,0);
-  for(var i = 0; i < envMeshes.length; i++){
-    envMeshes[i].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
-    envMeshes[i].receiveShadows = true;
-  }
+// set scene and begin render loop
+function readyGo(meshes) {
+  var bob = new Robot(0,new BABYLON.Vector3(0,2,0),meshes['Skitter'],meshes['Skitter'].skeleton);
 
-  BABYLON.SceneLoader.ImportMesh("Skitter", "Assets/", "enemy@idleRun.babylon", scene, function (newMeshes, particleSystems, skeletons) {
-    robotMesh = newMeshes[0];
-    robotMesh.scaling = new BABYLON.Vector3(0.02,0.02,0.02);
-    robotMesh.position = new BABYLON.Vector3(0,0,0); 
-    robotMesh.setEnabled(false);
-
-    readyGo();
-  });
-
-});
-
-function readyGo() {
-  var bob = new Robot(0,new BABYLON.Vector3(0,2,0),robotMesh,robotMesh.skeleton);
+  // ground
+  meshes['Plane001'].setEnabled(true);
+  meshes['Plane001'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+  meshes['Plane001'].material.diffuseTexture.uScale = 0.1;
+  meshes['Plane001'].material.diffuseTexture.vScale = 0.1;
+  // columns
+  meshes['Cylinder014'].setEnabled(true);
+  meshes['Cylinder014'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+  meshes['Cylinder014'].position = new BABYLON.Vector3(200,0,-70);
 
   var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.setTarget(BABYLON.Vector3.Zero());
@@ -128,7 +120,7 @@ function readyGo() {
   light.specular = new BABYLON.Color3(1,1,1);
   light.groundColor = new BABYLON.Color3(0.4,0.4,0.4);
 
-  var light3 = new BABYLON.SpotLight('light2', new BABYLON.Vector3(0,12,1), new BABYLON.Vector3(0,0,-0.9), 0.7,1, scene);
+  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,5,-10), new BABYLON.Vector3(0,0,0.9), 0.7,1, scene);
   light3.diffuse = new BABYLON.Color3(1,1,1);
   light3.specular = new BABYLON.Color3(1,1,1);
 
@@ -138,14 +130,17 @@ function readyGo() {
   shadowG2.getShadowMap().renderList.push(bob.mesh);
 
   engine.runRenderLoop(function() {
-    //build inputObject
-
     bob.update(USER_INPUT); 
     scene.render();
   });
+  
   window.addEventListener('resize', function() {
     engine.resize();
   });
+
+  // additional listeners for debugging
+  // use 'f' to switch between follow & chase cam
+  // use 'p' to toggle debug layer
   var switchcam = false;
   var switchdebug = true;
   window.addEventListener('keydown', function(e) {
