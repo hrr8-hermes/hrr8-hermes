@@ -2,7 +2,7 @@
   "name": "raucous-running-and-rampaging-robot-racer-rally",
   "version": "1.0.0",
   "description": "A fast-paced many-explosion robot racer game.",
-  "main": "index.js",
+  "main": "./Server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
