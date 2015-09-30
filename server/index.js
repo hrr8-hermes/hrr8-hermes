@@ -16,17 +16,17 @@ var pixelData = [];
 var testingGrid;
 
 //Load a map for the game
-loadMap('server/assets/testImage.png');
+loadMap('server/assets/converted_aa6c49df_converted.png');
 
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
 
   //Set the player to the first open game.
   for(var i = 0; i < games.length; i++) {
-   if(games[i].maxPlayers > games[i].players.length) {
+    if(games[i].maxPlayers > games[i].players.length) {
       games[i].addPlayer(socket.id);
       break;
-   } 
+    } 
   }
 
   //Use this id to get id for player game id
@@ -61,6 +61,8 @@ io.on('connection', function(socket) {
   //Handle when a player disconnects from server
   socket.on('disconnect', function() {
     getGame(gameId).removePlayer(socket.id);
+    //Tell all other players that he is doconnected
+    io.sockets.emit('playerDisconnected', p);
   });
   //When someone colides with a player on client check if it really happened with truthy people
   socket.on('collision', function(data) {
@@ -116,12 +118,30 @@ function processImageIntoBitArray(imageDataArray, width, height) {
       }
       bitArrayGrid.push(row);  
     }
+    console.log(findWhiteZone(bitArrayGrid));
     console.log(bitArrayGrid.length);
+    console.log(bitArrayGrid[1].length);
     console.log(bitArrayGrid[0].length === bitArrayGrid[3].length);
     //set the map grid the client will check collisions against
     testingGrid = bitArrayGrid;
     return bitArrayGrid;
 }
+
+function findWhiteZone(grid) {
+  var count = 0;
+  var breaking = false;
+  for (var i = 0; i < grid.length; i++) {
+    for (var j = 0; j < grid.length; j++) {
+      if (grid[i][j] === 1) {
+        count++;
+        breaking = (count > 10); 
+        if (breaking) break;
+      }  
+    }
+    if (breaking) break;
+  } 
+  return [i, j];
+}  
 
 //Return a game by id
 function getGame(id) {

@@ -30,7 +30,7 @@ Game.prototype.addPlayer = function(id1) {
     socketId: id1,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, id1, new Vector3(0,2,0))
+    robotModel: new Robot(this.delta, id1, new Vector3(-447,2,-490))
   });
 }; 
 
@@ -126,13 +126,13 @@ Game.prototype.createUpdateLoop = function() {
     self.players.forEach(function(player) {
       player.robotModel.update(player.input);
       if (player.robotModel.hasWallCollision(self.map)) {
+        var collideCount = 0;
+        console.log('colliding in game', ++collideCount);
         player.robotModel.handleWallCollision();
       }
     });
     self.io.sockets.emit("positions",self.players);
   },this.updatePerSec);
-
-
 
 };
 

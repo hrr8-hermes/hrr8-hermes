@@ -18,7 +18,7 @@ function Robot(delta,id,pos) {
 //  this._buildRobot(mesh, skeleton);   (took these args out of function, only used for graphics)
 
   this.position = pos; 
-  this.lastPosition = new Vector3(0, 2, 0);
+  this.lastPosition = new Vector3(-447, 2, -490);
   this.setState(states.running); //initial state
   //make mesh, set position
   this.isRunning = false; 
@@ -27,27 +27,33 @@ function Robot(delta,id,pos) {
 Robot.prototype.hasWallCollision = function(map) {
   //compensate for the fact that 0,0 is the center of the 3d map,  
   //but is upper left of the 2d map
+  //console.log('3d x: ', this.position.x);
+  //console.log('3d y: ', this.position.z);
 
-  var xOnGrid = this.position.x + map.width / 2;
-  var yOnGrid = this.position.z + map.height / 2;
-
+  var xOnGrid = Math.round(this.position.x + map.width / 2);
+  var yOnGrid = Math.round(this.position.z + map.height / 2);
+  //console.log('xOnGrid', xOnGrid);
+  //console.log('yOnGrid', yOnGrid);
   //0 means a black pixel (wall) 
   //commented out for now - crashes server because 3d and 2d maps 
   //are not the same (tries to access outside bounds of array)
+  
   //return map.grid[yOnGrid][xOnGrid] === 0;
 };
 
 Robot.prototype.handlePlayerCollision = function() {
-  this.position.x = this.lastPosition.x;
-  this.position.z = this.lastPosition.z;
+
+  //this.position.x = this.lastPosition.x;
+  //this.position.z = this.lastPosition.z;
 };
 
 Robot.prototype.handleWallCollision = function() {
+    console.log('colliding');
   //stop movement, stop running, move back to previous position
-  this.velocity = 0;
-  this.stopRunning();
-  this.position.x = this.lastPosition.x;
-  this.position.z = this.lastPosition.z;
+  // this.velocity = 0;
+  // this.stopRunning();
+  // this.position.x = this.lastPosition.x;
+  // this.position.z = this.lastPosition.z;
 };
 
 Robot.prototype.update = function(input) {

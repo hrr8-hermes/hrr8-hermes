@@ -12,10 +12,12 @@ window.ASSETS = [
   { 'name' : 'Skitter',
     'file' : 'Assets/enemy@idleRun.babylon' },
 
-  { 'name' : 'Plane001',
-    'file' : "Assets/testEnv.babylon" },
+  // { 'name' : 'Plane001',
+  //   'file' : "Assets/testEnv.babylon" },
 
-  { 'name' : 'Cylinder014',
-    'file' : 'Assets/testEnv.babylon' }
+  // { 'name' : 'Cylinder014',
+  //   'file' : 'Assets/testEnv.babylon' }
+  { 'name' : '',
+    'file' : 'assets/course_1_star.babylon'}
 
 ];
