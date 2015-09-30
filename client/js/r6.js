@@ -113,7 +113,7 @@ function runScene(meshes) {
     }
   });
   //Connect to server once the scene is loaded to not miss any events
-  var socket = io();
+  window.socket = socket = io();
   socket.on('connect', function() {
     console.log('Connected');
   });
