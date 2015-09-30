@@ -61,6 +61,8 @@ io.on('connection', function(socket) {
   //Handle when a player disconnects from server
   socket.on('disconnect', function() {
     getGame(gameId).removePlayer(socket.id);
+    //Tell all other players that he is doconnected
+    io.sockets.emit('playerDisconnected', p);
   });
   //When someone colides with a player on client check if it really happened with truthy people
   socket.on('collision', function(data) {

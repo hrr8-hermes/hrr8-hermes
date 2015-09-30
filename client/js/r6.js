@@ -145,4 +145,11 @@ function runScene(meshes) {
       players[player.socketId] = set;
     }
   });
+  //Removes the player from game when he disconnects
+  socket.on('playerDisconnected', function(player) {
+    if(players[player.socketId]) {
+      players[player.socketId].pivot.dispose();
+      delete players[player.socketId];
+    }
+  })
 }
