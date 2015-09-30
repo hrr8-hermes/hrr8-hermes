@@ -5,7 +5,9 @@
  */
 
 function runScene(meshes) {
+  var players = {};
   var bob = new Robot(0,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+
 
   // ground
   meshes['Plane001'].setEnabled(true);
@@ -78,7 +80,7 @@ function runScene(meshes) {
   engine.runRenderLoop(function() {
     // keeps the spot at camera's location
     light3.position = camera.position;
-    bob.update(USER_INPUT); 
+    //bob.update(USER_INPUT); 
     scene.render();
   });
   
@@ -108,6 +110,38 @@ function runScene(meshes) {
         scene.debugLayer.hide();
       }
       switchdebug = !switchdebug;
+    }
+  });
+
+
+  socket.on('positions', function(data) {
+
+    data.forEach(function(serverPlayer) {
+      if(players[serverPlayer.socketId]) {
+        players[serverPlayer.socketId].update(serverPlayer);
+      }
+    });
+    // console.log(data)
+    // bob.update(data); 
+  });
+  //a new player has connected
+  socket.on('playerConnected', function(playerData) {
+    var set = new Robot(playerData.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+    players[playerData.socketId] = set;
+  });
+  
+  socket.on('connected', function(data) {
+    //Retuns a array of connected players
+    for(var i = 0; i < data.length; i++) {
+      var player = data[i];
+      var set;
+      if(player.socketId === socket.id) {
+        bob.id = socket.id;
+        set = bob;
+      } else {
+        set = new Robot(player.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+      }
+      players[player.socketId] = set;
     }
   });
 }

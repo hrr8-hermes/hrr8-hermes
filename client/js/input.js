@@ -41,7 +41,7 @@ window.addEventListener('keydown', function(e) {
       USER_INPUT['BACK'] = 1;
       break;
     }
-  //socket.emit('move',USER_INPUT);
+  socket.emit('movementInput',USER_INPUT);
 });
 window.addEventListener('keyup', function(e) {
   switch (e.keyCode) {
@@ -58,5 +58,5 @@ window.addEventListener('keyup', function(e) {
       USER_INPUT['BACK'] = 0;
       break;
     }
-  //socket.emit('move',USER_INPUT);
+  socket.emit('movementInput',USER_INPUT);
 });
