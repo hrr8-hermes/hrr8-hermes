@@ -4,7 +4,7 @@
   "description": "A fast-paced many-explosion robot racer game.",
   "main": "./Server/server.js",
   "scripts": {
-    "clean": "mkdir public;rimraf public/*; mkdir public/js",
+    "clean": "rimraf public;mkdir public;mkdir public/js",
     "js-min": "uglifyjs public/*.js -o public/js/r6.js; rimraf public/*.js",
     "watch": "watch \"node preprocess.js debug\" client -d",
     "serve": "nodemon --watch server server/index.js",
