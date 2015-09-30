@@ -11,8 +11,8 @@ function Robot(delta,id,pos) {
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.4; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
-  this.turnSpeed = 1; // rotation per second (~6.28 is a 360 degrees per second)
-  this.maxSpeed = 10; //clamps the magnidue of speed vector
+  this.turnSpeed = .5; // rotation per second (~6.28 is a 360 degrees per second)
+  this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
 //  this._buildRobot(mesh, skeleton);   (took these args out of function, only used for graphics)
@@ -72,12 +72,15 @@ Running.prototype.run = function(robot, parsedInput) {
   var currentAccl;
   if (parsedInput[0] === 0) {
     robot.velocity -= robot.velocity * robot.speedDecay * robot.delta.deltaValue / 1000;
-    if (robot.velocity < 0.1) {
+    if (robot.velocity < 0.05) {
       robot.velocity = 0; 
     }
   } else {
     currentAccl = parsedInput[0] * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
+    if(robot.velocity >= robot.maxSpeed) {
+      robot.velocity = robot.maxSpeed;
+    }
   }
   this._runCheck(robot); 
   //robot.position.addInPlace(robot.velocity); //position = position + velocity;
