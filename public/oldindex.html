@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>r6</title>
+
+<!-- External libraries -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/external/babylon.2.2.js"></script>
+
+<!-- Internal files (w/ description, see file for more info) -->
+<!-- Loading wrapper around Babylon's ImportMesh -->
+<script src="js/loader.js"></script>
+<!-- player (robot) object model -->
+<script src="js/robotModel.js"></script>
+
+<!-- register USER_INPUT array and listeners -->
+<script src="js/input.js"></script>
+<!-- sets ASSETS array and ASSET_SCALE float -->
+<script src="js/assets.js"></script>
+<!-- contains game scene set and render loop -->
+<script src="js/r6.js"></script>
+
+<script type="text/javascript">
+</script>
+<style>
+html,body {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#renderCanvas {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+</style>
+</head>
+<body>
+<canvas id="renderCanvas"></canvas>
+<script>
+<<<<<<< HEAD
+var socket = io();
+socket.on('connection', function() {
+  console.log('connected');
+});
+var USER_INPUT = {};
+USER_INPUT['FORWARD'] = 0;
+USER_INPUT['BACK'] = 0;
+USER_INPUT['RIGHT'] = 0;
+USER_INPUT['LEFT'] = 0;
+window.addEventListener('keydown', function(e) {
+  switch (e.keyCode) {
+    case 87:
+      USER_INPUT['FORWARD'] = 1;
+      break;
+    case 65:
+      USER_INPUT['LEFT'] = 1;
+      break;
+    case 68:
+      USER_INPUT['RIGHT'] = 1;
+      break;
+    case 83:
+      USER_INPUT['BACK'] = 1;
+      break;
+  }
+  socket.emit('movementInput', USER_INPUT);
+});
+window.addEventListener('keyup', function(e) {
+  switch (e.keyCode) {
+    case 87:
+      USER_INPUT['FORWARD'] = 0;
+      break;
+    case 65:
+      USER_INPUT['LEFT'] = 0;
+      break;
+    case 68:
+      USER_INPUT['RIGHT'] = 0;
+      break;
+    case 83:
+      USER_INPUT['BACK'] = 0;
+      break;
+  }
+  socket.emit('movementInput', USER_INPUT);
+=======
+// connect to server
+var socket = io();
+socket.on('connect', function() {
+  console.log('Connected');
+>>>>>>> 799d927f13501183b29e273f42112d9ece0375d9
+});
+
+// BABYLON setup
+var canvas = document.getElementById('renderCanvas');
+var engine = new BABYLON.Engine(canvas,true);
+var scene = new BABYLON.Scene(engine);
+
+// preload assets, finish setup, begin render loop
+loadAssets(ASSETS, ASSET_SCALE, scene, false, runScene);
+
+</script>
+</body>
+</html>

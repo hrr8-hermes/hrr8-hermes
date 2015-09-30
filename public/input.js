@@ -19,44 +19,37 @@ window.USER_INPUT = {
 
 };
 
-/*
-USER_INPUT['FORWARD'] = 0;
-USER_INPUT['BACK'] = 0;
-USER_INPUT['RIGHT'] = 0;
-USER_INPUT['LEFT'] = 0;
-*/
-
 window.addEventListener('keydown', function(e) {
   switch (e.keyCode) {
-    case 87:
-      USER_INPUT['FORWARD'] = 1;
+    case 87: // W
+      USER_INPUT.FORWARD = 1;
       break;
-    case 65:
-      USER_INPUT['LEFT'] = 1;
+    case 65: // A
+      USER_INPUT.LEFT = 1;
       break;
-    case 68:
-      USER_INPUT['RIGHT'] = 1;
+    case 68: // D
+      USER_INPUT.RIGHT = 1;
       break;
-    case 83:
-      USER_INPUT['BACK'] = 1;
+    case 83: // S
+      USER_INPUT.BACK = 1;
       break;
     }
-  socket.emit('movementInput',USER_INPUT);
+  socket.emit('movementInput', USER_INPUT);
 });
 window.addEventListener('keyup', function(e) {
   switch (e.keyCode) {
-    case 87:
-      USER_INPUT['FORWARD'] = 0;
+    case 87: // W
+      USER_INPUT.FORWARD = 0;
       break;
-    case 65:
-      USER_INPUT['LEFT'] = 0;
+    case 65: // A
+      USER_INPUT.LEFT = 0;
       break;
-    case 68:
-      USER_INPUT['RIGHT'] = 0;
+    case 68: // D
+      USER_INPUT.RIGHT = 0;
       break;
-    case 83:
-      USER_INPUT['BACK'] = 0;
+    case 83: // S
+      USER_INPUT.BACK = 0;
       break;
     }
-  socket.emit('movementInput',USER_INPUT);
+  socket.emit('movementInput', USER_INPUT);
 });

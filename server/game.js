@@ -2,18 +2,34 @@
 //ID of game
 //Io for socket.io
 //Map bitmap of game
+var Robot = require('./serverRobotModel.js');
+var Vector3 = require('./Vector3.js');
+
 function Game(id, io, map) {
+  console.log(this);
   this.id = id;
   this.map = map;
   this.players = [];
   this.io = io;
+  this.updatePerSec = 10;
+  this.createUpdateLoop();
+  //Mill Seconds
+
+  this.delta = {deltaValue: 0};
+
   this.maxPlayers = 8;
 };
 
-//Adds a Player to the Game with there socket id.
+//Adds a Player to the Game with their socket id.
 //Init position is 0,0
 Game.prototype.addPlayer = function(id1) {
-  this.players.push({gid: this.id, socketId: id1,x: 0, y: 0});
+  this.players.push({input: {'FORWARD': 0, 'BACK': 0, 'RIGHT': 0, 'LEFT': 0}, 
+    gid: this.id, 
+    socketId: id1,
+    x: 0, 
+    y: 0, 
+    robotModel: new Robot(this.delta, id1, new Vector3(0,2,0))
+  });
 }; 
 
 //Returning the truthy player from socket id
@@ -43,17 +59,17 @@ Game.prototype.getIndex = function(player) {
     if(p1 === player) {
       result = index;
     }
-  })
+  });
   return result;
 };
 
 //A move happened in this game
 //Updated there truthy player
 Game.prototype.move = function(data) {
-  var p1 = this.getPlayer(data.square.socketId);
-  p1.x += data.moveTo[0];
-  p1.y += data.moveTo[1];
-  this.io.sockets.emit('move', p1);
+  // var p1 = this.getPlayer(data.square.socketId);
+  // p1.x += data.moveTo[0];
+  // p1.y += data.moveTo[1];
+  // this.io.sockets.emit('move', p1.robotModel.positionData);
   //this.checkWallCollision([data.x, data.y, p1.socketId]); 
   
 };
@@ -90,4 +106,26 @@ Game.prototype.checkWallCollision = function(player) {
     this.io.to(socketId).emit("falseWallCollision", serverPlayerData);
   }
 };
+
+Game.prototype.parseInput = function(inputObj, socketId) {
+  var p = this.getPlayer(socketId);
+  p.input = inputObj;
+  
+};
+
+Game.prototype.createUpdateLoop = function() {
+  var self = this;
+  var last = new Date().getTime();
+  setInterval(function() {
+    var current = new Date().getTime();
+    self.delta.deltaValue = current - last;
+    last = current;
+    self.players.forEach(function(player) {
+      player.robotModel.update(player.input);
+    });
+    self.io.sockets.emit("positions",self.players);
+  },this.updatePerSec);
+};
+
+
 module.exports = Game;
