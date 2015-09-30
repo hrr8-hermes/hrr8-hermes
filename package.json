@@ -4,7 +4,7 @@
   "description": "A fast-paced many-explosion robot racer game.",
   "main": "index.js",
   "scripts": {
-    "clean": "rimraf public/*; mkdir public/js",
+    "clean": "mkdir public;rimraf public/*; mkdir public/js",
     "js-min": "uglifyjs public/*.js -o public/js/r6.js; rimraf public/*.js",
     "watch": "watch \"node preprocess.js debug\" client -d",
     "serve": "nodemon --watch server server/index.js",
@@ -15,6 +15,7 @@
     "dev": "npm run build:dev && npm run serve & npm run watch & npm run livereload",
     "prebuild": "npm run clean -s",
     "build": "npm run preprocess -s && npm run js-min -s",
+    "prebuild:dev": "npm run clean -s",
     "build:dev": "npm run preprocess:debug -s"
   },
   "repository": {
