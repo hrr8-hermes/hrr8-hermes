@@ -12,7 +12,7 @@
     "preprocess:debug": "node preprocess.js debug",
     "livereload": "live-reload --port 3001 public/",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run build:dev && npm run serve & npm run watch & npm run livereload",
+    "dev": "npm run build:dev && parallelshell \"npm run serve\" \" npm run watch\" \"npm run livereload\"",
     "prebuild": "npm run clean -s",
     "build": "npm run preprocess -s && npm run js-min -s",
     "prebuild:dev": "npm run clean -s",
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "nodemon": "^1.7.1",
+    "parallelshell": "^2.0.0",
     "preprocess": "^3.0.2",
     "rimraf": "^2.4.3",
     "uglify-js": "^2.4.24",
