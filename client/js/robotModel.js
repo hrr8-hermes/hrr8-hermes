@@ -4,7 +4,6 @@ states.running = new Running();
 // states.outOfEnergy = new outOfEnergy(); 
 
 function Robot(id,pos,mesh,skeleton) {
-  console.log(socket);
   this.id = id;
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.8; //Acceleration removed per second
@@ -54,7 +53,6 @@ function Running(){
 }
 
 Running.prototype._input = function(serverData){
-  console.log(serverData)
   var parsed = {}; 
   parsed.position =  new BABYLON.Vector3(serverData.robotModel.position.x, 0.3, serverData.robotModel.position.z);
   parsed.rotation = new BABYLON.Vector3(0, serverData.robotModel.facing * 2  * Math.PI + Math.PI * 0.5, 0);
