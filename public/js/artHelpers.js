@@ -1,3 +1,4 @@
+<<<<<<< 0f00cb39b0fd638b37cc47d7be381601994209dc
 var modUpdateFunction = function (particles) {
     for (var index = 0; index < particles.length; index++) {
         var particle = particles[index];

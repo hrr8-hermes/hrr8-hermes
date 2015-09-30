@@ -33,13 +33,17 @@ io.on('connection', function(socket) {
   var gameId = game.id;
 
 
-
-
+  socket.on('movementInput', function(inputObj) {
+    getGame(gameId).parseInput(inputObj, socket.id);
+  }); 
+  
   //Gets the recently added player from game object
   var p = game.getPlayer(socket.id);
   //Let all the players know about the new player
   socket.broadcast.emit("playerConnected", p);
-  socket.emit("connected", game.players);
+  setTimeout(function() {
+    socket.emit("connected", game.players);
+  }, 500);
   //send the map to the client to draw, and send the grid to check collisions against
   var objToEmit = { imageData: pixelData, imageGrid: testingGrid };
   socket.emit('map loaded', objToEmit);
@@ -47,7 +51,7 @@ io.on('connection', function(socket) {
   //When a move happens give it to the game to handle
   socket.on('move', function(data) {
     //Find game with id
-    getGame(data.square.gid).move(data);
+    getGame(gameId).move(data);
   });
   //When a client collides with wall confirm with server.
   socket.on('possibleWallCollision', function(data) {
