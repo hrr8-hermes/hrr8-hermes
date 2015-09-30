@@ -112,8 +112,11 @@ function runScene(meshes) {
       switchdebug = !switchdebug;
     }
   });
-
-
+  //Connect to server once the scene is loaded to not miss any events
+  window.socket = socket = io();
+  socket.on('connect', function() {
+    console.log('Connected');
+  });
   socket.on('positions', function(data) {
 
     data.forEach(function(serverPlayer) {
@@ -121,8 +124,6 @@ function runScene(meshes) {
         players[serverPlayer.socketId].update(serverPlayer);
       }
     });
-    // console.log(data)
-    // bob.update(data); 
   });
   //a new player has connected
   socket.on('playerConnected', function(playerData) {
