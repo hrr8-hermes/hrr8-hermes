@@ -4,10 +4,11 @@
 <title>r6</title>
 
 <!-- External libraries -->
+<!-- @if DEBUG='true' -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/external/babylon.2.2.js"></script>
 
-<!-- Internal files (w/ description, see file for more info) -->
+<!-- Internal files -->
 <!-- Loading wrapper around Babylon's ImportMesh -->
 <script src="js/loader.js"></script>
 <!-- player (robot) object model -->
@@ -19,8 +20,17 @@
 <!-- contains game scene set and render loop -->
 <script src="js/r6.js"></script>
 
-<script type="text/javascript">
-</script>
+<script src="http://localhost:3001"></script>
+<!-- @endif -->
+
+<!-- @if DEBUG='false' -->
+<script src="<!-- @echo socketCDN -->"></script>
+<script src="<!-- @echo babylonCDN -->"></script>
+
+<!-- internal -->
+<script src="js/r6.js"></script>
+<!-- @endif -->
+
 <style>
 html,body {
   overflow: hidden;
