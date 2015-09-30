@@ -76,14 +76,15 @@ function loadMap(imagePath) {
       console.log ('error finding image size:', err);
     } else {  
       png.decode(imagePath, function(pixels) {
-        //conver the pixels ArrayBuffer into an actual array to send to the client
+        //convert the pixels ArrayBuffer into an actual array to send to the client
         for (var i = 0; i < pixels.length; i++) {
           pixelData[i] = pixels[i];
         }  
         console.log(dimensions);
         var mapGrid = processImageIntoBitArray(pixels, dimensions.width, dimensions.height);
         //Setup the temp game with mapgrid and id and socket io
-        game = new Game(0, io, mapGrid);
+        var mapObj = {grid: mapGrid, width: dimensions.width, height: dimensions.height};
+        game = new Game(0, io, mapObj);
         //Add it to the list of games..
         games.push(game);
 

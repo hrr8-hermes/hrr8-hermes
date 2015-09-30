@@ -8,6 +8,8 @@ var Vector3 = require('./Vector3.js');
 function Game(id, io, map) {
   console.log(this);
   this.id = id;
+  //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
+  // width, and height (map dimensions).
   this.map = map;
   this.players = [];
   this.io = io;
@@ -94,12 +96,12 @@ Game.prototype.checkWallCollision = function(player) {
   var socketId = player.socketId;
   //console.log(bitArray);
   //var index = position[0] + (4 * position[1]);
-  if (this.map[y] === undefined || this.map[y][x] === undefined) {
+  if (this.map.grid[y] === undefined || this.map.grid[y][x] === undefined) {
     console.log('ERROR: outside course bounds');
     return;
   }
-  var wallHit = (this.map[y][x] === 0)  
-  //if (this.map[y][x] === 0) console.log('hitting wall!', wallCollisionsCount++);
+  var wallHit = (this.map.grid[y][x] === 0)  
+  //if (this.map.grid[y][x] === 0) console.log('hitting wall!', wallCollisionsCount++);
   if(wallHit) {
     this.io.to(socketId).emit("trueWallCollision", serverPlayerData);   
   } else {
@@ -114,6 +116,7 @@ Game.prototype.parseInput = function(inputObj, socketId) {
 };
 
 Game.prototype.createUpdateLoop = function() {
+  //alias for this so we don't lose context inside setInterval
   var self = this;
   var last = new Date().getTime();
   setInterval(function() {
@@ -122,9 +125,15 @@ Game.prototype.createUpdateLoop = function() {
     last = current;
     self.players.forEach(function(player) {
       player.robotModel.update(player.input);
+      if (player.robotModel.hasWallCollision(self.map)) {
+        player.robotModel.handleWallCollision();
+      }
     });
     self.io.sockets.emit("positions",self.players);
   },this.updatePerSec);
+
+
+
 };
 
 

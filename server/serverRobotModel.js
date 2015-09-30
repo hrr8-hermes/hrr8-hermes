@@ -18,19 +18,38 @@ function Robot(delta,id,pos) {
 //  this._buildRobot(mesh, skeleton);   (took these args out of function, only used for graphics)
 
   this.position = pos; 
+  this.lastPosition = new Vector3(0, 2, 0);
   this.setState(states.running); //initial state
   //make mesh, set position
   this.isRunning = false; 
 }
-// Robot.prototype._buildRobot = function(mesh, skeleton) {
-//   this.mesh = mesh.clone(this.id + '_mesh'); 
-//   this.skeleton = skeleton.clone(this.id + '_skeleton'); 
-//   this.mesh.skeleton = this.skeleton; 
-//   this.pivot =  new BABYLON.Mesh.CreateBox(this.ide + '_pivot',1,scene);
-//   this.pivot.isVisible = false; w
-//   this.mesh.parent = this.pivot; 
-//   this.mesh.position = Vector3.Zero(); 
-// };
+
+Robot.prototype.hasWallCollision = function(map) {
+  //compensate for the fact that 0,0 is the center of the 3d map,  
+  //but is upper left of the 2d map
+
+  var xOnGrid = this.position.x + map.width / 2;
+  var yOnGrid = this.position.z + map.height / 2;
+
+  //0 means a black pixel (wall) 
+  //commented out for now - crashes server because 3d and 2d maps 
+  //are not the same (tries to access outside bounds of array)
+  //return map.grid[yOnGrid][xOnGrid] === 0;
+};
+
+Robot.prototype.handlePlayerCollision = function() {
+  this.position.x = this.lastPosition.x;
+  this.position.z = this.lastPosition.z;
+};
+
+Robot.prototype.handleWallCollision = function() {
+  //stop movement, stop running, move back to previous position
+  this.velocity = 0;
+  this.stopRunning();
+  this.position.x = this.lastPosition.x;
+  this.position.z = this.lastPosition.z;
+};
+
 Robot.prototype.update = function(input) {
   this.state.update(this,input); 
 };
@@ -86,6 +105,9 @@ Running.prototype.run = function(robot, parsedInput) {
   //robot.currentRot = parsedInput[1] * robot.turnSpeed * robot.delta.deltaValue / 1000;
   robot.forwardNormX = Math.sin(robot.facing * Math.PI * 2); 
   robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2); 
+  //save previous position in case this move results in a collision
+  robot.lastPosition.x = robot.position.x;
+  robot.lastPosition.z = robot.position.z; 
   robot.position.x += robot.velocity * robot.forwardNormX;
   robot.position.z += robot.velocity * robot.forwardNormY;
 };
