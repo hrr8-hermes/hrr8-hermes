@@ -8,17 +8,24 @@ function runScene(meshes) {
   var players = {};
   var bob = new Robot(0,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
 
-
+//part of testEnv, commented out for star track
   // ground
-  meshes['Plane001'].setEnabled(true);
-  meshes['Plane001'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
-  meshes['Plane001'].material.diffuseTexture.uScale = 0.1;
-  meshes['Plane001'].material.diffuseTexture.vScale = 0.1;
-  meshes['Plane001'].material.specularColor = new BABYLON.Color3(0,0,0);
-  // columns
-  meshes['Cylinder014'].setEnabled(true);
-  meshes['Cylinder014'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
-  meshes['Cylinder014'].position = new BABYLON.Vector3(200,0,-70);
+  // meshes['Plane001'].setEnabled(true);
+
+  // meshes['ground'].setEnabled(true);
+  // meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
+  meshes['ground'].setEnabled(true);
+  meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
+  //meshes['track'].setEnabled(true);
+
+  // meshes['Plane001'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+  // meshes['Plane001'].material.diffuseTexture.uScale = 0.1;
+  // meshes['Plane001'].material.diffuseTexture.vScale = 0.1;
+  // meshes['Plane001'].material.specularColor = new BABYLON.Color3(0,0,0);
+  // // columnsw
+  // meshes['Cylinder014'].setEnabled(true);
+  // meshes['Cylinder014'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
+  // meshes['Cylinder014'].position = new BABYLON.Vector3(200,0,-70);
 
   // creates free-floating camera w/ default controls
   // click-drag to look, arrows to move, standard FP controls
@@ -155,12 +162,13 @@ function runScene(meshes) {
       }
       players[player.socketId] = set;
     }
-  });
-  //Removes the player from game when he disconnects
-  socket.on('playerDisconnected', function(player) {
+});
+
+socket.on('playerDisconnected', function(player) {
     if(players[player.socketId]) {
       players[player.socketId].pivot.dispose();
       delete players[player.socketId];
     }
-  })
+});
 }
+
