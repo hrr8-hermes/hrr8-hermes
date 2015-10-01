@@ -162,32 +162,6 @@ function runScene(meshes) {
       }
       players[player.socketId] = set;
     }
-
-    //roundabout way to process the .png
-
-    // var canvas = document.createElement('CANVAS');
-    //  canvasWidth = 512;
-    //  canvasHeight = 512;
-    //  canvas.width = canvasWidth;
-    //  canvas.height = canvasHeight;
-    //  //canvas.id = 'canvas';
-    //  canvas.style.position = 'absolute';
-    //  canvas.style.top = '0';
-    //  canvas.style.left = '0';
-    // var context = canvas.getContext('2d');
-    // var image = new Image();
-    // var imageData;
-    // console.log('about to load..');
-    // image.onload = function() {
-    //   context.drawImage(image, 0, 0);
-    //   var imageData = context.getImageData(0, 0, 512, 512); 
-    //   console.log('about to send...');
-    //   socket.emit('correct image data', imageData.data);
-    // };
-    // image.src = '../../assets/scaledCircleMap.png';
-    //document.body.appendChild(canvas);
-  //Removes the player from game when he disconnects
-  
 });
 
 socket.on('playerDisconnected', function(player) {

@@ -59,7 +59,6 @@ Robot.prototype.handlePlayerCollision = function() {
 };
 
 Robot.prototype.handleWallCollision = function() {
-    console.log('colliding');
   //stop movement, stop running, move back to previous position
    this.velocity = 0;
    this.stopRunning();

@@ -12,6 +12,7 @@ function Game(id, io, map) {
   // width, and height (map dimensions).
   this.map = map;
   this.players = [];
+  this.numPlayers = 0;
   this.io = io;
   this.createUpdateLoop();
   // setInterval(function() {
@@ -37,6 +38,7 @@ Game.prototype.addPlayer = function(id1) {
     y: 0, 
     robotModel: new Robot(this.delta, id1, new Vector3(0,2,0))
   });
+  this.numPlayers++;
 }; 
 
 //Returning the truthy player from socket id
