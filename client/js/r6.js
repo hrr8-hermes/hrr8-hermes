@@ -132,12 +132,13 @@ function runScene(meshes) {
     console.log('Connected');
   });
   var applyPositions = function(){
-    if(window.positions){
-      window.positions.forEach(function(serverPlayer) {
-        if(players[serverPlayer.socketId]) {
-          players[serverPlayer.socketId].update(serverPlayer);
+    if(window.positions) {
+      for (var serverPlayerId in window.positions) {
+        if (players[serverPlayerId]) {
+          var serverPlayer = window.positions[serverPlayerId];
+          players[serverPlayerId].update(serverPlayer);
         }
-      });
+      }
     }
   };
   socket.on('positions', function(data) {
@@ -150,25 +151,25 @@ function runScene(meshes) {
   });
   
   socket.on('connected', function(data) {
-    //Retuns a array of connected players
-    for(var i = 0; i < data.length; i++) {
-      var player = data[i];
+    //receives a object of connected players
+    for (var playerId in data) {
+      var player = data[playerId];
       var set;
       if(player.socketId === socket.id) {
         bob.id = socket.id;
         set = bob;
       } else {
         set = new Robot(player.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
-      }
+      }  
       players[player.socketId] = set;
     }
-});
+  });
 
-socket.on('playerDisconnected', function(player) {
-    if(players[player.socketId]) {
-      players[player.socketId].pivot.dispose();
-      delete players[player.socketId];
-    }
-});
+  socket.on('playerDisconnected', function(player) {
+      if(players[player.socketId]) {
+        players[player.socketId].pivot.dispose();
+        delete players[player.socketId];
+      }
+  });
 }
 
