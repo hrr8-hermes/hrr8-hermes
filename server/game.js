@@ -23,7 +23,7 @@ function Game(id, io, map) {
 //Adds a Player to the Game with their socket id.
 //Init position is 0,0
 Game.prototype.addPlayer = function(id1) {
-  this.players.push({input: {'FORWARD': 0, 'BACK': 0, 'RIGHT': 0, 'LEFT': 0}, 
+  this.players.push({input: {}, 
     gid: this.id, 
     socketId: id1,
     x: 0, 

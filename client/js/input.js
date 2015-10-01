@@ -10,53 +10,13 @@
 // Global object for all inputs
 // 1 = triggered
 // 0 = untriggered
-window.USER_INPUT = {
-  
-  FORWARD : 0,
-  BACK    : 0,
-  RIGHT   : 0,
-  LEFT    : 0
-
-};
-
-/*
-USER_INPUT['FORWARD'] = 0;
-USER_INPUT['BACK'] = 0;
-USER_INPUT['RIGHT'] = 0;
-USER_INPUT['LEFT'] = 0;
-*/
+window.USER_INPUT = {};
 
 window.addEventListener('keydown', function(e) {
-  switch (e.keyCode) {
-    case 87:
-      USER_INPUT['FORWARD'] = 1;
-      break;
-    case 65:
-      USER_INPUT['LEFT'] = 1;
-      break;
-    case 68:
-      USER_INPUT['RIGHT'] = 1;
-      break;
-    case 83:
-      USER_INPUT['BACK'] = 1;
-      break;
-    }
+  USER_INPUT['K' + String.fromCharCode(e.keyCode)] = 1;
   socket.emit('movementInput',USER_INPUT);
 });
 window.addEventListener('keyup', function(e) {
-  switch (e.keyCode) {
-    case 87:
-      USER_INPUT['FORWARD'] = 0;
-      break;
-    case 65:
-      USER_INPUT['LEFT'] = 0;
-      break;
-    case 68:
-      USER_INPUT['RIGHT'] = 0;
-      break;
-    case 83:
-      USER_INPUT['BACK'] = 0;
-      break;
-    }
+  USER_INPUT['K' + String.fromCharCode(e.keyCode)] = 0;
   socket.emit('movementInput',USER_INPUT);
 });
