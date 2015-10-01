@@ -11,7 +11,7 @@ function Game(id, io, map) {
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
   this.map = map;
-  this.players = [];
+  this.players = {};
   this.numPlayers = 0;
   this.io = io;
   this.createUpdateLoop();
@@ -20,106 +20,35 @@ function Game(id, io, map) {
   // }, 2000);
   
   this.updatePerSec = 10;
-  
   //Mill Seconds
-
   this.delta = {deltaValue: 0};
-
   this.maxPlayers = 8;
 };
 
 //Adds a Player to the Game with their socket id.
 //Init position is 0,0
-Game.prototype.addPlayer = function(id1) {
-  this.players.push({input: {}, 
+Game.prototype.addPlayer = function(socketId) {
+  this.players[socketId] = {
+    input: {}, 
     gid: this.id, 
-    socketId: id1,
+    socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, id1, new Vector3(0,2,0))
-  });
+    robotModel: new Robot(this.delta, socketId, new Vector3(0,2,0))
+  };
   this.numPlayers++;
 }; 
 
-//Returning the truthy player from socket id
-Game.prototype.getPlayer = function(id) {
-  var result;
-  this.players.forEach(function(player) {
-    if(player.socketId === id) {
-      result = player; 
-    }
-  });
-  return result;
-};
-
 //Removes a player from game with socket id
 Game.prototype.removePlayer = function(id) {
-  this.players.splice(this.getIndex(id), 1)
+  delete this.players[id];
+  this.numPlayers--;
 };
 
-//Returns the index of player in list
-//input can be player object or socket id
-Game.prototype.getIndex = function(player) {
-  if(typeof player === 'string') {
-    player = this.getPlayer(player);
-  }
-  var result;
-  this.players.forEach(function(p1, index) {
-    if(p1 === player) {
-      result = index;
-    }
-  });
-  return result;
-};
-
-//A move happened in this game
-//Updated there truthy player
-Game.prototype.move = function(data) {
-  // var p1 = this.getPlayer(data.square.socketId);
-  // p1.x += data.moveTo[0];
-  // p1.y += data.moveTo[1];
-  // this.io.sockets.emit('move', p1.robotModel.positionData);
-  //this.checkWallCollision([data.x, data.y, p1.socketId]); 
-  
-};
-
-//Check if player is colliding with other players
-Game.prototype.collision = function(data) {
-  var temp = this.getPlayer(data.player1.socketId);
-  var compare = this.getPlayer(data.player2.socketId);
-  if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
-   temp.y < compare.y + 1 && 1+ temp.y > compare.y)) { 
-    this.io.sockets.emit('falseCollision', data);
-  } else {
-    this.io.sockets.emit('trueCollision', data);
-  }
-};
-
-//Check if player is coliding with a wall of the map
-Game.prototype.checkWallCollision = function(player) {
-  var serverPlayerData = this.getPlayer(player.socketId);
-  var x = serverPlayerData.x;
-  var y = serverPlayerData.y;
-  var socketId = player.socketId;
-  //console.log(bitArray);
-  //var index = position[0] + (4 * position[1]);
-  if (this.map.grid[y] === undefined || this.map.grid[y][x] === undefined) {
-    console.log('ERROR: outside course bounds');
-    return;
-  }
-  var wallHit = (this.map.grid[y][x] === 0)  
-  //if (this.map.grid[y][x] === 0) console.log('hitting wall!', wallCollisionsCount++);
-  if(wallHit) {
-    this.io.to(socketId).emit("trueWallCollision", serverPlayerData);   
-  } else {
-    this.io.to(socketId).emit("falseWallCollision", serverPlayerData);
-  }
-};
 
 Game.prototype.parseInput = function(inputObj, socketId) {
-  var p = this.getPlayer(socketId);
+  var p = this.players[socketId];
   p.input = inputObj;
-  
 };
 
 Game.prototype.createUpdateLoop = function() {
@@ -130,16 +59,29 @@ Game.prototype.createUpdateLoop = function() {
     var current = new Date().getTime();
     self.delta.deltaValue = current - last;
     last = current;
-    self.players.forEach(function(player) {
+    //loop over all players, check for wall collisions
+    for (var playerId in self.players) {
+      var player = self.players[playerId];
       player.robotModel.update(player.input);
       if (player.robotModel.hasWallCollision(self.map)) {
         player.robotModel.handleWallCollision();
       }
-    });
-    self.io.sockets.emit("positions",self.players);
+    }
+    self.io.sockets.emit('positions', self.players); 
   },this.updatePerSec);
-
 };
 
+//player/player collision, under construction...
+//Check if player is colliding with other players
+// Game.prototype.collision = function(data) {
+//   var temp = this.getPlayer(data.player1.socketId);
+//   var compare = this.getPlayer(data.player2.socketId);
+//   if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
+//    temp.y < compare.y + 1 && 1+ temp.y > compare.y)) { 
+//     this.io.sockets.emit('falseCollision', data);
+//   } else {
+//     this.io.sockets.emit('trueCollision', data);
+//   }
+// };
 
 module.exports = Game;
