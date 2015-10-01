@@ -1,9 +1,9 @@
-function Running() {
-  this.name = "running";
+function Death() {
+  this.name = "death";
   this.isRunning = false; 
   this.isBoosting = false; 
 }
-Running.prototype._input = function(inputObj){
+Death.prototype._input = function(inputObj){
   var x = 0;
   var z = 0;  
   x-=inputObj.KA ? inputObj.KA : 0; 
@@ -15,7 +15,7 @@ Running.prototype._input = function(inputObj){
   currentInput[1] = x; 
   return currentInput; 
 };
-Running.prototype.run = function(robot, parsedInput) {
+Death.prototype.run = function(robot, parsedInput) {
   var currentAccl;
   if (parsedInput[0] === 0) {
     robot.velocity -= robot.velocity * robot.speedDecay * robot.delta.deltaValue / 1000;
@@ -32,26 +32,23 @@ Running.prototype.run = function(robot, parsedInput) {
   
   robot.facing += parsedInput[1] * robot.turnSpeed * robot.delta.deltaValue / 1000;
   robot.forwardNormX = Math.sin(robot.facing * Math.PI * 2); 
-  robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2);
-  //save this position before moving in case there is a collision
-  robot.lastPosition.x = robot.position.x;
-  robot.lastPosition.z = robot.position.z; 
+  robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2); 
   robot.position.x += robot.velocity * robot.forwardNormX;
   robot.position.z += robot.velocity * robot.forwardNormY;
 };
 
 
-Running.prototype.update = function(robot,inputObj){
+Death.prototype.update = function(robot,inputObj){
   var parsedInput = this._input(inputObj); 
   this.run(robot, parsedInput); 
 };
 
-Running.prototype.enterState = function() {
+Death.prototype.enterState = function() {
 
 };
 
-Running.prototype.exitState = function() {
+Death.prototype.exitState = function() {
 
 };
 
-module.exports = Running;
+module.exports = Death;
