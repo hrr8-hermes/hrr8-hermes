@@ -84,13 +84,11 @@ function runScene(meshes) {
 
   // start rendering
   engine.runRenderLoop(function() {
-    if(sceneIsDirty){
-      // keeps the spot at camera's location
-      light3.position = camera.position;
-      //bob.update(USER_INPUT); 
-      scene.render();
-      sceneIsDirty = false; 
-    }
+    // keeps the spot at camera's location
+    light3.position = camera.position;
+    //bob.update(USER_INPUT); 
+    scene.render();
+    applyPositions(); 
   });
   
   // keep Babylon rendering at same scale as canvas
@@ -126,15 +124,17 @@ function runScene(meshes) {
   socket.on('connect', function() {
     console.log('Connected');
   });
-  socket.on('positions', function(data) {
-    if(!sceneIsDirty){
-      sceneIsDirty = true; 
-      data.forEach(function(serverPlayer) {
+  var applyPositions = function(){
+    if(window.positions){
+      window.positions.forEach(function(serverPlayer) {
         if(players[serverPlayer.socketId]) {
           players[serverPlayer.socketId].update(serverPlayer);
         }
       });
     }
+  };
+  socket.on('positions', function(data) {
+    window.positions = data; 
   });
   //a new player has connected
   socket.on('playerConnected', function(playerData) {
