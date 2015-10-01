@@ -11,15 +11,48 @@ function Robot(delta,id,pos) {
   this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
+  this.position = pos; 
+  this.lastPosition = new Vector3(0, 2, 0);
   this.states = {
     running: new Running(),
     //death: new Death(),
   }
-  this.position = pos; 
+  this.isRunning = false; 
   this.setState(this.states.running); //initial state
   //make mesh, set position
-  this.isRunning = false; 
 }
+
+Robot.prototype.hasWallCollision = function(map) {
+
+  //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
+  //but is upper left of the 2d map
+  var xOnGrid = Math.round(this.position.x + map.width / 2);
+  var yOnGrid = Math.round(map.height / 2 - this.position.z);
+  //out of course bounds
+  if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
+    this.handleWallCollision();
+    console.log('ERROR: out of course bounds');
+  } else {
+    //0 means a black pixel (wall) 
+    return map.grid[yOnGrid][xOnGrid] === 0;
+  }
+};
+
+Robot.prototype.handlePlayerCollision = function() {
+  console.log('handlingPlayerCollision');
+  this.position.x = this.lastPosition.x;
+  this.position.z = this.lastPosition.z;
+};
+
+Robot.prototype.handleWallCollision = function() {
+  //stop movement, stop running, move back to previous position
+   this.velocity = 0;
+   this.stopRunning();
+   this.position.x = this.lastPosition.x;
+   this.position.z = this.lastPosition.z;
+};
+
+
 Robot.prototype.update = function(input) {
   this.state.update(this,input); 
 };
@@ -31,6 +64,15 @@ Robot.prototype.setState = function(state) {
   if(this.state.enterState){
     this.state.enterState(this);
   } 
+};
+
+Robot.prototype.startRunning = function(){
+ // scene.beginAnimation(this.skeleton,16,32,true,1.0); 
+  this.isRunning = true; 
+};
+Robot.prototype.stopRunning = function(){
+//  scene.beginAnimation(this.skeleton,0,10,true,1.0); 
+  this.isRunning = false;
 };
 
 module.exports = Robot;

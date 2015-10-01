@@ -31,7 +31,10 @@ Running.prototype.run = function(robot, parsedInput) {
   
   robot.facing += parsedInput[1] * robot.turnSpeed * robot.delta.deltaValue / 1000;
   robot.forwardNormX = Math.sin(robot.facing * Math.PI * 2); 
-  robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2); 
+  robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2);
+  //save this position before moving in case there is a collision
+  robot.lastPosition.x = robot.position.x;
+  robot.lastPosition.z = robot.position.z; 
   robot.position.x += robot.velocity * robot.forwardNormX;
   robot.position.z += robot.velocity * robot.forwardNormY;
 };
