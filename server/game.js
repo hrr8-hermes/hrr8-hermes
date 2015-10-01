@@ -130,11 +130,9 @@ Game.prototype.createUpdateLoop = function() {
     last = current;
     self.players.forEach(function(player) {
       player.robotModel.update(player.input);
-      // if (player.robotModel.hasWallCollision(self.map)) {
-      //   var collideCount = 0;
-      //   //console.log('colliding in game', ++collideCount);
-      //   player.robotModel.handleWallCollision();
-      // }
+      if (player.robotModel.hasWallCollision(self.map)) {
+        player.robotModel.handleWallCollision();
+      }
     });
     self.io.sockets.emit("positions",self.players);
   },this.updatePerSec);

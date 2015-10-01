@@ -9,9 +9,9 @@ var fs = require('fs');
 
 //For now one game
 var game; 
-//var mapGridFromFile = JSON.parse(fs.readFileSync('server/assets/grid.json', 'utf8'));
+var mapGridFromFile = JSON.parse(fs.readFileSync('server/assets/grid.json', 'utf8'));
 
-game = new Game(0, io, {grid: [1,2,3], width: 512, height: 512});
+game = new Game(0, io, {grid: mapGridFromFile, width: 512, height: 512});
 //The list of games in the server
 var games = [];
 games.push(game);
@@ -83,7 +83,7 @@ io.on('connection', function(socket) {
     io.sockets.emit('playerDisconnected', p);
   });
   //When someone colides with a player on client check if it really happened with truthy people
-  socket.on('collision', function(data) {
+  socket.on('collision', function(data) {git 
     getGame(gameId).collision(data);
 
   });

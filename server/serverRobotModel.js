@@ -29,20 +29,20 @@ function Robot(delta,id,pos) {
 Robot.prototype.hasWallCollision = function(map) {
   //compensate for the fact that 0,0 is the center of the 3d map,  
   //but is upper left of the 2d map
-   console.log('3d x: ', this.position.x);
-   console.log('3d y: ', this.position.z);
+   // console.log('3d x: ', this.position.x);
+   // console.log('3d y: ', this.position.z);
   
   var xOnGrid = Math.round(this.position.x + map.width / 2);
   var yOnGrid = Math.round(map.height / 2 - this.position.z);
-   console.log('xOnGrid', xOnGrid);
-   console.log('yOnGrid', yOnGrid);
+   // console.log('xOnGrid', xOnGrid);
+   // console.log('yOnGrid', yOnGrid);
   //out of bounds
   //this should never happen
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
     console.log('ERROR: out of course bounds');
   } else {
-    console.log(map.grid[yOnGrid][xOnGrid]);
+    //console.log(map.grid[yOnGrid][xOnGrid]);
     return map.grid[yOnGrid][xOnGrid] === 0;
   }
   //0 means a black pixel (wall) 
@@ -61,10 +61,10 @@ Robot.prototype.handlePlayerCollision = function() {
 Robot.prototype.handleWallCollision = function() {
     console.log('colliding');
   //stop movement, stop running, move back to previous position
-   // this.velocity = 0;
-   // this.stopRunning();
-   // this.position.x = this.lastPosition.x;
-   // this.position.z = this.lastPosition.z;
+   this.velocity = 0;
+   this.stopRunning();
+   this.position.x = this.lastPosition.x;
+   this.position.z = this.lastPosition.z;
 };
 
 Robot.prototype.update = function(input) {
