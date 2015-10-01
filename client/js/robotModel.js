@@ -1,6 +1,6 @@
-states = {}; 
-states.running = new Running();
-// states.death = new Death(); 
+
+
+// 
 // states.outOfEnergy = new outOfEnergy(); 
 
 function Robot(id,pos,mesh,skeleton) {
@@ -12,8 +12,12 @@ function Robot(id,pos,mesh,skeleton) {
   this.maxSpeed = 10; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this._buildRobot(mesh, skeleton);
-  this.pivot.position = pos; 
-  this.setState(states.running); //initial state
+  this.pivot.position = pos;
+  this.states = {
+    running: new Running(),
+    death: new Death(), 
+  } 
+  this.setState(this.states.running); //initial state
   //make mesh, set position
   this.isRunning = false; 
 }
@@ -31,6 +35,9 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
 };
 Robot.prototype.update = function(input){
+  if(input.robotModel.state.name !== this.state.name) {
+    this.setState(this.states[input.robotModel.state.name]);
+  }
   this.state.update(this,input); 
 };
 Robot.prototype.setState = function(state){
@@ -51,64 +58,4 @@ Robot.prototype.stopRunning = function(){
   this.isRunning = false;
 };
 
-function Running(){
-  this.isRunning = false; 
-  this.isBoosting = false; 
-}
-
-Running.prototype._input = function(serverData){
-  var parsed = {}; 
-  parsed.position =  new BABYLON.Vector3(serverData.robotModel.position.x, 0.3, serverData.robotModel.position.z);
-  parsed.rotation = new BABYLON.Vector3(0, serverData.robotModel.facing * 2  * Math.PI + Math.PI * 0.5, 0);
-  parsed.velocity = serverData.robotModel.velocity;
-  return parsed; 
-};
-
-Running.prototype._runCheck = function(robot){
-  if(!robot.isRunning && robot.velocity !== 0){
-    robot.startRunning();
-    return;  
-  }
-  if(robot.isRunning && robot.velocity === 0){
-    robot.stopRunning(); 
-  }
-};
-
-Running.prototype.run = function(robot, parsedInput) {
-  // var shouldAnimateCam = false; 
-  // if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
-  //   !robot.pivot.position.equals(parsedInput.position)) &&
-  //   robot.id === socket.id){
-  //   shouldAnimateCam = true; 
-  // }
-  robot.pivot.position = parsedInput.position; 
-  robot.pivot.rotation = parsedInput.rotation; 
-  robot.velocity = parsedInput.velocity;
-  if(robot.id === socket.id) {
-    camera.position = robot.camPivot.getAbsolutePosition();
-    camera.setTarget(robot.pivot.position); 
-  } 
-  
-  
-  // if(shouldAnimateCam){
-  //   //robot.camPivot.lookAt(robot.pivot,0,0,0);
-  //   //camera.rotation = robot.camPivot.rotation;
-  //   console.log(camera);
-  // }
-};
-
-
-Running.prototype.update = function(robot,serverData){
-  var parsedInput = this._input(serverData); 
-  this.run(robot, parsedInput); 
-  this._runCheck(robot); 
-};
-
-Running.prototype.enterState = function() {
-
-};
-
-Running.prototype.exitState = function() {
-
-};
 

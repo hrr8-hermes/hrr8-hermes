@@ -1,5 +1,6 @@
 var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
+var Death = require('./states/Death.js')
 
 function Robot(delta,id,pos) {
   this.delta = delta;
@@ -15,7 +16,7 @@ function Robot(delta,id,pos) {
   this.lastPosition = new Vector3(0, 2, 0);
   this.states = {
     running: new Running(),
-    //death: new Death(),
+    death: new Death(),
   }
   this.isRunning = false; 
   this.setState(this.states.running); //initial state
