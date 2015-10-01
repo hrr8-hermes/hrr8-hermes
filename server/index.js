@@ -23,7 +23,6 @@ var maps = {
 };
 //Load up a map grid for collision detection and start a game
 initialize();
-//loadMap('server/assets/scaledCircleMap.png');
 
 //load the map grid, as soon as that's complete, use it to instantiate a Game
 function initialize() {

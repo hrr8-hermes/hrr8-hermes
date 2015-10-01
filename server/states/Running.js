@@ -35,6 +35,7 @@ Running.prototype.run = function(robot, parsedInput) {
   //save this position before moving in case there is a collision
   robot.lastPosition.x = robot.position.x;
   robot.lastPosition.z = robot.position.z; 
+  //advance position
   robot.position.x += robot.velocity * robot.forwardNormX;
   robot.position.z += robot.velocity * robot.forwardNormY;
 };
