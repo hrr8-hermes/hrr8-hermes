@@ -12,7 +12,7 @@ function Robot(delta,id,pos) {
   this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
-  this.lastPosition = new Vector3(0, 2, 0);
+  this.lastPosition = new Vector3(0, 1, 0);
   this.states = {
     running: new Running(),
     death: new Death(),

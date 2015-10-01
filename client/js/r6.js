@@ -6,7 +6,7 @@
 
 function runScene(meshes) {
   var players = {};
-  var bob = new Robot(0,new BABYLON.Vector3(200,2,-66),meshes['Skitter'],meshes['Skitter'].skeleton);
+  var bob = new Robot(0,new BABYLON.Vector3(200,1,-66),meshes['Skitter'],meshes['Skitter'].skeleton);
 
 //part of testEnv, commented out for star track
   // ground

@@ -34,7 +34,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, new Vector3(200,2, -66))
+    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66))
   };
   this.numPlayers++;
 }; 
