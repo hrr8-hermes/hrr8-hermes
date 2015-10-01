@@ -17,7 +17,7 @@ window.ASSETS = [
 
   // { 'name' : 'Cylinder014',
   //   'file' : 'Assets/testEnv.babylon' }
-  { 'name' : '',
-    'file' : 'assets/course_1_star.babylon'}
+  { 'name' : 'ground',
+    'file' : 'Assets/circleMap.babylon'}
 
 ];

@@ -16,12 +16,12 @@ var pixelData = [];
 var testingGrid;
 
 //Load a map for the game
-loadMap('server/assets/converted_aa6c49df_converted.png');
+loadMap('server/assets/circleMap.png');
 
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
 
-  //Set the player to the first open game.
+  //Set the player todwww the first open game.
   for(var i = 0; i < games.length; i++) {
     if(games[i].maxPlayers > games[i].players.length) {
       games[i].addPlayer(socket.id);

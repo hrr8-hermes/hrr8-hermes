@@ -18,7 +18,7 @@ function Robot(delta,id,pos) {
 //  this._buildRobot(mesh, skeleton);   (took these args out of function, only used for graphics)
 
   this.position = pos; 
-  this.lastPosition = new Vector3(-447, 2, -490);
+  this.lastPosition = new Vector3(0, 2, 0);
   this.setState(states.running); //initial state
   //make mesh, set position
   this.isRunning = false; 
@@ -37,7 +37,7 @@ Robot.prototype.hasWallCollision = function(map) {
   //0 means a black pixel (wall) 
   //commented out for now - crashes server because 3d and 2d maps 
   //are not the same (tries to access outside bounds of array)
-  
+
   //return map.grid[yOnGrid][xOnGrid] === 0;
 };
 

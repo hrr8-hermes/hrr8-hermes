@@ -192,8 +192,8 @@ socket.on('map loaded', function(data) {
   console.log(pixelsSubset);
   console.log(pixels[3]);
   var canvas = document.getElementById('canvas');
-  canvasWidth = 1024;
-  canvasHeight = 1024;
+  canvasWidth = 512;
+  canvasHeight = 512;
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
   canvas.id = 'canvas';
@@ -202,23 +202,26 @@ socket.on('map loaded', function(data) {
   canvas.style.left = '0';
   var context = canvas.getContext('2d');
   var image = new Image();
-  image.onload = function() {
-    context.drawImage(image, 0, 0);
-  };
-  image.src = 'course_1_star.png';
+  // var data;
+  // image.onload = function() {
+  //   context.drawImage(image, 0, 0);
+  //   var data = context.getImageData(0, 0, canvasWidth, canvasHeight); 
+  //   context.putImageData(data, 0, 0);
+  // };
+  // image.src = 'course_1_star.png';
 
 
-  // var imageData = context.createImageData(canvasWidth, canvasHeight);
-  // console.log(pixels);
-  // for (var i = 0; i < pixels.length; i++) {
-  //   imageData.data[i] = pixels[i];
+  var imageData = context.createImageData(canvasWidth, canvasHeight);
+  console.log(pixels);
+  for (var i = 0; i < pixels.length; i++) {
+    imageData.data[i] = pixels[i];
+  }
+  // for (var i =0; i < imageData.data.length; i+=4) {
+  //   for (var j = 0; j < 4; j++) {
+  //     imageData.data[j + i] = pixels[j + i];
+  //   }
   // }
-  // // for (var i =0; i < imageData.data.length; i+=4) {
-  // //   for (var j = 0; j < 4; j++) {
-  // //     imageData.data[j + i] = pixels[j + i];
-  // //   }
-  // // }
-  // context.putImageData(imageData, 0, 0);
+  context.putImageData(imageData, 0, 0);
 });
 var lastTime;
 var wallCollisionsCount = 1;
