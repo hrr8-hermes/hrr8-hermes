@@ -59,10 +59,10 @@ function Running() {
 Running.prototype._input = function(inputObj){
   var x = 0;
   var z = 0;  
-  x+=inputObj.RIGHT; 
-  x-=inputObj.LEFT; 
-  z+=inputObj.FORWARD * 1;
-  z-=inputObj.BACK * 0.6; 
+  x-=inputObj.KA ? inputObj.KA : 0; 
+  x+=inputObj.KD ? inputObj.KD : 0; 
+  z+=inputObj.KW ? inputObj.KW * 1 : 0;
+  z-=inputObj.KS ? inputObj.KS * 0.6 : 0;
   var currentInput = []; 
   currentInput[0] = z; 
   currentInput[1] = x; 
