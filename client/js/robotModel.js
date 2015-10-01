@@ -13,11 +13,8 @@ function Robot(id,pos,mesh,skeleton) {
   this.velocity = 0; 
   this._buildRobot(mesh, skeleton);
   this.pivot.position = pos;
-  this.states = {
-    running: new Running(),
-    death: new Death(), 
-  } 
-  this.setState(this.states.running); //initial state
+
+  this.setState('running'); //initial state
   //make mesh, set position
   this.isRunning = false; 
 }
@@ -36,11 +33,12 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
 };
 Robot.prototype.update = function(input){
   if(input.robotModel.state.name !== this.state.name) {
-    this.setState(this.states[input.robotModel.state.name]);
+    this.setState(input.robotModel.state.name);
   }
   this.state.update(this,input); 
 };
-Robot.prototype.setState = function(state){
+Robot.prototype.setState = function(name){
+  var state = Robot.states[name]
   if(this.state && this.state.exitState){
     this.state.exitState(this); 
   }
@@ -58,4 +56,7 @@ Robot.prototype.stopRunning = function(){
   this.isRunning = false;
 };
 
-
+Robot.states = {
+  running: new Running(),
+  death: new Death(), 
+} 

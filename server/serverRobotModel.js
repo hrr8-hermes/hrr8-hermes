@@ -12,14 +12,14 @@ function Robot(delta,id,pos) {
   this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
-  this.position = pos; 
   this.lastPosition = new Vector3(0, 2, 0);
   this.states = {
     running: new Running(),
     death: new Death(),
   }
   this.isRunning = false; 
-  this.setState(this.states.running); //initial state
+  this.position = pos; 
+  this.setState('running'); //initial state
   //make mesh, set position
 }
 
@@ -57,7 +57,8 @@ Robot.prototype.handleWallCollision = function() {
 Robot.prototype.update = function(input) {
   this.state.update(this,input); 
 };
-Robot.prototype.setState = function(state) {
+Robot.prototype.setState = function(name) {
+  var state = Robot.states[name];
   if(this.state && this.state.exitState){
     this.state.exitState(this); 
   }
@@ -75,5 +76,9 @@ Robot.prototype.stopRunning = function(){
 //  scene.beginAnimation(this.skeleton,0,10,true,1.0); 
   this.isRunning = false;
 };
+Robot.states = {
+  running: new Running(),
+  death: new Death(),
+}
 
 module.exports = Robot;
