@@ -3,25 +3,25 @@ var express = require("./server");
 var Game = require('./game');
 var server = require('http').Server(express);
 var io = require('socket.io')(server);
-var png = require('png-js');
+var PNG = require('pngjs2').PNG;
 var sizeOf = require('image-size');
 var fs = require('fs');
 
 //For now one game
 var game; 
-var mapGridFromFile = JSON.parse(fs.readFileSync('server/assets/grid.json', 'utf8'));
+//var mapGridFromFile = JSON.parse(fs.readFileSync('server/assets/grid.json', 'utf8'));
 
-game = new Game(0, io, {grid: mapGridFromFile, width: 512, height: 512});
+//game = new Game(0, io, {grid: mapGridFromFile, width: 512, height: 512});
 //The list of games in the server
 var games = [];
-games.push(game);
+//games.push(game);
 //pixelData is for displaying the map client side
 var pixelData = [];
 //will hold the map collision grid we send to the client
 var testingGrid;
 
 //Load a map for the game
-//loadMap('server/assets/scaledCircleMap.png');
+loadMap('server/assets/scaledCircleMap.png');
 
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
@@ -97,20 +97,32 @@ function loadMap(imagePath) {
     if (err) {
       console.log ('error finding image size:', err);
     } else {  
-      png.decode(imagePath, function(pixels) {
-        //convert the pixels ArrayBuffer into an actual array to send to the client
-        for (var i = 0; i < pixels.length; i++) {
-          pixelData[i] = pixels[i];
-        }  
-        console.log(dimensions);
-        var mapGrid = processImageIntoBitArray(pixelData, dimensions.width, dimensions.height);
-        //Setup the temp game with mapgrid and id and socket io
-        var mapObj = {grid: mapGrid, width: dimensions.width, height: dimensions.height};
-        game = new Game(0, io, mapObj);
-        //Add it to the list of games..
-        games.push(game);
+      // png.decode(imagePath, function(pixels) {
+      //   //convert the pixels ArrayBuffer into an actual array to send to the client
+      //   for (var i = 0; i < pixels.length; i++) {
+      //     pixelData[i] = pixels[i];
+      //   }  
+      var thePixels = [];
+      fs.createReadStream(imagePath)
+        .pipe(new PNG({
+          filterType: 4
+        }))
+        .on('parsed', function() {
+          var mapGrid = processImageIntoBitArray(this.data, this.width, this.height);
+          var mapObj = {grid: mapGrid, width: this.width, height: this.height};
+          game = game = new Game(0, io, mapObj);
+          games.push(game);
+        });
+ 
+        // console.log(dimensions);
+        // var mapGrid = processImageIntoBitArray(pixelData, dimensions.width, dimensions.height);
+        // //Setup the temp game with mapgrid and id and socket io
+        // var mapObj = {grid: mapGrid, width: dimensions.width, height: dimensions.height};
+        // game = new Game(0, io, mapObj);
+        // //Add it to the list of games..
+        // games.push(game);
 
-      });
+
     }  
   });
 }
