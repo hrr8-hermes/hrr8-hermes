@@ -27,7 +27,7 @@ function runScene(meshes) {
   // camera.attachControl(canvas,false);
   window.camera = new BABYLON.TargetCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.attachControl(canvas,false);
-  camera.lockedTarget = bob.pivot;
+  //camera.lockedTarget = bob.pivot;
   
 
 

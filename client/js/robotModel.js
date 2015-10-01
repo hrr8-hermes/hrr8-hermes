@@ -75,14 +75,14 @@ Running.prototype._runCheck = function(robot){
 };
 
 Running.prototype.run = function(robot, parsedInput) {
+  robot.pivot.position = parsedInput.position; 
+  robot.pivot.rotation = parsedInput.rotation; 
+  robot.velocity = parsedInput.velocity; 
   if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
     !robot.pivot.position.equals(parsedInput.position)) &&
     robot.id === socket.id){
     camera.position = robot.camPivot.getAbsolutePosition();
   }
-  robot.pivot.position = parsedInput.position; 
-  robot.pivot.rotation = parsedInput.rotation; 
-  robot.velocity = parsedInput.velocity; 
 };
 
 
