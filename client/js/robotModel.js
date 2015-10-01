@@ -25,6 +25,10 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.pivot.isVisible = false; 
   this.mesh.parent = this.pivot; 
   this.mesh.position = BABYLON.Vector3.Zero(); 
+  this.camPivot =  new BABYLON.Mesh.CreateBox(this.ide + '_pivot',1,scene);
+  this.camPivot.isVisible = false; 
+  this.camPivot.parent = this.pivot; 
+  this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
 };
 Robot.prototype.update = function(input){
   this.state.update(this,input); 
@@ -59,6 +63,7 @@ Running.prototype._input = function(serverData){
   parsed.velocity = serverData.robotModel.velocity;
   return parsed; 
 };
+
 Running.prototype._runCheck = function(robot){
   if(!robot.isRunning && robot.velocity !== 0){
     robot.startRunning();
@@ -68,7 +73,13 @@ Running.prototype._runCheck = function(robot){
     robot.stopRunning(); 
   }
 };
+
 Running.prototype.run = function(robot, parsedInput) {
+  if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
+    !robot.pivot.position.equals(parsedInput.position)) &&
+    robot.id === socket.id){
+    camera.position = robot.camPivot.getAbsolutePosition();
+  }
   robot.pivot.position = parsedInput.position; 
   robot.pivot.rotation = parsedInput.rotation; 
   robot.velocity = parsedInput.velocity; 

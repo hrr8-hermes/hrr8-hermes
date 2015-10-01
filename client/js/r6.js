@@ -22,9 +22,14 @@ function runScene(meshes) {
 
   // creates free-floating camera w/ default controls
   // click-drag to look, arrows to move, standard FP controls
-  var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
-  camera.setTarget(BABYLON.Vector3.Zero());
+  // var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
+  // camera.setTarget(BABYLON.Vector3.Zero());
+  // camera.attachControl(canvas,false);
+  window.camera = new BABYLON.TargetCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.attachControl(canvas,false);
+  camera.lockedTarget = bob.pivot;
+  
+
 
   // toggle to cam following our robot bob
   // radius is distance to maintain, height/rotation is as it sounds
