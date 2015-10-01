@@ -83,9 +83,13 @@ Running.prototype.run = function(robot, parsedInput) {
   // }
   robot.pivot.position = parsedInput.position; 
   robot.pivot.rotation = parsedInput.rotation; 
-  robot.velocity = parsedInput.velocity; 
-  camera.position = robot.camPivot.getAbsolutePosition();
-  camera.setTarget(robot.pivot.position); 
+  robot.velocity = parsedInput.velocity;
+  if(robot.id === socket.id) {
+    camera.position = robot.camPivot.getAbsolutePosition();
+    camera.setTarget(robot.pivot.position); 
+  } 
+  
+  
   // if(shouldAnimateCam){
   //   //robot.camPivot.lookAt(robot.pivot,0,0,0);
   //   //camera.rotation = robot.camPivot.rotation;
