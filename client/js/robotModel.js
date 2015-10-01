@@ -75,14 +75,22 @@ Running.prototype._runCheck = function(robot){
 };
 
 Running.prototype.run = function(robot, parsedInput) {
-  if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
-    !robot.pivot.position.equals(parsedInput.position)) &&
-    robot.id === socket.id){
-    camera.position = robot.camPivot.getAbsolutePosition();
-  }
+  // var shouldAnimateCam = false; 
+  // if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
+  //   !robot.pivot.position.equals(parsedInput.position)) &&
+  //   robot.id === socket.id){
+  //   shouldAnimateCam = true; 
+  // }
   robot.pivot.position = parsedInput.position; 
   robot.pivot.rotation = parsedInput.rotation; 
   robot.velocity = parsedInput.velocity; 
+  camera.position = robot.camPivot.getAbsolutePosition();
+  camera.setTarget(robot.pivot.position); 
+  // if(shouldAnimateCam){
+  //   //robot.camPivot.lookAt(robot.pivot,0,0,0);
+  //   //camera.rotation = robot.camPivot.rotation;
+  //   console.log(camera);
+  // }
 };
 
 
