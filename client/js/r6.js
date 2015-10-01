@@ -27,8 +27,9 @@ function runScene(meshes) {
   // camera.attachControl(canvas,false);
   window.camera = new BABYLON.TargetCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.attachControl(canvas,false);
-  //camera.lockedTarget = bob.pivot;
-  
+  // camera.lockedTarget = bob.pivot; 
+  // camera.speed = 0; 
+  window.sceneIsDirty = true; 
 
 
   // toggle to cam following our robot bob
@@ -83,10 +84,13 @@ function runScene(meshes) {
 
   // start rendering
   engine.runRenderLoop(function() {
-    // keeps the spot at camera's location
-    light3.position = camera.position;
-    //bob.update(USER_INPUT); 
-    scene.render();
+    if(sceneIsDirty){
+      // keeps the spot at camera's location
+      light3.position = camera.position;
+      //bob.update(USER_INPUT); 
+      scene.render();
+      sceneIsDirty = false; 
+    }
   });
   
   // keep Babylon rendering at same scale as canvas
@@ -123,12 +127,14 @@ function runScene(meshes) {
     console.log('Connected');
   });
   socket.on('positions', function(data) {
-
-    data.forEach(function(serverPlayer) {
-      if(players[serverPlayer.socketId]) {
-        players[serverPlayer.socketId].update(serverPlayer);
-      }
-    });
+    if(!sceneIsDirty){
+      sceneIsDirty = true; 
+      data.forEach(function(serverPlayer) {
+        if(players[serverPlayer.socketId]) {
+          players[serverPlayer.socketId].update(serverPlayer);
+        }
+      });
+    }
   });
   //a new player has connected
   socket.on('playerConnected', function(playerData) {
