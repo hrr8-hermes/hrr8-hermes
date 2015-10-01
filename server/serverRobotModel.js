@@ -27,6 +27,8 @@ Robot.prototype.hasWallCollision = function(map) {
 
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
+  console.log('Babylon x: ', this.position.x);
+  console.log('Babylon z: ', this.position.z);
   var xOnGrid = Math.round(this.position.x + map.width / 2);
   var yOnGrid = Math.round(map.height / 2 - this.position.z);
   //out of course bounds

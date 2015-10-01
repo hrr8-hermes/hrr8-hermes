@@ -23,7 +23,7 @@ Running.prototype.run = function(robot, parsedInput) {
       robot.velocity = 0; 
     }
   } else {
-    currentAccl = parsedInput[0] * robot.accelerationForward * robot.delta.deltaValue / 1000;
+    currentAccl = parsedInput[0] *  0.5 * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
     if(robot.velocity >= robot.maxSpeed) {
       robot.velocity = robot.maxSpeed;

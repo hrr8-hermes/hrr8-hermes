@@ -12,10 +12,26 @@ var fs = require('fs');
 //The list of games in the server
 var games = {};
 var nextGameId = 1;
+var currentMapName = 'oblong';
+
 var maps = {
   circle: {
     name: 'Circle of Iniquity',
     path: 'server/assets/scaledCircleMap.png',
+    width: null,
+    height: null,
+    grid: null
+  },
+  star: {
+    name: 'Satan\'s Secret Star',
+    path: 'server/assets/course_1_star.png',
+    width: null,
+    height: null,
+    grid: null
+  },
+  oblong: {
+    name: 'The Odious Oblong',
+    path: 'server/assets/course_2_oblong.png',
     width: null,
     height: null,
     grid: null
@@ -26,7 +42,7 @@ initialize();
 
 //load the map grid, as soon as that's complete, use it to instantiate a Game
 function initialize() {
-  loadMapGrid('circle', createGame);
+  loadMapGrid(currentMapName, createGame);
   console.log(games);
 }
 
@@ -45,7 +61,7 @@ function loadMapGrid(mapName, callback) {
 }
 
 function createGame() {
-  game = new Game(nextGameId, io, maps.circle);
+  game = new Game(nextGameId, io, maps[currentMapName]);
   games[nextGameId] = game;
   nextGameId++;
 }
