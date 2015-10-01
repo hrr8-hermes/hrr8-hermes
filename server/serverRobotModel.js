@@ -11,12 +11,14 @@ function Robot(delta,id,pos) {
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.4; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
-  this.turnSpeed = 1; // rotation per second (~6.28 is a 360 degrees per second)
-  this.maxSpeed = 10; //clamps the magnidue of speed vector
+  this.turnSpeed = .5; // rotation per second (~6.28 is a 360 degrees per second)
+  
+  //TEMPORARY
+  this.maxSpeed = 1; //clamps the magnidue of speed vector
+// this.maxSpeed = 1;
   this.velocity = 0; 
   this.facing = 0; 
 //  this._buildRobot(mesh, skeleton);   (took these args out of function, only used for graphics)
-
   this.position = pos; 
   this.lastPosition = new Vector3(0, 2, 0);
   this.setState(states.running); //initial state
@@ -27,33 +29,42 @@ function Robot(delta,id,pos) {
 Robot.prototype.hasWallCollision = function(map) {
   //compensate for the fact that 0,0 is the center of the 3d map,  
   //but is upper left of the 2d map
-  //console.log('3d x: ', this.position.x);
-  //console.log('3d y: ', this.position.z);
-
+   console.log('3d x: ', this.position.x);
+   console.log('3d y: ', this.position.z);
+  
   var xOnGrid = Math.round(this.position.x + map.width / 2);
-  var yOnGrid = Math.round(this.position.z + map.height / 2);
-  //console.log('xOnGrid', xOnGrid);
-  //console.log('yOnGrid', yOnGrid);
+  var yOnGrid = Math.round(map.height / 2 - this.position.z);
+   console.log('xOnGrid', xOnGrid);
+   console.log('yOnGrid', yOnGrid);
+  //out of bounds
+  //this should never happen
+  if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
+    this.handleWallCollision();
+    console.log('ERROR: out of course bounds');
+  } else {
+    console.log(map.grid[yOnGrid][xOnGrid]);
+    return map.grid[yOnGrid][xOnGrid] === 0;
+  }
   //0 means a black pixel (wall) 
   //commented out for now - crashes server because 3d and 2d maps 
   //are not the same (tries to access outside bounds of array)
 
-  //return map.grid[yOnGrid][xOnGrid] === 0;
+
 };
 
 Robot.prototype.handlePlayerCollision = function() {
-
-  //this.position.x = this.lastPosition.x;
-  //this.position.z = this.lastPosition.z;
+  console.log('handlingPlayerCollision');
+  this.position.x = this.lastPosition.x;
+  this.position.z = this.lastPosition.z;
 };
 
 Robot.prototype.handleWallCollision = function() {
     console.log('colliding');
   //stop movement, stop running, move back to previous position
-  // this.velocity = 0;
-  // this.stopRunning();
-  // this.position.x = this.lastPosition.x;
-  // this.position.z = this.lastPosition.z;
+   // this.velocity = 0;
+   // this.stopRunning();
+   // this.position.x = this.lastPosition.x;
+   // this.position.z = this.lastPosition.z;
 };
 
 Robot.prototype.update = function(input) {
@@ -97,12 +108,15 @@ Running.prototype.run = function(robot, parsedInput) {
   var currentAccl;
   if (parsedInput[0] === 0) {
     robot.velocity -= robot.velocity * robot.speedDecay * robot.delta.deltaValue / 1000;
-    if (robot.velocity < 0.1) {
+    if (robot.velocity < 0.05) {
       robot.velocity = 0; 
     }
   } else {
     currentAccl = parsedInput[0] * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
+    if(robot.velocity >= robot.maxSpeed) {
+      robot.velocity = robot.maxSpeed;
+    }
   }
   this._runCheck(robot); 
   //robot.position.addInPlace(robot.velocity); //position = position + velocity;

@@ -11,8 +11,13 @@ function runScene(meshes) {
 //part of testEnv, commented out for star track
   // ground
   // meshes['Plane001'].setEnabled(true);
-  console.log(meshes['ground']);
+
+  // meshes['ground'].setEnabled(true);
+  // meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
   meshes['ground'].setEnabled(true);
+  meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
+  //meshes['track'].setEnabled(true);
+
   // meshes['Plane001'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
   // meshes['Plane001'].material.diffuseTexture.uScale = 0.1;
   // meshes['Plane001'].material.diffuseTexture.vScale = 0.1;
@@ -24,9 +29,14 @@ function runScene(meshes) {
 
   // creates free-floating camera w/ default controls
   // click-drag to look, arrows to move, standard FP controls
-  var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
-  camera.setTarget(BABYLON.Vector3.Zero());
+  // var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
+  // camera.setTarget(BABYLON.Vector3.Zero());
+  // camera.attachControl(canvas,false);
+  window.camera = new BABYLON.TargetCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.attachControl(canvas,false);
+  camera.lockedTarget = bob.pivot;
+  
+
 
   // toggle to cam following our robot bob
   // radius is distance to maintain, height/rotation is as it sounds
@@ -146,12 +156,39 @@ function runScene(meshes) {
       }
       players[player.socketId] = set;
     }
-  });
+
+    //roundabout way to process the .png
+
+    // var canvas = document.createElement('CANVAS');
+    //  canvasWidth = 512;
+    //  canvasHeight = 512;
+    //  canvas.width = canvasWidth;
+    //  canvas.height = canvasHeight;
+    //  //canvas.id = 'canvas';
+    //  canvas.style.position = 'absolute';
+    //  canvas.style.top = '0';
+    //  canvas.style.left = '0';
+    // var context = canvas.getContext('2d');
+    // var image = new Image();
+    // var imageData;
+    // console.log('about to load..');
+    // image.onload = function() {
+    //   context.drawImage(image, 0, 0);
+    //   var imageData = context.getImageData(0, 0, 512, 512); 
+    //   console.log('about to send...');
+    //   socket.emit('correct image data', imageData.data);
+    // };
+    // image.src = '../../assets/scaledCircleMap.png';
+    //document.body.appendChild(canvas);
   //Removes the player from game when he disconnects
-  socket.on('playerDisconnected', function(player) {
+  
+});
+
+socket.on('playerDisconnected', function(player) {
     if(players[player.socketId]) {
       players[player.socketId].pivot.dispose();
       delete players[player.socketId];
     }
-  })
+});
 }
+

@@ -192,8 +192,8 @@ socket.on('map loaded', function(data) {
   console.log(pixelsSubset);
   console.log(pixels[3]);
   var canvas = document.getElementById('canvas');
-  canvasWidth = 512;
-  canvasHeight = 512;
+  canvasWidth = 2434;
+  canvasHeight = 2432;
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
   canvas.id = 'canvas';
@@ -202,26 +202,35 @@ socket.on('map loaded', function(data) {
   canvas.style.left = '0';
   var context = canvas.getContext('2d');
   var image = new Image();
-  // var data;
-  // image.onload = function() {
-  //   context.drawImage(image, 0, 0);
-  //   var data = context.getImageData(0, 0, canvasWidth, canvasHeight); 
-  //   context.putImageData(data, 0, 0);
-  // };
-  // image.src = 'course_1_star.png';
+  var data;
+  image.onload = function() {
+    context.drawImage(image, 0, 0);
+    var data = context.getImageData(0, 0, canvasWidth, canvasHeight); 
+    socket.emit('correct image data', data.data);
+    console.log(data);
+    // var canvas2 = document.getElementById('canvas2');
+    // canvas2.style.position = 'absolute';
+    // canvas2.style.top = '513px';
+    // canvas2.style.left = '0';
+    // canvas2.width = canvasWidth;
+    // canvas2.height = canvasHeight;
+    // var context2 = canvas2.getContext('2d');
+    // context2.putImageData(data, 0, 0);
+  };
+  image.src = 'circleMap.png';
 
 
-  var imageData = context.createImageData(canvasWidth, canvasHeight);
-  console.log(pixels);
-  for (var i = 0; i < pixels.length; i++) {
-    imageData.data[i] = pixels[i];
-  }
-  // for (var i =0; i < imageData.data.length; i+=4) {
-  //   for (var j = 0; j < 4; j++) {
-  //     imageData.data[j + i] = pixels[j + i];
-  //   }
+  // var imageData = context.createImageData(canvasWidth, canvasHeight);
+  // console.log(pixels);
+  // for (var i = 0; i < pixels.length; i++) {
+  //   imageData.data[i] = pixels[i];
   // }
-  context.putImageData(imageData, 0, 0);
+  // // for (var i =0; i < imageData.data.length; i+=4) {
+  // //   for (var j = 0; j < 4; j++) {
+  // //     imageData.data[j + i] = pixels[j + i];
+  // //   }
+  // // }
+  // context.putImageData(imageData, 10, 10);
 });
 var lastTime;
 var wallCollisionsCount = 1;

@@ -5,42 +5,60 @@ var server = require('http').Server(express);
 var io = require('socket.io')(server);
 var png = require('png-js');
 var sizeOf = require('image-size');
+var fs = require('fs');
 
 //For now one game
-var game;
+var game; 
+//var mapGridFromFile = JSON.parse(fs.readFileSync('server/assets/grid.json', 'utf8'));
+
+game = new Game(0, io, {grid: [1,2,3], width: 512, height: 512});
 //The list of games in the server
 var games = [];
+games.push(game);
 //pixelData is for displaying the map client side
 var pixelData = [];
 //will hold the map collision grid we send to the client
 var testingGrid;
 
 //Load a map for the game
-loadMap('server/assets/circleMap.png');
+//loadMap('server/assets/scaledCircleMap.png');
 
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
+  // socket.on('correct image data', function(data) {
+  //   console.log('receiving correct data');
+  //   var mapGrid = processImageIntoBitArray(data, 512, 512);
+  //   var mapObj = {grid: mapGrid, width: 512, height: 512};
+  //   game.map = mapObj; 
+  // });
 
   //Set the player todwww the first open game.
-  for(var i = 0; i < games.length; i++) {
-    if(games[i].maxPlayers > games[i].players.length) {
-      games[i].addPlayer(socket.id);
-      break;
-    } 
-  }
+
+     for(var i = 0; i < games.length; i++) {
+        if(games[i].maxPlayers > games[i].players.length) {
+          games[i].addPlayer(socket.id);
+          break;
+        } 
+      }
 
   //Use this id to get id for player game id
-  var gameId = game.id;
+    var gameId = game.id;
+    //Gets the recently added player from game object
+  var p = game.getPlayer(socket.id);
+  //Let all the players know about the new player
+  socket.broadcast.emit("playerConnected", p);
+
+
+
+
+ 
 
 
   socket.on('movementInput', function(inputObj) {
     getGame(gameId).parseInput(inputObj, socket.id);
   }); 
   
-  //Gets the recently added player from game object
-  var p = game.getPlayer(socket.id);
-  //Let all the players know about the new player
-  socket.broadcast.emit("playerConnected", p);
+  
   setTimeout(function() {
     socket.emit("connected", game.players);
   }, 500);
@@ -69,6 +87,8 @@ io.on('connection', function(socket) {
     getGame(gameId).collision(data);
 
   });
+
+
 });
 
 //Map loading
@@ -83,7 +103,7 @@ function loadMap(imagePath) {
           pixelData[i] = pixels[i];
         }  
         console.log(dimensions);
-        var mapGrid = processImageIntoBitArray(pixels, dimensions.width, dimensions.height);
+        var mapGrid = processImageIntoBitArray(pixelData, dimensions.width, dimensions.height);
         //Setup the temp game with mapgrid and id and socket io
         var mapObj = {grid: mapGrid, width: dimensions.width, height: dimensions.height};
         game = new Game(0, io, mapObj);
@@ -98,7 +118,7 @@ function loadMap(imagePath) {
 //converts data from png of the map into a multidimensional array of 1s and 0s, 
 //representing white and black pixels resepectively
 function processImageIntoBitArray(imageDataArray, width, height) {
-    console.log(imageDataArray[3]);
+    //console.log(imageDataArray);
     var bitArrayGrid = [];
     var numRows = height;
     var rowLength = width;
@@ -118,12 +138,20 @@ function processImageIntoBitArray(imageDataArray, width, height) {
       }
       bitArrayGrid.push(row);  
     }
-    console.log(findWhiteZone(bitArrayGrid));
+    findWhiteZone(bitArrayGrid);
     console.log(bitArrayGrid.length);
     console.log(bitArrayGrid[1].length);
     console.log(bitArrayGrid[0].length === bitArrayGrid[3].length);
     //set the map grid the client will check collisions against
     testingGrid = bitArrayGrid;
+    var string = JSON.stringify(bitArrayGrid);
+    // fs.writeFile('server/assets/grid.json', string, function(err) {
+    //   if (err) throw err;
+    //   fs.readFile('server/assets/grid.json', 'utf8', function(err, data) {
+    //     console.log('same', JSON.parse(data)[5][7] === bitArrayGrid[5][7]);
+    //   });
+    // });
+
     return bitArrayGrid;
 }
 
@@ -133,8 +161,9 @@ function findWhiteZone(grid) {
   for (var i = 0; i < grid.length; i++) {
     for (var j = 0; j < grid.length; j++) {
       if (grid[i][j] === 1) {
+        console.log('first white pixel: row: ' + i + 'column: ' + j );
         count++;
-        breaking = (count > 10); 
+        breaking = (count > 0); 
         if (breaking) break;
       }  
     }

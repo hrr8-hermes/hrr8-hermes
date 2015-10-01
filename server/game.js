@@ -13,8 +13,13 @@ function Game(id, io, map) {
   this.map = map;
   this.players = [];
   this.io = io;
-  this.updatePerSec = 10;
   this.createUpdateLoop();
+  // setInterval(function() {
+  //   console.log('console marker...');
+  // }, 2000);
+  
+  this.updatePerSec = 10;
+  
   //Mill Seconds
 
   this.delta = {deltaValue: 0};
@@ -125,11 +130,11 @@ Game.prototype.createUpdateLoop = function() {
     last = current;
     self.players.forEach(function(player) {
       player.robotModel.update(player.input);
-      if (player.robotModel.hasWallCollision(self.map)) {
-        var collideCount = 0;
-        console.log('colliding in game', ++collideCount);
-        player.robotModel.handleWallCollision();
-      }
+      // if (player.robotModel.hasWallCollision(self.map)) {
+      //   var collideCount = 0;
+      //   //console.log('colliding in game', ++collideCount);
+      //   player.robotModel.handleWallCollision();
+      // }
     });
     self.io.sockets.emit("positions",self.players);
   },this.updatePerSec);
