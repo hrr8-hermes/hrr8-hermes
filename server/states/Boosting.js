@@ -36,7 +36,7 @@ Boosting.prototype.run = function(robot, parsedInput) {
   //save this position before moving in case there is a collision
   robot.lastPosition.push({x: robot.position.x, z: robot.position.z});
 
-  if(robot.lastPosition.length >= 5) {
+  if(robot.lastPosition.length >= 1) {
     robot.lastPosition.shift();
   }
   //advance position

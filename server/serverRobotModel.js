@@ -72,6 +72,7 @@ Robot.prototype.handleWallCollision = function() {
   //stop movement, stop running, move back to previous position
    this.velocity = 0;
    this.stopRunning();
+
    this.position.x = this.lastPosition.tail.value.x;
    this.position.z = this.lastPosition.tail.value.z;
 };
@@ -84,7 +85,7 @@ Robot.prototype.getYOnGrid = function(map) {
   return Math.round(map.height / 2 - this.position.z);
 };
 
-Robot.prototype.update = function(input) {
+Robot.prototype.update = functiongit(input) {
 
   //console.log(this.energy);
   //console.log(this.state);
