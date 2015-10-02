@@ -85,7 +85,7 @@ Robot.prototype.getYOnGrid = function(map) {
 
 
 Robot.prototype.update = function(input) {
-  
+
   this.state.update(this,input); 
 };
 Robot.prototype.setState = function(name) {
@@ -110,6 +110,6 @@ Robot.prototype.stopRunning = function(){
 Robot.states = {
   running: new Running(),
   death: new Death(),
-}
+};
 
 module.exports = Robot;
