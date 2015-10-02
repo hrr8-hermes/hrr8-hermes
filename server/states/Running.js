@@ -43,6 +43,7 @@ Running.prototype.run = function(robot, parsedInput) {
 
   }
 
+
   //advance position
   robot.position.x += robot.velocity * robot.forwardNormX;
   robot.position.z += robot.velocity * robot.forwardNormY;
