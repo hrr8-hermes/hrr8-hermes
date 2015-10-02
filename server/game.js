@@ -19,7 +19,7 @@ function Game(id, io, map) {
   //   console.log('console marker...');
   // }, 2000);
   
-  this.updatePerSec = 40;
+  this.updatePerSec = 30;
   //Mill Seconds
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
