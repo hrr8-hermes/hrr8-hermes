@@ -66,14 +66,32 @@ Game.prototype.createUpdateLoop = function() {
       if (player.robotModel.hasWallCollision(self.map)) {
         player.robotModel.handleWallCollision();
       }
+      if (self.hasPlayerCollision(player)) {
+        player.robotModel.handlePlayerCollision();
+      }
     }
     self.io.sockets.emit('positions', self.players); 
   },this.updatePerSec);
 };
 
 //player/player collision, under construction...
-//Check if player is colliding with other players
-// Game.prototype.collision = function(data) {
+//currently only checks if occupying same pixel on 2d map
+
+Game.prototype.hasPlayerCollision = function(player) {
+  for (var playerId in this.players) {
+    if (player.socketId === playerId) continue;
+    if (this.playersAreColliding(player, this.players[playerId])) return true;
+  }
+  return false;
+};
+
+Game.prototype.playersAreColliding = function(player1, player2) {
+  var player1x = player1.robotModel.getXOnGrid(this.map);
+  var player2x = player2.robotModel.getXOnGrid(this.map);
+  var player1y = player1.robotModel.getYOnGrid(this.map);
+  var player2y = player2.robotModel.getYOnGrid(this.map);
+  return (player1x === player2x && player1y === player2y);
+//old bounding box algorithm, saving for later  
 //   var temp = this.getPlayer(data.player1.socketId);
 //   var compare = this.getPlayer(data.player2.socketId);
 //   if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
@@ -83,5 +101,6 @@ Game.prototype.createUpdateLoop = function() {
 //     this.io.sockets.emit('trueCollision', data);
 //   }
 // };
+};
 
 module.exports = Game;
