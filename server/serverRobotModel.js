@@ -1,5 +1,6 @@
 var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
+var Death = require('./states/Death.js')
 
 function Robot(delta,id,pos) {
   this.delta = delta;
@@ -11,14 +12,14 @@ function Robot(delta,id,pos) {
   this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
-  this.position = pos; 
-  this.lastPosition = new Vector3(0, 2, 0);
+  this.lastPosition = new Vector3(0, 1, 0);
   this.states = {
     running: new Running(),
-    //death: new Death(),
+    death: new Death(),
   }
   this.isRunning = false; 
-  this.setState(this.states.running); //initial state
+  this.position = pos; 
+  this.setState('running'); //initial state
   //make mesh, set position
 }
 
@@ -26,6 +27,8 @@ Robot.prototype.hasWallCollision = function(map) {
 
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
+  // console.log('Babylon x: ', this.position.x);
+  // console.log('Babylon z: ', this.position.z);
   var xOnGrid = Math.round(this.position.x + map.width / 2);
   var yOnGrid = Math.round(map.height / 2 - this.position.z);
   //out of course bounds
@@ -56,7 +59,8 @@ Robot.prototype.handleWallCollision = function() {
 Robot.prototype.update = function(input) {
   this.state.update(this,input); 
 };
-Robot.prototype.setState = function(state) {
+Robot.prototype.setState = function(name) {
+  var state = Robot.states[name];
   if(this.state && this.state.exitState){
     this.state.exitState(this); 
   }
@@ -74,5 +78,9 @@ Robot.prototype.stopRunning = function(){
 //  scene.beginAnimation(this.skeleton,0,10,true,1.0); 
   this.isRunning = false;
 };
+Robot.states = {
+  running: new Running(),
+  death: new Death(),
+}
 
 module.exports = Robot;

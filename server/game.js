@@ -11,7 +11,7 @@ function Game(id, io, map) {
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
   this.map = map;
-  this.players = [];
+  this.players = {};
   this.numPlayers = 0;
   this.io = io;
   this.createUpdateLoop();
@@ -20,62 +20,34 @@ function Game(id, io, map) {
   // }, 2000);
   
   this.updatePerSec = 10;
-  
   //Mill Seconds
-
   this.delta = {deltaValue: 0};
-
   this.maxPlayers = 8;
 };
 
 //Adds a Player to the Game with their socket id.
 //Init position is 0,0
-Game.prototype.addPlayer = function(id1) {
-  this.players.push({input: {}, 
+Game.prototype.addPlayer = function(socketId) {
+  this.players[socketId] = {
+    input: {}, 
     gid: this.id, 
-    socketId: id1,
+    socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, id1, new Vector3(0,2,0))
-  });
+    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66))
+  };
   this.numPlayers++;
 }; 
 
-//Returning the truthy player from socket id
-Game.prototype.getPlayer = function(id) {
-  var result;
-  this.players.forEach(function(player) {
-    if(player.socketId === id) {
-      result = player; 
-    }
-  });
-  return result;
-};
-
 //Removes a player from game with socket id
 Game.prototype.removePlayer = function(id) {
-  this.players.splice(this.getIndex(id), 1)
-};
-
-//Returns the index of player in list
-//input can be player object or socket id
-Game.prototype.getIndex = function(player) {
-  if(typeof player === 'string') {
-    player = this.getPlayer(player);
-  }
-  var result;
-  this.players.forEach(function(p1, index) {
-    if(p1 === player) {
-      result = index;
-    }
-  });
-  return result;
+  delete this.players[id];
+  this.numPlayers--;
 };
 
 Game.prototype.parseInput = function(inputObj, socketId) {
-  var p = this.getPlayer(socketId);
+  var p = this.players[socketId];
   p.input = inputObj;
-  
 };
 
 Game.prototype.createUpdateLoop = function() {
@@ -86,17 +58,30 @@ Game.prototype.createUpdateLoop = function() {
     var current = new Date().getTime();
     self.delta.deltaValue = current - last;
     last = current;
-    self.players.forEach(function(player) {
+    //loop over all players, check for wall collisions
+    for (var playerId in self.players) {
+      var player = self.players[playerId];
       player.robotModel.update(player.input);
       if (player.robotModel.hasWallCollision(self.map)) {
         player.robotModel.handleWallCollision();
       }
-    });
+    }
     self.io.sockets.emit("positions",self.players);
     setTimeout(l00p,self.updatePerSec);
   },this.updatePerSec);
-
 };
 
+//player/player collision, under construction...
+//Check if player is colliding with other players
+// Game.prototype.collision = function(data) {
+//   var temp = this.getPlayer(data.player1.socketId);
+//   var compare = this.getPlayer(data.player2.socketId);
+//   if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
+//    temp.y < compare.y + 1 && 1+ temp.y > compare.y)) { 
+//     this.io.sockets.emit('falseCollision', data);
+//   } else {
+//     this.io.sockets.emit('trueCollision', data);
+//   }
+// };
 
 module.exports = Game;

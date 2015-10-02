@@ -13,11 +13,31 @@ window.ASSETS = [
     'type' : 'mesh',
     'file' : 'Assets/enemy@idleRun.babylon' },
 
-  { 'name' : 'ground',
-    'type' : 'mesh',
-    'file' : 'Assets/scaledCircleMap.babylon'},
-  
   { 'name' : 'bg1',
     'type' : 'sound',
-    'file' : 'sounds/bg/first.wav'}
+    'file' : 'sounds/bg/first.wav'},
+
+  // { 'name' : 'Plane001',
+    // 'type' : 'mesh',
+  //   'file' : "Assets/testEnv.babylon" },
+
+  // { 'name' : 'Cylinder014',
+    // 'type' : 'mesh',
+  //   'file' : 'Assets/testEnv.babylon' }
+
+//circle 
+  // { 'name' : 'ground',
+    // 'type' : 'mesh',
+  //   'file' : 'Assets/scaledCircleMap.babylon'}
+
+//star course
+  // { 'name' : 'track',
+    // 'type' : 'mesh',
+  //   'file' : 'Assets/course_1_star.babylon'}
+
+//oblong course
+  { 'name' : 'track',
+    'type' : 'mesh',
+    'file' : 'Assets/course_2_oblong.babylon'}
+
 ];
