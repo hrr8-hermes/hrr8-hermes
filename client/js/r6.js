@@ -7,7 +7,7 @@
 function runScene(meshes) {
   createMaterials(); 
   var players = {};
-  var bob = new Robot(0,new BABYLON.Vector3(200,1,-66),meshes['Robot'],meshes['Robot'].skeleton);
+  var bob = new Robot(0,new BABYLON.Vector3(200,4,-66),meshes['Robot'],meshes['Robot'].skeleton);
   bob.mesh.material = materials.robot; 
 
   meshes['track'].setEnabled(true);

@@ -43,7 +43,12 @@ function loadAssets(assetArray, scale, scene, ENABLED, callback) {
       tasks[asset.name].onSuccess = function(t) {
         engine.loadingUIText = asset.name+' loaded';
         t.loadedMeshes[0].setEnabled(ENABLED);
-        t.loadedMeshes[0].scaling = new BABYLON.Vector3(scale,scale,scale);
+        //check if applying global or specific scale
+        if (asset.scale) {
+          t.loadedMeshes[0].scaling = new BABYLON.Vector3(asset.scale,asset.scale,asset.scale);
+        } else {
+          t.loadedMeshes[0].scaling = new BABYLON.Vector3(scale,scale,scale);
+        }
         createdAssets[asset.name] = t.loadedMeshes[0];
       };
       tasks[asset.name].onError = function(t) {
