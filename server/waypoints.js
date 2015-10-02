@@ -17,8 +17,9 @@
  *  the current waypoint & lap).
  *
  * The function assumes the first waypoint serves as the finish line
- * and will increment distance to (LAPS * WAYCOUNT) + 1, then no longer
- * check/update the object's distance.
+ * and will increment distance to LAPS * WAYCOUNT, then no longer
+ * check/update the object's distance. Distance should begin the race
+ * at 0.
  *
  * Returns undefined if finished, true if incrementing distance, false otherwise
  *
