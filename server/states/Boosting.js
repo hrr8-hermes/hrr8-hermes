@@ -37,7 +37,7 @@ Boosting.prototype.run = function(robot, parsedInput) {
   robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2);
   //save this position before moving in case there is a collision
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
-  if(robot.lastPosition.length >= 5000) {
+  if(robot.lastPosition.length >= 2500) {
     robot.lastPosition.removeHead();
   }
 

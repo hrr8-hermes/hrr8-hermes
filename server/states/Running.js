@@ -42,7 +42,7 @@ Running.prototype.run = function(robot, parsedInput) {
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
 
 
-  if(robot.lastPosition.length >= 5000) {
+  if(robot.lastPosition.length >= 2500) {
     robot.lastPosition.removeHead();
 
   }
