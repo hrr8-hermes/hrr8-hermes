@@ -64,19 +64,10 @@ Robot.prototype.hasWallCollision = function(map) {
   //but is upper left of the 2d map
   // console.log('Babylon x: ', this.position.x);
   // console.log('Babylon z: ', this.position.z);
-<<<<<<< HEAD
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);
-  //console.log(xOnGrid);
-  //console.log(yOnGrid);
 
-=======
-  var xOnGrid = Math.round(this.position.x + map.width / 2);
-  var yOnGrid = Math.round(map.height / 2 - this.position.z);
-  console.log('Grid: ('+xOnGrid+','+yOnGrid+')');
-  console.log('ACtu: ('+this.position.x+','+this.position.z+')');
->>>>>>> Added waypoint functionality
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
