@@ -146,7 +146,7 @@ function runScene(meshes) {
   });
   //a new player has connected
   socket.on('playerConnected', function(playerData) {
-    var set = new Robot(playerData.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+    var set = new Robot(playerData.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Robot'],meshes['Robot'].skeleton);
     players[playerData.socketId] = set;
   });
   
@@ -159,7 +159,7 @@ function runScene(meshes) {
         bob.id = socket.id;
         set = bob;
       } else {
-        set = new Robot(player.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+        set = new Robot(player.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Robot'],meshes['Robot'].skeleton);
       }  
       players[player.socketId] = set;
     }
