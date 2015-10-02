@@ -1,6 +1,7 @@
 module.exports = {
   maxRunSpeed : 2,
   maxBoostSpeed : 5,
+
   boostingHealthDrain : .5,
   runningHealthGain : .25,
   runningAcclMultiplier : 0.4,
@@ -10,4 +11,5 @@ module.exports = {
   playerCollisionDamage: 100, 
   wallCollisionDamage: 100,
   savedPositions: 25
+
 };
