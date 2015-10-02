@@ -17,6 +17,7 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.mesh = mesh.clone(this.id + '_mesh'); 
   this.skeleton = skeleton.clone(this.id + '_skeleton'); 
   this.mesh.skeleton = this.skeleton; 
+  this.mesh.rotation = new BABYLON.Vector3(0, Math.PI * 0.5, 0);
   this.pivot =  new BABYLON.Mesh.CreateBox(this.ide + '_pivot',1,scene);
   this.pivot.isVisible = false; 
   this.mesh.parent = this.pivot; 
@@ -33,7 +34,7 @@ Robot.prototype.update = function(input){
   this.state.update(this,input); 
 };
 Robot.prototype.setState = function(name){
-  var state = Robot.states[name]
+  var state = Robot.states[name];
   if(this.state && this.state.exitState){
     this.state.exitState(this); 
   }
@@ -43,15 +44,16 @@ Robot.prototype.setState = function(name){
   } 
 };
 Robot.prototype.startRunning = function(){
-  scene.beginAnimation(this.skeleton,16,32,true,1.0); 
+  console.log('started running');
+  scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 
 };
 Robot.prototype.stopRunning = function(){
-  scene.beginAnimation(this.skeleton,0,10,true,1.0); 
+  scene.beginAnimation(this.skeleton,1,10,true,1.0); 
   this.isRunning = false;
 };
 
 Robot.states = {
   running: new Running(),
   death: new Death(), 
-} 
+} ;

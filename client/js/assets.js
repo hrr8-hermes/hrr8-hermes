@@ -23,12 +23,12 @@ window.ASSETS = [
 //star course
   // { 'name' : 'track',
   //   'file' : 'Assets/course_1_star.babylon'},
-  { 'name' : 'ground',
-    'file' : 'Assets/scaledCircleMap.babylon'},
+  { 'name' : 'Robot',
+    'file' : 'assets/robot.babylon' },
+  // { 'name' : 'ground',
+  //   'file' : 'Assets/scaledCircleMap.babylon'},
   // { 'name' : 'cube',
   //   'file' : 'Assets/testcube.babylon' }
-  { 'name' : 'robot',
-    'file' : 'Assets/robot.babylon'},
   //   'file' : 'Assets/course_1_star.babylon'}
 //oblong course
   { 'name' : 'track',
