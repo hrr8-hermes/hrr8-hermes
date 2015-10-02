@@ -12,7 +12,7 @@ function Robot(delta,id,pos) {
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.4; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
-  this.turnSpeed = .5; // rotation per second (~6.28 is a 360 degrees per second)
+  this.turnSpeed = settings.turnSpeed; // rotation per second (~6.28 is a 360 degrees per second)
   this.maxRunSpeed = settings.maxRunSpeed; //clamps the magnidue of speed vector
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
