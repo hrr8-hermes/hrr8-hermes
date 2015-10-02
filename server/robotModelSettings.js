@@ -7,6 +7,6 @@ module.exports = {
   boostingAcclMultiplier: 4,
   turnSpeed : .5,
   //these two are multiplied by velocity to determine damage
-  playerCollisionDamage: 100, 
-  wallCollisionDamage: 100,
+  playerCollisionDamage: 100,
+  wallCollisionDamage: 100
 };
