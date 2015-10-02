@@ -72,50 +72,6 @@ Game.prototype.getIndex = function(player) {
   return result;
 };
 
-//A move happened in this game
-//Updated there truthy player
-Game.prototype.move = function(data) {
-  // var p1 = this.getPlayer(data.square.socketId);
-  // p1.x += data.moveTo[0];
-  // p1.y += data.moveTo[1];
-  // this.io.sockets.emit('move', p1.robotModel.positionData);
-  //this.checkWallCollision([data.x, data.y, p1.socketId]); 
-  
-};
-
-//Check if player is colliding with other players
-Game.prototype.collision = function(data) {
-  var temp = this.getPlayer(data.player1.socketId);
-  var compare = this.getPlayer(data.player2.socketId);
-  if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
-   temp.y < compare.y + 1 && 1+ temp.y > compare.y)) { 
-    this.io.sockets.emit('falseCollision', data);
-  } else {
-    this.io.sockets.emit('trueCollision', data);
-  }
-};
-
-//Check if player is coliding with a wall of the map
-Game.prototype.checkWallCollision = function(player) {
-  var serverPlayerData = this.getPlayer(player.socketId);
-  var x = serverPlayerData.x;
-  var y = serverPlayerData.y;
-  var socketId = player.socketId;
-  //console.log(bitArray);
-  //var index = position[0] + (4 * position[1]);
-  if (this.map.grid[y] === undefined || this.map.grid[y][x] === undefined) {
-    console.log('ERROR: outside course bounds');
-    return;
-  }
-  var wallHit = (this.map.grid[y][x] === 0)  
-  //if (this.map.grid[y][x] === 0) console.log('hitting wall!', wallCollisionsCount++);
-  if(wallHit) {
-    this.io.to(socketId).emit("trueWallCollision", serverPlayerData);   
-  } else {
-    this.io.to(socketId).emit("falseWallCollision", serverPlayerData);
-  }
-};
-
 Game.prototype.parseInput = function(inputObj, socketId) {
   var p = this.getPlayer(socketId);
   p.input = inputObj;
@@ -126,7 +82,7 @@ Game.prototype.createUpdateLoop = function() {
   //alias for this so we don't lose context inside setInterval
   var self = this;
   var last = new Date().getTime();
-  setInterval(function() {
+  setTimeout(function l00p() {
     var current = new Date().getTime();
     self.delta.deltaValue = current - last;
     last = current;
@@ -137,6 +93,7 @@ Game.prototype.createUpdateLoop = function() {
       }
     });
     self.io.sockets.emit("positions",self.players);
+    setTimeout(l00p,self.updatePerSec);
   },this.updatePerSec);
 
 };

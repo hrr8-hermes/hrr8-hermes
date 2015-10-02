@@ -10,18 +10,14 @@ window.ASSET_SCALE = 0.02;
 window.ASSETS = [
 
   { 'name' : 'Skitter',
+    'type' : 'mesh',
     'file' : 'Assets/enemy@idleRun.babylon' },
 
-  // { 'name' : 'Plane001',
-  //   'file' : "Assets/testEnv.babylon" },
-
-  // { 'name' : 'Cylinder014',
-  //   'file' : 'Assets/testEnv.babylon' }
-  // { 'name' : 'track',
-  //   'file' : 'Assets/course_1_star.babylon'},
   { 'name' : 'ground',
-    'file' : 'Assets/scaledCircleMap.babylon'}
-  // { 'name' : 'cube',
-  //   'file' : 'Assets/testcube.babylon' }
-
+    'type' : 'mesh',
+    'file' : 'Assets/scaledCircleMap.babylon'},
+  
+  { 'name' : 'bg1',
+    'type' : 'sound',
+    'file' : 'sounds/bg/first.wav'}
 ];
