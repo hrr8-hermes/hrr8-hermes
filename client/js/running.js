@@ -27,7 +27,7 @@ Running.prototype.run = function(robot, parsedInput) {
   // var shouldAnimateCam = false; 
   // if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
   //   !robot.pivot.position.equals(parsedInput.position)) &&
-  //   robot.id === socket.id){
+  //   robot.id === socket.id){a
   //   shouldAnimateCam = true; 
   // }
   robot.pivot.position = parsedInput.position; 
