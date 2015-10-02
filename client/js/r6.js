@@ -6,17 +6,15 @@
 
 function runScene(meshes) {
   var players = {};
-  var bob = new Robot(0,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+  var bob = new Robot(0,new BABYLON.Vector3(200,1,-66),meshes['Skitter'],meshes['Skitter'].skeleton);
 
 //part of testEnv, commented out for star track
   // ground
   // meshes['Plane001'].setEnabled(true);
-
   // meshes['ground'].setEnabled(true);
   // meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
-  meshes['ground'].setEnabled(true);
-  meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
-  //meshes['track'].setEnabled(true);
+  meshes['track'].setEnabled(true);
+  meshes['track'].scaling = new BABYLON.Vector3(1,1,1);
 
   // meshes['Plane001'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
   // meshes['Plane001'].material.diffuseTexture.uScale = 0.1;

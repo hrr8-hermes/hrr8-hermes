@@ -6,7 +6,7 @@ function Running(){
 
 Running.prototype._input = function(serverData){
   var parsed = {}; 
-  parsed.position =  new BABYLON.Vector3(serverData.robotModel.position.x, 0.3, serverData.robotModel.position.z);
+  parsed.position =  new BABYLON.Vector3(serverData.robotModel.position.x, 1, serverData.robotModel.position.z);
   parsed.rotation = new BABYLON.Vector3(0, serverData.robotModel.facing * 2  * Math.PI + Math.PI * 0.5, 0);
   parsed.velocity = serverData.robotModel.velocity;
   return parsed; 
