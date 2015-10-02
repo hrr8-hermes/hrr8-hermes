@@ -15,7 +15,7 @@ window.ASSETS = [
 
   { 'name' : 'track',
     'type' : 'mesh',
-    'file' : 'Assets/course_2_oblong.babylon'}
+    'file' : 'Assets/course_2_oblong.babylon'},
 
   { 'name' : 'bg1',
     'type' : 'sound',
