@@ -43,8 +43,6 @@ function Robot(delta,id,pos) {
   //make mesh, set position
 }
 
-
-
 Robot.prototype.increaseEnergy = function(num) {
   if (this.energy < this.maxEnergy) {
     this.energy += num;
