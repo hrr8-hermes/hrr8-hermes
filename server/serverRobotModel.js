@@ -12,7 +12,7 @@ function Robot(delta,id,pos) {
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.4; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
-  this.turnSpeed = .5; // rotation per second (~6.28 is a 360 degrees per second)
+  this.turnSpeed = settings.turnSpeed; // rotation per second (~6.28 is a 360 degrees per second)
   this.maxRunSpeed = settings.maxRunSpeed; //clamps the magnidue of speed vector
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
@@ -67,14 +67,14 @@ Robot.prototype.hasWallCollision = function(map) {
 };
 
 Robot.prototype.handlePlayerCollision = function() {
-  console.log('handlingPlayerCollision');
+  this.decreaseEnergy(this.velocity * settings.playerCollisionDamage);
   this.position.x = this.lastPosition.tail.value.x;
   this.position.z = this.lastPosition.tail.value.z;
 };
 
 Robot.prototype.handleWallCollision = function() {
 
-  this.decreaseEnergy(this.velocity * 100); //50% speed takes away 50 energy
+  this.decreaseEnergy(this.velocity * settings.WallCollisionDamage); //50% speed takes away 50 energy
   //stop movement, stop running, move back to previous position
 
    this.velocity = 0;
