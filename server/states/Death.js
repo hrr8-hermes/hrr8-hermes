@@ -15,7 +15,7 @@ Death.prototype.enterState = function(robot) {
 };
 
 Death.prototype.exitState = function(robot) {
-  var pos = robot.lastPosition[0];
+  var pos = robot.lastPosition.head.value;
   robot.position.x = pos.x;
   robot.position.z = pos.z;
   robot.energy = 5;

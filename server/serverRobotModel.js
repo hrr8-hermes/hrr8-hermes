@@ -1,6 +1,7 @@
 var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
+var LinkedList = require('./LinkedList.js')
 
 function Robot(delta,id,pos) {
   this.delta = delta;
@@ -14,12 +15,14 @@ function Robot(delta,id,pos) {
   this.facing = 0; 
   this.lastGridPosition = [0,0];
   this.energy = 100; 
-  this.lastPosition = [];
+  this.lastPosition = new LinkedList();
   this.isRunning = false; 
   this.position = pos; 
   this.setState('running'); //initial state
   //make mesh, set position
 }
+
+
 
 Robot.prototype.increaseEnergy = function(num) {
   this.energy += num;
@@ -52,8 +55,8 @@ Robot.prototype.hasWallCollision = function(map) {
 
 Robot.prototype.handlePlayerCollision = function() {
   console.log('handlingPlayerCollision');
-  this.position.x = this.lastPosition[this.lastPosition.length -1].x;
-  this.position.z = this.lastPosition[this.lastPosition.length -1].z;
+  this.position.x = this.lastPosition.tail.value.x;
+  this.position.z = this.lastPosition.tail.value.z;
 };
 
 Robot.prototype.handleWallCollision = function() {
@@ -61,8 +64,8 @@ Robot.prototype.handleWallCollision = function() {
   //stop movement, stop running, move back to previous position
    this.velocity = 0;
    this.stopRunning();
-   this.position.x = this.lastPosition[this.lastPosition.length -1].x;
-   this.position.z = this.lastPosition[this.lastPosition.length -1].z;
+   this.position.x = this.lastPosition.tail.value.x;
+   this.position.z = this.lastPosition.tail.value.z;
 };
 
 
@@ -80,6 +83,7 @@ Robot.prototype.getYOnGrid = function(map) {
 
 
 Robot.prototype.update = function(input) {
+  
   this.state.update(this,input); 
 };
 Robot.prototype.setState = function(name) {

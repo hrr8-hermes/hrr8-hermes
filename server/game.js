@@ -19,7 +19,7 @@ function Game(id, io, map) {
   //   console.log('console marker...');
   // }, 2000);
   
-  this.updatePerSec = 10;
+  this.updatePerSec = 20;
   //Mill Seconds
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
@@ -59,8 +59,10 @@ Game.prototype.createUpdateLoop = function() {
     var current = new Date().getTime();
     self.delta.deltaValue = current - last;
     last = current;
+    var objectsToSend = {};
     //loop over all players, check for wall collisions
     for (var playerId in self.players) {
+      
       var player = self.players[playerId];
       player.robotModel.update(player.input);
       if (player.robotModel.hasWallCollision(self.map)) {
@@ -69,8 +71,19 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
+      objectsToSend[player.socketId] = {
+        socketId: player.socketId,
+        robotModel: {
+          velocity: player.robotModel.velocity,
+          state: player.robotModel.state,
+          facing: player.robotModel.facing,
+          position: player.robotModel.position,
+          energy: player.robotModel.energy,
+        }
+      };
     }
-    self.io.sockets.emit('positions', self.players); 
+    //console.log(objects)
+    self.io.sockets.emit('positions', objectsToSend); 
   },this.updatePerSec);
 };
 

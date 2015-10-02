@@ -9,8 +9,8 @@ window.ASSET_SCALE = 0.02;
 
 window.ASSETS = [
 
-  // { 'name' : 'Skitter',
-  //   'file' : 'Assets/enemy@idleRun.babylon' },
+  { 'name' : 'Skitter',
+    'file' : 'Assets/enemy@idleRun.babylon' },
 
   // { 'name' : 'Plane001',
   //   'file' : "Assets/testEnv.babylon" },
@@ -27,8 +27,8 @@ window.ASSETS = [
     'file' : 'Assets/scaledCircleMap.babylon'},
   // { 'name' : 'cube',
   //   'file' : 'Assets/testcube.babylon' }
-  { 'name' : 'robot',
-    'file' : 'Assets/robot.babylon'},
+  // { 'name' : 'robot',
+  //   'file' : 'Assets/robot.babylon'},
   //   'file' : 'Assets/course_1_star.babylon'}
 //oblong course
   { 'name' : 'track',
