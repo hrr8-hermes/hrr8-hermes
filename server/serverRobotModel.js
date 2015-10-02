@@ -67,14 +67,14 @@ Robot.prototype.hasWallCollision = function(map) {
 };
 
 Robot.prototype.handlePlayerCollision = function() {
-  console.log('handlingPlayerCollision');
+  this.decreaseEnergy(this.velocity * settings.playerCollisionDamage);
   this.position.x = this.lastPosition.tail.value.x;
   this.position.z = this.lastPosition.tail.value.z;
 };
 
 Robot.prototype.handleWallCollision = function() {
 
-  this.decreaseEnergy(this.velocity * 100); //50% speed takes away 50 energy
+  this.decreaseEnergy(this.velocity * settings.WallCollisionDamage); //50% speed takes away 50 energy
   //stop movement, stop running, move back to previous position
 
    this.velocity = 0;
