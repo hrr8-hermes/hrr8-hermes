@@ -45,8 +45,6 @@ Robot.prototype.hasWallCollision = function(map) {
   // console.log('Babylon z: ', this.position.z);
   var xOnGrid = Math.round(this.position.x + map.width / 2);
   var yOnGrid = Math.round(map.height / 2 - this.position.z);
-  console.log('Grid: ('+xOnGrid+','+yOnGrid+')');
-  console.log('ACtu: ('+this.position.x+','+this.position.z+')');
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
