@@ -12,16 +12,24 @@ function Robot(delta,id,pos) {
   this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
-  this.lastPosition = new Vector3(0, 1, 0);
   this.lastGridPosition = [0,0];
-  this.states = {
-    running: new Running(),
-    death: new Death(),
-  }
+  this.energy = 100; 
+  this.lastPosition = [];
   this.isRunning = false; 
   this.position = pos; 
   this.setState('running'); //initial state
   //make mesh, set position
+}
+
+Robot.prototype.increaseEnergy = function(num) {
+  this.energy += num;
+}
+
+Robot.prototype.decreaseEnergy = function(num) {
+  this.energy -= num;
+  if(this.energy <= 0) {
+    this.setState('death');
+  }
 }
 
 Robot.prototype.hasWallCollision = function(map) {
@@ -42,19 +50,21 @@ Robot.prototype.hasWallCollision = function(map) {
   }
 };
 
+Robot.prototype.handlePlayerCollision = function() {
+  console.log('handlingPlayerCollision');
+  this.position.x = this.lastPosition[this.lastPosition.length -1].x;
+  this.position.z = this.lastPosition[this.lastPosition.length -1].z;
+};
+
 Robot.prototype.handleWallCollision = function() {
+  this.decreaseEnergy(this.velocity * 100); //50% speed take way 50 energy
   //stop movement, stop running, move back to previous position
    this.velocity = 0;
    this.stopRunning();
-   this.position.x = this.lastPosition.x;
-   this.position.z = this.lastPosition.z;
+   this.position.x = this.lastPosition[this.lastPosition.length -1].x;
+   this.position.z = this.lastPosition[this.lastPosition.length -1].z;
 };
 
-Robot.prototype.handlePlayerCollision = function() {
-  console.log('handlingPlayerCollision');
-  this.position.x = this.lastPosition.x + 5;
-  this.position.z = this.lastPosition.z + 5;
-};
 
 Robot.prototype.getXOnGrid = function(map) {
   return Math.round(this.position.x + map.width / 2);
