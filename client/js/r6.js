@@ -87,6 +87,9 @@ function runScene(meshes) {
   meshes['Plane001'].receiveShadows = true;
   */
 
+  meshes.bg1.loop = true;
+  meshes['bg1'].autoplay = true;
+
   // start rendering
   engine.runRenderLoop(function() {
     // keeps the spot at camera's location
@@ -107,6 +110,7 @@ function runScene(meshes) {
   var switchcam = false;
   var switchdebug = true;
   window.addEventListener('keydown', function(e) {
+    
     if (e.keyCode===70) {
       if (switchcam) {
         scene.activeCamera = camera;
@@ -122,6 +126,11 @@ function runScene(meshes) {
         scene.debugLayer.hide();
       }
       switchdebug = !switchdebug;
+    }
+
+    // M to stop track
+    if (e.keyCode === 77) {
+      meshes.bg1.stop();
     }
   });
   //Connect to server once the scene is loaded to not miss any events
