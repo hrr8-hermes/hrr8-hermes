@@ -27,7 +27,6 @@ Running.prototype.run = function(robot, parsedInput) {
     }
   } else {
     currentAccl = parsedInput[0] *  settings.runningAcclMultiplier * robot.accelerationForward * robot.delta.deltaValue / 1000;
-    console.log('accl mult: ',settings);
     robot.velocity += currentAccl; //velocity = velocity + accl
     if(robot.velocity >= robot.maxRunSpeed) {
       robot.velocity = robot.maxRunSpeed;
