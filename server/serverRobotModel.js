@@ -85,7 +85,7 @@ Robot.prototype.getYOnGrid = function(map) {
   return Math.round(map.height / 2 - this.position.z);
 };
 
-Robot.prototype.update = functiongit(input) {
+Robot.prototype.update = function(input) {
 
   //console.log(this.energy);
   //console.log(this.state);
