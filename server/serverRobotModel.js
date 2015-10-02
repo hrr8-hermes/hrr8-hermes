@@ -2,6 +2,8 @@ var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
 var LinkedList = require('./LinkedList.js')
+var Boosting = require('./states/Boosting.js');
+
 
 function Robot(delta,id,pos) {
   this.delta = delta;
@@ -14,9 +16,12 @@ function Robot(delta,id,pos) {
   this.velocity = 0; 
   this.facing = 0; 
   this.lastGridPosition = [0,0];
+
   this.energy = 100; 
   this.lastPosition = new LinkedList();
   this.isRunning = false; 
+  this.isBoosting = false; 
+
   this.position = pos; 
   this.setState('running'); //initial state
   //make mesh, set position
@@ -76,9 +81,6 @@ Robot.prototype.getXOnGrid = function(map) {
 Robot.prototype.getYOnGrid = function(map) {
   return Math.round(map.height / 2 - this.position.z);
 };
-
-
-
 
 
 
