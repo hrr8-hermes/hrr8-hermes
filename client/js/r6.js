@@ -5,8 +5,10 @@
  */
 
 function runScene(meshes) {
+  createMaterials(); 
   var players = {};
-  var bob = new Robot(0,new BABYLON.Vector3(200,1,-66),meshes['Skitter'],meshes['Skitter'].skeleton);
+  var bob = new Robot(0,new BABYLON.Vector3(200,1,-66),meshes['Robot'],meshes['Robot'].skeleton);
+  bob.mesh.material = materials.robot; 
 
 //part of testEnv, commented out for star track
   // ground
@@ -50,7 +52,7 @@ function runScene(meshes) {
   chaseCam.maxCameraSpeed = 10;
 
   // light the entire scene with ambient
-  var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0),scene);
+  var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,10,0),scene);
   light.diffuse = new BABYLON.Color3(1,1,1);
   light.specular = new BABYLON.Color3(1,1,1);
   light.groundColor = new BABYLON.Color3(0,0,0);
