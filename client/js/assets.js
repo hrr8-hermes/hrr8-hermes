@@ -19,7 +19,7 @@ window.ASSETS = [
 
   { 'name' : 'Robot',
     'type' : 'mesh',
-    'scale': 0.04,
+    'scale': 0.03,
     'file' : 'assets/robot.babylon' },
 
   { 'name' : 'track',
