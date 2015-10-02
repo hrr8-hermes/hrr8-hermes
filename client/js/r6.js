@@ -10,34 +10,23 @@ function runScene(meshes) {
   var bob = new Robot(0,new BABYLON.Vector3(200,1,-66),meshes['Robot'],meshes['Robot'].skeleton);
   bob.mesh.material = materials.robot; 
 
-//part of testEnv, commented out for star track
-  // ground
-  // meshes['Plane001'].setEnabled(true);
-  // meshes['ground'].setEnabled(true);
-  // meshes['ground'].scaling = new BABYLON.Vector3(1,1,1);
   meshes['track'].setEnabled(true);
   meshes['track'].scaling = new BABYLON.Vector3(1,1,1);
 
-  // meshes['Plane001'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
-  // meshes['Plane001'].material.diffuseTexture.uScale = 0.1;
-  // meshes['Plane001'].material.diffuseTexture.vScale = 0.1;
-  // meshes['Plane001'].material.specularColor = new BABYLON.Color3(0,0,0);
-  // // columnsw
-  // meshes['Cylinder014'].setEnabled(true);
-  // meshes['Cylinder014'].scaling = new BABYLON.Vector3(0.1,0.1,0.1);
-  // meshes['Cylinder014'].position = new BABYLON.Vector3(200,0,-70);
-
   // creates free-floating camera w/ default controls
   // click-drag to look, arrows to move, standard FP controls
-  // var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
-  // camera.setTarget(BABYLON.Vector3.Zero());
-  // camera.attachControl(canvas,false);
+  var freeCam = new BABYLON.FreeCamera('freeCam', new BABYLON.Vector3(0,300,-90), scene);
+  freeCam.attachControl(canvas);
+  
+  // 0,0,0 visualization
+  var origin = new BABYLON.Mesh.CreateSphere('origin', 20, 10, scene);
+  origin.position = new BABYLON.Vector3(0,0,0);
+  origin.material = new BABYLON.StandardMaterial('originmat',scene);
+  origin.material.emissiveColor = new BABYLON.Color3(1,0,0);
+
+  // followcam
   window.camera = new BABYLON.TargetCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.attachControl(canvas,false);
-  // camera.lockedTarget = bob.pivot; 
-  // camera.speed = 0; 
-  window.sceneIsDirty = true; 
-
 
   // toggle to cam following our robot bob
   // radius is distance to maintain, height/rotation is as it sounds
@@ -89,11 +78,16 @@ function runScene(meshes) {
   meshes['Plane001'].receiveShadows = true;
   */
 
+  meshes.bg1.loop = true;
+  meshes.bg1.autoplay = true;
+  meshes.bg1.play();
+
   // start rendering
   engine.runRenderLoop(function() {
+    // keep freecam on bob for now
+//    freeCam.setTarget(bob.pivot.position);
     // keeps the spot at camera's location
     light3.position = camera.position;
-    //bob.update(USER_INPUT); 
     scene.render();
     applyPositions(); 
   });
@@ -104,18 +98,23 @@ function runScene(meshes) {
   });
 
   // additional listeners for debugging
-  // use 'f' to switch between follow & chase cam
+  // use 'f' to flip cams through follow, chase, and free
   // use 'p' to toggle debug layer
-  var switchcam = false;
+  var switchcam = 0;
   var switchdebug = true;
+  var togglemusic = true;
   window.addEventListener('keydown', function(e) {
+    
     if (e.keyCode===70) {
-      if (switchcam) {
+      if (switchcam===0) {
         scene.activeCamera = camera;
-      } else {
+      } else if (switchcam===1) {
         scene.activeCamera = chaseCam;
+      } else {
+        freeCam.setTarget(origin.position);
+        scene.activeCamera = freeCam;
       }
-      switchcam = !switchcam;
+      switchcam = (switchcam<2)?switchcam+1:0;
     }
     if (e.keyCode===80) {
       if (switchdebug) {
@@ -124,6 +123,16 @@ function runScene(meshes) {
         scene.debugLayer.hide();
       }
       switchdebug = !switchdebug;
+    }
+
+    // M to stop track
+    if (e.keyCode === 77) {
+      if (togglemusic) {
+        meshes.bg1.stop();
+      } else {
+        meshes.bg1.play();
+      }
+      togglemusic = !togglemusic;
     }
   });
   //Connect to server once the scene is loaded to not miss any events
