@@ -22,7 +22,7 @@ Running.prototype._runCheck = function(robot){
     robot.stopRunning(); 
   }
 };
- 
+  
 Running.prototype.run = function(robot, parsedInput) {
   // var shouldAnimateCam = false; 
   // if((!robot.pivot.rotation.equals(parsedInput.rotation) ||
