@@ -1,12 +1,12 @@
 var settings = require('../robotModelSettings.js');
 
-function Running() {
-  this.name = "running";
+function Boosting() {
+  this.name = "boosting";
   this.isRunning = false; 
-  this.isBoosting = false; 
+  this.isBoosting = false;
   this.updateCounter = 0; 
 }
-Running.prototype._input = function(inputObj){
+Boosting.prototype._input = function(inputObj){
   var x = 0;
   var z = 0;  
   x-=inputObj.KA ? inputObj.KA : 0; 
@@ -18,7 +18,7 @@ Running.prototype._input = function(inputObj){
   currentInput[1] = x; 
   return currentInput; 
 };
-Running.prototype.run = function(robot, parsedInput) {
+Boosting.prototype.run = function(robot, parsedInput) {
   var currentAccl;
   if (parsedInput[0] === 0) {
     robot.velocity -= robot.velocity * robot.speedDecay * robot.delta.deltaValue / 1000;
@@ -26,25 +26,19 @@ Running.prototype.run = function(robot, parsedInput) {
       robot.velocity = 0; 
     }
   } else {
-    currentAccl = parsedInput[0] *  settings.runningAcclMultiplier * robot.accelerationForward * robot.delta.deltaValue / 1000;
+    currentAccl = parsedInput[0] *  settings.boostingAcclMultiplier * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
-    if(robot.velocity >= robot.maxRunSpeed) {
-      robot.velocity = robot.maxRunSpeed;
+    if(robot.velocity >= robot.maxBoostSpeed) {
+      robot.velocity = robot.maxBoostSpeed;
     }
   }
-  
   robot.facing += parsedInput[1] * robot.turnSpeed * robot.delta.deltaValue / 1000;
   robot.forwardNormX = Math.sin(robot.facing * Math.PI * 2); 
   robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2);
   //save this position before moving in case there is a collision
-
-
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
-
-
   if(robot.lastPosition.length >= 2500) {
     robot.lastPosition.removeHead();
-
   }
 
 
@@ -54,22 +48,23 @@ Running.prototype.run = function(robot, parsedInput) {
 };
 
 
-Running.prototype.update = function(robot,inputObj){
-  var parsedInput = this._input(inputObj);
+Boosting.prototype.update = function(robot,inputObj){
+  var parsedInput = this._input(inputObj); 
+  //deplete energy while boosting
   this.updateCounter++;
   if (this.updateCounter === 20) {
-    robot.increaseEnergy(settings.runningHealthGain); 
-    this.updateCounter = 0;
+      robot.decreaseEnergy(settings.boostingHealthDrain);
+      this.updateCounter = 0;
   }
   this.run(robot, parsedInput); 
 };
 
-Running.prototype.enterState = function() {
+Boosting.prototype.enterState = function() {
 
 };
 
-Running.prototype.exitState = function() {
+Boosting.prototype.exitState = function() {
 
 };
 
-module.exports = Running;
+module.exports = Boosting;

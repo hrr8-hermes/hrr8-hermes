@@ -171,5 +171,30 @@ function runScene(meshes) {
         delete players[player.socketId];
       }
   });
+  //if we ever want to display the png client side (for testing or something)
+  // socket.on('image data to display', function(data) {
+  //   var canvas2 = document.createElement('CANVAS');
+  //    canvasWidth = 512;
+  //    canvasHeight = 512;
+  //    canvas2.width = canvasWidth;
+  //    canvas2.height = canvasHeight;
+  //    //canvas.id = 'canvas';
+  //    canvas2.style.position = 'absolute';
+  //    canvas2.style.top = '0';
+  //    canvas2.style.left = '0';
+  //   var context = canvas2.getContext('2d');
+  //   var imageData = context.createImageData(512, 512);
+  //   console.log(data[0]);
+  //   for (var i = 0; i < imageData.data.length; i++) {
+  //     imageData.data[i] = data[i];
+  //   }
+  //   console.log(imageData.data[4]);
+
+  //   context.putImageData(imageData, 0, 0);
+  //   document.body.appendChild(canvas2);
+  // });
+  // //roundabout way to process the .png
+
+
 }
 

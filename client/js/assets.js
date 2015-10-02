@@ -9,12 +9,16 @@ window.ASSET_SCALE = 0.02;
 
 window.ASSETS = [
 
-  // { 'name' : 'Skitter',
-  //   'file' : 'Assets/enemy@idleRun.babylon' },
 
+//characters
+  { 'name' : 'Skitter',
+    'file' : 'Assets/enemy@idleRun.babylon' },
+  // { 'name' : 'robot',
+  //   'file' : 'Assets/robot.babylon'},
+
+//environments
   // { 'name' : 'Plane001',
   //   'file' : "Assets/testEnv.babylon" },
-
   // { 'name' : 'Cylinder014',
   //   'file' : 'Assets/testEnv.babylon' }
 //circle 
@@ -30,6 +34,9 @@ window.ASSETS = [
   // { 'name' : 'cube',
   //   'file' : 'Assets/testcube.babylon' }
   //   'file' : 'Assets/course_1_star.babylon'}
+//test cube
+  // { 'name' : 'cube',
+  //   'file' : 'Assets/testcube.babylon' }
 //oblong course
   { 'name' : 'track',
     'file' : 'Assets/course_2_oblong.babylon'}

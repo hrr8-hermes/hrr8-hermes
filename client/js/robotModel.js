@@ -12,6 +12,7 @@ function Robot(id,pos,mesh,skeleton) {
   this.setState('running'); //initial state
   //make mesh, set position
   this.isRunning = false; 
+  this.isBoosting = false;
 }
 Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.mesh = mesh.clone(this.id + '_mesh'); 
@@ -56,4 +57,5 @@ Robot.prototype.stopRunning = function(){
 Robot.states = {
   running: new Running(),
   death: new Death(), 
-} ;
+  boosting: new Boosting()
+};
