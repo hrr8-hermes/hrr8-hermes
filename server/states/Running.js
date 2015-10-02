@@ -2,6 +2,7 @@ function Running() {
   this.name = "running";
   this.isRunning = false; 
   this.isBoosting = false; 
+  this.updateCounter = 0; 
 }
 Running.prototype._input = function(inputObj){
   var x = 0;
@@ -23,10 +24,10 @@ Running.prototype.run = function(robot, parsedInput) {
       robot.velocity = 0; 
     }
   } else {
-    currentAccl = parsedInput[0] *  0.5 * robot.accelerationForward * robot.delta.deltaValue / 1000;
+    currentAccl = parsedInput[0] *  0.02 * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
-    if(robot.velocity >= robot.maxSpeed) {
-      robot.velocity = robot.maxSpeed;
+    if(robot.velocity >= robot.maxRunSpeed) {
+      robot.velocity = robot.maxRunSpeed;
     }
   }
   
@@ -46,7 +47,12 @@ Running.prototype.run = function(robot, parsedInput) {
 
 
 Running.prototype.update = function(robot,inputObj){
-  var parsedInput = this._input(inputObj); 
+  var parsedInput = this._input(inputObj);
+  this.updateCounter++;
+  if (this.updateCounter === 20) {
+    robot.increaseEnergy(2); 
+    this.updateCounter = 0;
+  }
   this.run(robot, parsedInput); 
 };
 

@@ -45,7 +45,6 @@ Game.prototype.removePlayer = function(id) {
   this.numPlayers--;
 };
 
-
 Game.prototype.parseInput = function(inputObj, socketId) {
   var p = this.players[socketId];
   p.input = inputObj;

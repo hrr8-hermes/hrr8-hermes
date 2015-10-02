@@ -1,7 +1,8 @@
 function Boosting() {
   this.name = "boosting";
   this.isRunning = false; 
-  this.isBoosting = false; 
+  this.isBoosting = false;
+  this.updateCounter = 0; 
 }
 Boosting.prototype._input = function(inputObj){
   var x = 0;
@@ -23,13 +24,12 @@ Boosting.prototype.run = function(robot, parsedInput) {
       robot.velocity = 0; 
     }
   } else {
-    currentAccl = parsedInput[0] *  1.5 * robot.accelerationForward * robot.delta.deltaValue / 1000;
+    currentAccl = parsedInput[0] *  1 * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
-    if(robot.velocity >= robot.maxSpeed) {
-      robot.velocity = robot.maxSpeed;
+    if(robot.velocity >= robot.maxBoostSpeed) {
+      robot.velocity = robot.maxBoostSpeed;
     }
   }
-  
   robot.facing += parsedInput[1] * robot.turnSpeed * robot.delta.deltaValue / 1000;
   robot.forwardNormX = Math.sin(robot.facing * Math.PI * 2); 
   robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2);
@@ -44,6 +44,12 @@ Boosting.prototype.run = function(robot, parsedInput) {
 
 Boosting.prototype.update = function(robot,inputObj){
   var parsedInput = this._input(inputObj); 
+  //deplete energy while boosting
+  this.updateCounter++;
+  if (this.updateCounter === 20) {
+      robot.decreaseEnergy(1);
+      this.updateCounter = 0;
+  }
   this.run(robot, parsedInput); 
 };
 
