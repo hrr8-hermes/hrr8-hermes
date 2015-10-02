@@ -9,6 +9,7 @@ Death.prototype.update = function(robot,inputObj){
 };
 
 Death.prototype.enterState = function(robot) {
+  console.log('dead!');
   setTimeout(function(){
     robot.setState('running')
   },3000)
