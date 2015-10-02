@@ -13,6 +13,10 @@ window.ASSETS = [
     'type' : 'mesh',
     'file' : 'Assets/enemy@idleRun.babylon' },
 
+  { 'name' : 'Robot',
+    'type' : 'mesh',
+    'file' : 'assets/robot.babylon' },
+
   { 'name' : 'track',
     'type' : 'mesh',
     'file' : 'Assets/course_2_oblong.babylon'},
