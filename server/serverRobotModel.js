@@ -13,6 +13,7 @@ function Robot(delta,id,pos) {
   this.velocity = 0; 
   this.facing = 0; 
   this.lastPosition = new Vector3(0, 1, 0);
+  this.lastGridPosition = [0,0];
   this.states = {
     running: new Running(),
     death: new Death(),
@@ -29,8 +30,8 @@ Robot.prototype.hasWallCollision = function(map) {
   //but is upper left of the 2d map
   // console.log('Babylon x: ', this.position.x);
   // console.log('Babylon z: ', this.position.z);
-  var xOnGrid = Math.round(this.position.x + map.width / 2);
-  var yOnGrid = Math.round(map.height / 2 - this.position.z);
+  var xOnGrid = this.getXOnGrid(map);
+  var yOnGrid = this.getYOnGrid(map);
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
@@ -41,12 +42,6 @@ Robot.prototype.hasWallCollision = function(map) {
   }
 };
 
-Robot.prototype.handlePlayerCollision = function() {
-  console.log('handlingPlayerCollision');
-  this.position.x = this.lastPosition.x;
-  this.position.z = this.lastPosition.z;
-};
-
 Robot.prototype.handleWallCollision = function() {
   //stop movement, stop running, move back to previous position
    this.velocity = 0;
@@ -54,6 +49,24 @@ Robot.prototype.handleWallCollision = function() {
    this.position.x = this.lastPosition.x;
    this.position.z = this.lastPosition.z;
 };
+
+Robot.prototype.handlePlayerCollision = function() {
+  console.log('handlingPlayerCollision');
+  this.position.x = this.lastPosition.x + 5;
+  this.position.z = this.lastPosition.z + 5;
+};
+
+Robot.prototype.getXOnGrid = function(map) {
+  return Math.round(this.position.x + map.width / 2);
+};
+
+Robot.prototype.getYOnGrid = function(map) {
+  return Math.round(map.height / 2 - this.position.z);
+};
+
+
+
+
 
 
 Robot.prototype.update = function(input) {
