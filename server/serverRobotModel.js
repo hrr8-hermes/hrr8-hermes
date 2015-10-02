@@ -1,3 +1,16 @@
+/* serverRobotModel.js
+ *
+ * Robot data model with server-side logic
+ *
+ * Track positions are handled by tracking "distance" :
+ *   0 : start
+ *   1 : halfway lap1
+ *   2 : start lap2
+ *   etc - easy to set for multiple track shapes
+ *
+ *   TODO: add more segments to allow for position tracking
+ */
+
 var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
@@ -17,6 +30,7 @@ function Robot(delta,id,pos) {
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
   this.facing = 0; 
+  this.distance = 0; // waypoint count, not actual distance
   this.lastGridPosition = [0,0];
   this.energy = 100; 
   this.lastPosition = new LinkedList();
@@ -28,8 +42,6 @@ function Robot(delta,id,pos) {
   this.setState('running'); //initial state
   //make mesh, set position
 }
-
-
 
 Robot.prototype.increaseEnergy = function(num) {
   if (this.energy < this.maxEnergy) {
@@ -53,8 +65,6 @@ Robot.prototype.hasWallCollision = function(map) {
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);
-  //console.log(xOnGrid);
-  //console.log(yOnGrid);
 
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
