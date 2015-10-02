@@ -3,6 +3,7 @@ var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
 var LinkedList = require('./LinkedList.js')
 var Boosting = require('./states/Boosting.js');
+var settings = require('./robotModelSettings.js');
 
 
 function Robot(delta,id,pos) {
@@ -12,8 +13,8 @@ function Robot(delta,id,pos) {
   this.brakeSpeed = 0.4; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
   this.turnSpeed = .5; // rotation per second (~6.28 is a 360 degrees per second)
-  this.maxRunSpeed = .2; //clamps the magnidue of speed vector
-  this.maxBoostSpeed = .8;
+  this.maxRunSpeed = settings.maxRunSpeed; //clamps the magnidue of speed vector
+  this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
   this.facing = 0; 
   this.lastGridPosition = [0,0];
@@ -49,12 +50,16 @@ Robot.prototype.hasWallCollision = function(map) {
   //but is upper left of the 2d map
   // console.log('Babylon x: ', this.position.x);
   // console.log('Babylon z: ', this.position.z);
+  //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);
+  //console.log(xOnGrid);
+  //console.log(yOnGrid);
+
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
-    console.log('ERROR: out of course bounds');
+  //  console.log('ERROR: out of course bounds');
   } else {
     //0 means a black pixel (wall) 
     return map.grid[yOnGrid][xOnGrid] === 0;
@@ -68,13 +73,16 @@ Robot.prototype.handlePlayerCollision = function() {
 };
 
 Robot.prototype.handleWallCollision = function() {
+
   this.decreaseEnergy(this.velocity * 100); //50% speed takes away 50 energy
   //stop movement, stop running, move back to previous position
+
    this.velocity = 0;
    this.stopRunning();
 
    this.position.x = this.lastPosition.tail.value.x;
    this.position.z = this.lastPosition.tail.value.z;
+
 };
 
 Robot.prototype.getXOnGrid = function(map) {

@@ -1,3 +1,5 @@
+var settings = require('../robotModelSettings.js');
+
 function Boosting() {
   this.name = "boosting";
   this.isRunning = false; 
@@ -24,7 +26,7 @@ Boosting.prototype.run = function(robot, parsedInput) {
       robot.velocity = 0; 
     }
   } else {
-    currentAccl = parsedInput[0] *  1 * robot.accelerationForward * robot.delta.deltaValue / 1000;
+    currentAccl = parsedInput[0] *  settings.boostingAcclMultiplier * robot.accelerationForward * robot.delta.deltaValue / 1000;
     robot.velocity += currentAccl; //velocity = velocity + accl
     if(robot.velocity >= robot.maxBoostSpeed) {
       robot.velocity = robot.maxBoostSpeed;
@@ -52,7 +54,7 @@ Boosting.prototype.update = function(robot,inputObj){
   //deplete energy while boosting
   this.updateCounter++;
   if (this.updateCounter === 20) {
-      robot.decreaseEnergy(1);
+      robot.decreaseEnergy(settings.boostingHealthDrain);
       this.updateCounter = 0;
   }
   this.run(robot, parsedInput); 

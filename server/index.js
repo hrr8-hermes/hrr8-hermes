@@ -13,7 +13,7 @@ var fs = require('fs');
 var games = {};
 var nextGameId = 1;
 var currentMapName = 'oblong';
-
+var pixelData = [];
 var maps = {
   circle: {
     name: 'Circle of Iniquity',
@@ -56,6 +56,10 @@ function loadMapGrid(mapName, callback) {
       mapObj.grid = processImageIntoBitArray(this.data, this.width, this.height);
       mapObj.width = this.width;
       mapObj.height = this.height;
+      for (var i = 0; i < this.data.length; i++) {
+        pixelData[i] = this.data[i];
+      }
+
       callback();
     }); 
 }
@@ -68,7 +72,7 @@ function createGame() {
 
 //Listen to connections from socket.io
 io.on('connection', function(socket) {
-
+  socket.emit('image data to display', pixelData);
   //add this player to the first open game
   var currentGame;
   for (var i = 1; i < nextGameId; i++)  {
@@ -140,7 +144,7 @@ function processImageIntoBitArray(imageDataArray, width, height) {
     }
     bitArrayGrid.push(row);  
   }
-  //findWhiteZone(bitArrayGrid);
+  findWhiteZone(bitArrayGrid);
   return bitArrayGrid;
 }
 
