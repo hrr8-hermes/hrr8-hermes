@@ -1,8 +1,3 @@
-
-
-// 
-// states.outOfEnergy = new outOfEnergy(); 
-
 function Robot(id,pos,mesh,skeleton) {
   this.id = id;
   this.accelerationForward = 1; //in seconds
@@ -10,7 +5,7 @@ function Robot(id,pos,mesh,skeleton) {
   this.speedDecay = 0.5; //percent of speed that dies per second 
   this.turnSpeed = 1; // rotation per second (~6.28 is a 360 degrees per second)
   this.maxSpeed = 10; //clamps the magnidue of speed vector
-  this.velocity = 0; 
+  this.velocity = 0;
   this._buildRobot(mesh, skeleton);
   this.pivot.position = pos;
 
