@@ -1,3 +1,16 @@
+/* serverRobotModel.js
+ *
+ * Robot data model with server-side logic
+ *
+ * Track positions are handled by tracking "distance" :
+ *   0 : start
+ *   1 : halfway lap1
+ *   2 : start lap2
+ *   etc - easy to set for multiple track shapes
+ *
+ *   TODO: add more segments to allow for position tracking
+ */
+
 var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
@@ -17,6 +30,7 @@ function Robot(delta,id,pos) {
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
   this.facing = 0; 
+  this.distance = 0; // waypoint count, not actual distance
   this.lastGridPosition = [0,0];
   this.energy = 100; 
   this.lastPosition = new LinkedList();
@@ -50,12 +64,19 @@ Robot.prototype.hasWallCollision = function(map) {
   //but is upper left of the 2d map
   // console.log('Babylon x: ', this.position.x);
   // console.log('Babylon z: ', this.position.z);
+<<<<<<< HEAD
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);
   //console.log(xOnGrid);
   //console.log(yOnGrid);
 
+=======
+  var xOnGrid = Math.round(this.position.x + map.width / 2);
+  var yOnGrid = Math.round(map.height / 2 - this.position.z);
+  console.log('Grid: ('+xOnGrid+','+yOnGrid+')');
+  console.log('ACtu: ('+this.position.x+','+this.position.z+')');
+>>>>>>> Added waypoint functionality
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
