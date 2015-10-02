@@ -50,9 +50,18 @@ html,body {
   height: 100%;
   touch-action: none;
 }
+#energy {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  top: 50px;
+  left: 50px;
+  clip: rect(0, 50px, 100px, 0);
+}
 </style>
 </head>
 <body>
+<img id='energy' src='/assets/energy.png'></img>
 <canvas id="renderCanvas"></canvas>
 <script>
 // connect to server
