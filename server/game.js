@@ -14,15 +14,16 @@ function Game(id, io, map) {
   this.players = {};
   this.numPlayers = 0;
   this.io = io;
+  this.updatePerSec = 20;
+  //Mill Seconds
+  this.delta = {deltaValue: 0};
+  this.maxPlayers = 8;
   this.createUpdateLoop();
   // setInterval(function() {
   //   console.log('console marker...');
   // }, 2000);
   
-  this.updatePerSec = 20;
-  //Mill Seconds
-  this.delta = {deltaValue: 0};
-  this.maxPlayers = 8;
+
 };
 
 //Adds a Player to the Game with their socket id.
@@ -57,7 +58,7 @@ Game.prototype.createUpdateLoop = function() {
   
 
   var updateLoop = function() {
-    var current = new Date().getTime();
+    var current = new Date().getTime(); 
     self.delta.deltaValue = current - last;
     last = current;
     var objectsToSend = {};
