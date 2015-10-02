@@ -37,8 +37,10 @@ Running.prototype.run = function(robot, parsedInput) {
   //save this position before moving in case there is a collision
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
 
+
   if(robot.lastPosition.length >= 5000) {
     robot.lastPosition.removeHead();
+
   }
   //advance position
   robot.position.x += robot.velocity * robot.forwardNormX;
