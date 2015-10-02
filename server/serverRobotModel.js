@@ -1,5 +1,6 @@
 var Vector3 = require('./Vector3.js');
 var Running = require('./states/Running.js')
+var Death = require('./states/Death.js')
 
 function Robot(delta,id,pos) {
   this.delta = delta;
@@ -11,23 +12,34 @@ function Robot(delta,id,pos) {
   this.maxSpeed = 1; //clamps the magnidue of speed vector
   this.velocity = 0; 
   this.facing = 0; 
-  this.position = pos; 
-  this.lastPosition = new Vector3(0, 2, 0);
-  this.states = {
-    running: new Running(),
-    //death: new Death(),
-  }
+  this.lastGridPosition = [0,0];
+  this.energy = 100; 
+  this.lastPosition = [];
   this.isRunning = false; 
-  this.setState(this.states.running); //initial state
+  this.position = pos; 
+  this.setState('running'); //initial state
   //make mesh, set position
+}
+
+Robot.prototype.increaseEnergy = function(num) {
+  this.energy += num;
+}
+
+Robot.prototype.decreaseEnergy = function(num) {
+  this.energy -= num;
+  if(this.energy <= 0) {
+    this.setState('death');
+  }
 }
 
 Robot.prototype.hasWallCollision = function(map) {
 
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
-  var xOnGrid = Math.round(this.position.x + map.width / 2);
-  var yOnGrid = Math.round(map.height / 2 - this.position.z);
+  // console.log('Babylon x: ', this.position.x);
+  // console.log('Babylon z: ', this.position.z);
+  var xOnGrid = this.getXOnGrid(map);
+  var yOnGrid = this.getYOnGrid(map);
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
@@ -40,23 +52,38 @@ Robot.prototype.hasWallCollision = function(map) {
 
 Robot.prototype.handlePlayerCollision = function() {
   console.log('handlingPlayerCollision');
-  this.position.x = this.lastPosition.x;
-  this.position.z = this.lastPosition.z;
+  this.position.x = this.lastPosition[this.lastPosition.length -1].x;
+  this.position.z = this.lastPosition[this.lastPosition.length -1].z;
 };
 
 Robot.prototype.handleWallCollision = function() {
+  this.decreaseEnergy(this.velocity * 100); //50% speed take way 50 energy
   //stop movement, stop running, move back to previous position
    this.velocity = 0;
    this.stopRunning();
-   this.position.x = this.lastPosition.x;
-   this.position.z = this.lastPosition.z;
+   this.position.x = this.lastPosition[this.lastPosition.length -1].x;
+   this.position.z = this.lastPosition[this.lastPosition.length -1].z;
 };
+
+
+Robot.prototype.getXOnGrid = function(map) {
+  return Math.round(this.position.x + map.width / 2);
+};
+
+Robot.prototype.getYOnGrid = function(map) {
+  return Math.round(map.height / 2 - this.position.z);
+};
+
+
+
+
 
 
 Robot.prototype.update = function(input) {
   this.state.update(this,input); 
 };
-Robot.prototype.setState = function(state) {
+Robot.prototype.setState = function(name) {
+  var state = Robot.states[name];
   if(this.state && this.state.exitState){
     this.state.exitState(this); 
   }
@@ -74,5 +101,9 @@ Robot.prototype.stopRunning = function(){
 //  scene.beginAnimation(this.skeleton,0,10,true,1.0); 
   this.isRunning = false;
 };
+Robot.states = {
+  running: new Running(),
+  death: new Death(),
+}
 
 module.exports = Robot;

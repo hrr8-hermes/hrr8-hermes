@@ -12,6 +12,8 @@ var fs = require('fs');
 //The list of games in the server
 var games = {};
 var nextGameId = 1;
+var currentMapName = 'oblong';
+
 var maps = {
   circle: {
     name: 'Circle of Iniquity',
@@ -19,15 +21,28 @@ var maps = {
     width: null,
     height: null,
     grid: null
+  },
+  star: {
+    name: 'Satan\'s Secret Star',
+    path: 'server/assets/course_1_star.png',
+    width: null,
+    height: null,
+    grid: null
+  },
+  oblong: {
+    name: 'The Odious Oblong',
+    path: 'server/assets/course_2_oblong.png',
+    width: null,
+    height: null,
+    grid: null
   }
 };
 //Load up a map grid for collision detection and start a game
 initialize();
-//loadMap('server/assets/scaledCircleMap.png');
 
 //load the map grid, as soon as that's complete, use it to instantiate a Game
 function initialize() {
-  loadMapGrid('circle', createGame);
+  loadMapGrid(currentMapName, createGame);
   console.log(games);
 }
 
@@ -46,7 +61,7 @@ function loadMapGrid(mapName, callback) {
 }
 
 function createGame() {
-  game = new Game(nextGameId, io, maps.circle);
+  game = new Game(nextGameId, io, maps[currentMapName]);
   games[nextGameId] = game;
   nextGameId++;
 }
@@ -65,7 +80,7 @@ io.on('connection', function(socket) {
   }
   currentGame.addPlayer(socket.id);
   //Gets the recently added player from game object
-  var currentPlayer = currentGame.getPlayer(socket.id);
+  var currentPlayer = currentGame.players[socket.id];
   //Let all the players know about the new player
   socket.broadcast.emit("playerConnected", currentPlayer);
 
@@ -77,7 +92,7 @@ io.on('connection', function(socket) {
   
   //send all player info to recently connected player
   setTimeout(function() {
-    socket.emit("connected", game.players);
+    socket.emit("connected", currentGame.players);
   }, 500);
 
   //Handle when a player disconnects from server
@@ -91,16 +106,13 @@ io.on('connection', function(socket) {
 
 //Finds the game a socket is connected to.
 function getGameBySocketId(socketId) {
-  var result;
   for (var gameId in games) {
-    games[gameId].players.forEach(function(player) {
-      if(player.socketId === socketId) {
-        result = games[gameId];
-      }
-    });
+    for(var playerId in games[gameId].players) {
+      if (playerId = socketId) return games[gameId];
+    }
   }
-  return result;
 }
+
 
 //Start up express and socket io
 var port = process.env.PORT || 3000;
