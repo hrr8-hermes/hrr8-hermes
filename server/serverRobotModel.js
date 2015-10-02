@@ -59,7 +59,7 @@ Robot.prototype.hasWallCollision = function(map) {
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
     this.handleWallCollision();
-  //  console.log('ERROR: out of course bounds');
+    console.log('ERROR: out of course bounds');
   } else {
     //0 means a black pixel (wall) 
     return map.grid[yOnGrid][xOnGrid] === 0;
