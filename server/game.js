@@ -55,7 +55,7 @@ Game.prototype.createUpdateLoop = function() {
   //alias for this so we don't lose context inside setInterval
   var self = this;
   var last = new Date().getTime();
-  
+  var counter = 0;
 
   var updateLoop = function() {
     var current = new Date().getTime(); 
@@ -85,7 +85,11 @@ Game.prototype.createUpdateLoop = function() {
       };
     }
     //console.log(objects)
-    self.io.sockets.emit('positions', objectsToSend); 
+    if (counter ===3) {
+      self.io.sockets.emit('positions', objectsToSend); 
+      counter = 0;
+    }
+    counter++;  
     setTimeout(updateLoop, this.updatePerSec);
   };
   updateLoop();
