@@ -6,6 +6,7 @@ function Robot(id,pos,mesh,skeleton) {
   this.turnSpeed = 1; // rotation per second (~6.28 is a 360 degrees per second)
   this.maxSpeed = 10; //clamps the magnidue of speed vector
   this.velocity = 0;
+  this.distance = -1;
   this._buildRobot(mesh, skeleton);
   this.pivot.position = pos;
 
@@ -32,6 +33,7 @@ Robot.prototype.update = function(input){
   if(input.robotModel.state.name !== this.state.name) {
     this.setState(input.robotModel.state.name);
   }
+  this.distance = input.robotModel.distance;
   this.state.update(this,input); 
 };
 Robot.prototype.setState = function(name){
