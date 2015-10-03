@@ -10,6 +10,7 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
+  this.startPos = {x: 200, y: 2.7, z : -66}
   this.map = map;
   this.players = {};
   this.numPlayers = 0;
@@ -35,7 +36,8 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66))
+    robotModel: new Robot(this.delta, socketId, 
+      new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
   };
   this.numPlayers++;
 }; 

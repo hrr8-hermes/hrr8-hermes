@@ -74,7 +74,7 @@ Robot.prototype.hasWallCollision = function(map) {
     //0 means a black pixel (wall) 
     return (map.grid[yOnGrid][xOnGrid] === 0 || map.grid[yOnGrid + 1][xOnGrid] === 0
     || map.grid[yOnGrid - 1][xOnGrid] === 0 || map.grid[yOnGrid][xOnGrid + 1] === 0 ||
-    map.grid[yOnGrid][xOnGrid - 1] === 0);
+    map.grid[yOnGrid][xOnGrid - 1] === 0 || map.grid[yOnGrid + 1][xOnGrid + 1] === 0 || map.grid[yOnGrid + 1][xOnGrid - 1] === 0);
   }
 };
 
