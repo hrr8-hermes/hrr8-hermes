@@ -60,8 +60,8 @@ Robot.prototype.hasWallCollision = function(map) {
 
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
-  // console.log('Babylon x: ', this.position.x);
-  // console.log('Babylon z: ', this.position.z);
+   //console.log('Babylon x: ', this.position.x);
+   //console.log('Babylon z: ', this.position.z);
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);

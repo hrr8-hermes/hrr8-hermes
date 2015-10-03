@@ -81,6 +81,7 @@ function runScene(meshes) {
 
   meshes.bg1.loop = true;
   meshes.bg1.autoplay = true;
+  meshes.bg1.setVolume(.05);
   meshes.bg1.play();
 
   // start rendering

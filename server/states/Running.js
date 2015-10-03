@@ -43,7 +43,6 @@ Running.prototype.run = function(robot, parsedInput) {
   console.log(robot.lastPosition.length);
   if(robot.lastPosition.length >= settings.savedPositions) {
     robot.lastPosition.removeHead();
-    console.log('removing head!');
   }
 
 

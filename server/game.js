@@ -4,7 +4,7 @@
 //Map bitmap of game
 var Robot = require('./serverRobotModel.js');
 var Vector3 = require('./Vector3.js');
-
+var makeWaypointCounter = require('./waypoints.js');
 function Game(id, io, map) {
   console.log(this);
   this.id = id;
@@ -12,11 +12,13 @@ function Game(id, io, map) {
   // width, and height (map dimensions).
   this.startPos = {x: 200, y: 2.7, z : -66}
   this.map = map;
+  //HERE
+  //this.waypointCounter = makeWaypointCounter(map.)
   this.players = {};
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
   this.io = io;
-  this.updatePerSec = 20;
+  this.updatePerSec = 10;
   //Mill Seconds
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
