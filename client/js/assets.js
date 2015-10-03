@@ -24,11 +24,11 @@ window.ASSETS = [
 
   { 'name' : 'track',
     'type' : 'mesh',
-    'file' : 'Assets/course_3_city.babylon'},
+    'file' : 'Assets/course_3_city_track.babylon'},
     
   { 'name' : 'buildings',
     'type' : 'mesh',
-    'file' : 'Assets/course_3_city.babylon'},
+    'file' : 'Assets/course_3_city_buildings.babylon'},
 
   { 'name' : 'bg1',
     'type' : 'sound',

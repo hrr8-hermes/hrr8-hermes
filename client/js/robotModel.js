@@ -33,7 +33,6 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
   this.boostPivot = new BABYLON.Mesh.CreateBox(this.id + '_boostPivot',1,scene);
   this.boostPivot.attachToBone(this.skeleton.bones[27], this.mesh); 
-  this.boostPivot.scaling = new BABYLON.Vector3(100,100,100);
 };
 Robot.prototype.update = function(input){
   if(input.robotModel.state.name !== this.state.name) {

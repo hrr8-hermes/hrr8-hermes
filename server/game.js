@@ -13,7 +13,7 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
-  this.startPos = {x: 190, y: 2.7, z : -66}
+  this.startPos = {x: -974, y: 2.7, z : -999};
   this.map = map;
   this.players = {};
   this.numPlayers = 0;
@@ -24,7 +24,7 @@ function Game(id, io, map) {
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
   this.createUpdateLoop();
-};
+}
 
 //when a player has pressed enter, set their isReady to true.  if all players are
 //ready, start a race.
@@ -151,7 +151,7 @@ Game.prototype.playersInRadiusOfLocation = function(location, radius) {
     }
   }
   return players;
-}
+};
 
 Game.prototype.getSendablePlayer = function(player) {
   return {
@@ -165,7 +165,7 @@ Game.prototype.getSendablePlayer = function(player) {
         distance: player.robotModel.distance,
       }
     };
-}
+};
 
 //Sends to all connected players in this game the object argument
 //if the third argument exsits it will skip that socket to send too. 
@@ -182,6 +182,6 @@ Game.prototype.sendToClients = function(event, obj,socket) {
       this.io.to(playerId).emit(event, obj); 
     }
   }
-}
+};
 
 module.exports = Game;

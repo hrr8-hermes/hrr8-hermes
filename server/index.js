@@ -12,7 +12,7 @@ var fs = require('fs');
 //The list of games in the server
 var games = {};
 var nextGameId = 1;
-var currentMapName = 'oblong';
+var currentMapName = 'city';
 var maps = {
   circle: {
     name: 'Circle of Iniquity',
@@ -62,6 +62,7 @@ function loadMapGrid(mapName, callback) {
       mapObj.grid = processImageIntoBitArray(this.data, this.width, this.height);
       mapObj.width = this.width;
       mapObj.height = this.height;
+      console.log(mapObj.width);
       callback();
     }); 
 }
