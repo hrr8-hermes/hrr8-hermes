@@ -4,7 +4,6 @@ function Running() {
   this.name = "running";
   this.isRunning = false; 
   this.isBoosting = false; 
-  this.updateCounter = 0; 
 }
 Running.prototype._input = function(inputObj){
   var x = 0;
@@ -41,10 +40,10 @@ Running.prototype.run = function(robot, parsedInput) {
 
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
 
-
-  if(robot.lastPosition.length >= 2500) {
+  console.log(robot.lastPosition.length);
+  if(robot.lastPosition.length >= settings.savedPositions) {
     robot.lastPosition.removeHead();
-
+    console.log('removing head!');
   }
 
 
@@ -58,11 +57,9 @@ Running.prototype.update = function(robot,inputObj){
   //if you aren't changing states, do the running thing
   if(!this.changeState(robot, inputObj)){
     var parsedInput = this._input(inputObj);
-    this.updateCounter++;
-    if (this.updateCounter === 20) {
-      robot.increaseEnergy(settings.runningHealthGain); 
-      this.updateCounter = 0;
-    }
+
+    robot.increaseEnergy(settings.runningHealthGain); 
+
     this.run(robot, parsedInput); 
   }
 };

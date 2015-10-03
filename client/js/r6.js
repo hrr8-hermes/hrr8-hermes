@@ -7,7 +7,8 @@
 function runScene(meshes) {
   createMaterials(); 
   var players = {};
-  var bob = new Robot(0,new BABYLON.Vector3(200,2.7,-66),meshes['Robot'],meshes['Robot'].skeleton);
+  var startPos = { x: 200, y: 2.7, z : -66 };
+  var bob = new Robot(0,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
   bob.mesh.material = materials.robot; 
 
   meshes['track'].setEnabled(true);
@@ -104,13 +105,14 @@ function runScene(meshes) {
   var switchcam = 0;
   var switchdebug = true;
   var togglemusic = true;
+
   window.addEventListener('keydown', function(e) {
     
     if (e.keyCode===70) {
-      if (switchcam===0) {
-        scene.activeCamera = camera;
-      } else if (switchcam===1) {
+      if (switchcam===0) {       
         scene.activeCamera = chaseCam;
+      } else if (switchcam===1) {
+        scene.activeCamera = camera;
       } else {
         freeCam.setTarget(origin.position);
         scene.activeCamera = freeCam;
@@ -160,7 +162,8 @@ function runScene(meshes) {
   });
   //a new player has connected
   socket.on('playerConnected', function(playerData) {
-    var set = new Robot(playerData.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+    var set = new Robot(playerData.socketId,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
+    set.mesh.material = materials.robot; 
     players[playerData.socketId] = set;
   });
   
@@ -173,7 +176,8 @@ function runScene(meshes) {
         bob.id = socket.id;
         set = bob;
       } else {
-        set = new Robot(player.socketId,new BABYLON.Vector3(0,0.3,0),meshes['Skitter'],meshes['Skitter'].skeleton);
+        set = new Robot(player.socketId,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
+        set.mesh.material = materials.robot; 
       }  
       players[player.socketId] = set;
     }
