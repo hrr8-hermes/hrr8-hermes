@@ -3,7 +3,7 @@
  * This module takes an object in the form:
  * { line : {x1,y1,x2,y2},
  *   half : {...},
- *   lap : [ line, way2 ] }
+ *   lap : [ 'line', 'half' ] }
  *
  * Where the waypoint lines can be named anything and the lap
  * value contains an array representing a lap -- this example
