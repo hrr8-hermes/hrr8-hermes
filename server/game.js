@@ -18,7 +18,7 @@ function Game(id, io, map) {
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
   this.io = io;
-  this.updatePerSec = 10;
+  this.updatePerSec = 20;
   //Mill Seconds
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
