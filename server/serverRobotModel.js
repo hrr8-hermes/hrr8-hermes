@@ -40,6 +40,7 @@ function Robot(game, delta,id,pos) {
   this.isBoosting = false; 
   this.pressed = false;
   this.updateCounter = 0;
+  this.attackBox = [];
 
   this.position = pos; 
   this.setState('running'); //initial state
@@ -110,28 +111,34 @@ Robot.prototype.getYOnGrid = function(map) {
 
 Robot.prototype.update = function(input) {
   if(input['KE'] && !this.pressed) {
+    console.log("attacking")
 
     this.pressed = true;
     //Make 3 explosions
     for(var i = 1; i < 4; i++) {
       //Calulate 3 spots in fron of you
-      var x = this.forwardNormX * (i * 3) + this.position.x;
-      var y = this.forwardNormY * (i * 3) + this.position.z;
+      var x = this.forwardNormX * (i * 4) + this.position.x;
+      var y = this.forwardNormY * (i * 4) + this.position.z;
+
+      this.attackBox.push({x: x,z: y});
       //Find players in that postition
-      var array = game.playersInRadiusOfLocation({x:x,z:y}, 4);
+      var array = game.playersInRadiusOfLocation({x:x,z:y}, 5);
       //Loop throught found players
       for(var x = 0; x < array.length; x++) {
         //Not yourself found
         if(this.id !== array[x].player.socketId) {
           //subtract there energy
-          array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (4 - array[x].distance))
+          array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (5 - array[x].distance))
         }
       }
-      //Allow attacking after a second
+      //Allow attacking after time
       var self = this;
       setTimeout(function() {
+        self.attackBox = [];
+      }, 15)
+      setTimeout(function() {
         self.pressed = false;
-      }, 1000)
+      }, 10000)
     }
   }
   this.state.update(this,input); 
