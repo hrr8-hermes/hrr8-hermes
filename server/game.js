@@ -14,6 +14,7 @@ function Game(id, io, map) {
   this.map = map;
   this.players = {};
   this.numPlayers = 0;
+  this.numReadyPlayers = 0;
   this.io = io;
   this.updatePerSec = 20;
   //Mill Seconds
@@ -27,10 +28,28 @@ function Game(id, io, map) {
 
 };
 
+//when a player has pressed enter, set their isReady to true.  if all players are
+//ready, start a race.
+Game.prototype.playerIsReady = function(socketId) {
+  var readyPlayer = this.players[socketId];
+  if (!readyPlayer.isReady) {
+    readyPlayer.isReady = true;
+    this.numReadyPlayers++;
+    if (this.numReadyPlayers === this.Players) {
+      this.startRace();
+    }
+  }  
+};
+
+Game.prototype.startRace = function() {
+
+};
+
 //Adds a Player to the Game with their socket id.
 //Init position is 0,0
 Game.prototype.addPlayer = function(socketId) {
   this.players[socketId] = {
+    isReady: false,
     input: {}, 
     gid: this.id, 
     socketId: socketId,

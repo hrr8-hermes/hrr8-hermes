@@ -13,6 +13,11 @@
 window.USER_INPUT = {};
 
 window.addEventListener('keydown', function(e) {
+  //user has pressed Enter and wants to start a race
+  if (e.keyCode === 13) {
+    socket.emit('readyToRace');
+    return;
+  }
   USER_INPUT['K' + String.fromCharCode(e.keyCode)] = 1;
   socket.emit('movementInput',USER_INPUT);
 });

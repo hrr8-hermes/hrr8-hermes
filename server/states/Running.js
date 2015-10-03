@@ -40,10 +40,10 @@ Running.prototype.run = function(robot, parsedInput) {
 
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
 
-
-  if(robot.lastPosition.length >= 2500) {
+  console.log(robot.lastPosition.length);
+  if(robot.lastPosition.length >= settings.savedPositions) {
     robot.lastPosition.removeHead();
-
+    console.log('removing head!');
   }
 
 
