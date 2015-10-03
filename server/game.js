@@ -5,8 +5,11 @@
 var Robot = require('./serverRobotModel.js');
 var Vector3 = require('./Vector3.js');
 
+// Temp map load for waypoint checker
+var mapJSON = require('./assets/course_2_oblong.json');
+var waypointCheck = require('./waypoints.js')(mapJSON,2);
+
 function Game(id, io, map) {
-  console.log(this);
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
@@ -21,11 +24,6 @@ function Game(id, io, map) {
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
   this.createUpdateLoop();
-  // setInterval(function() {
-  //   console.log('console marker...');
-  // }, 2000);
-  
-
 };
 
 //when a player has pressed enter, set their isReady to true.  if all players are
@@ -93,6 +91,9 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
+      
+      waypointCheck(player.robotModel);
+
       objectsToSend[player.socketId] = {
         socketId: player.socketId,
         robotModel: {
@@ -101,6 +102,7 @@ Game.prototype.createUpdateLoop = function() {
           facing: player.robotModel.facing,
           position: player.robotModel.position,
           energy: player.robotModel.energy,
+          distance: player.robotModel.distance
         }
       };
     }
