@@ -12,4 +12,3 @@ module.exports = {
   attackDamage: 15,
   savedPositions: 25,
 };
-
