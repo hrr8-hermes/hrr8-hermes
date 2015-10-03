@@ -5,6 +5,10 @@
 var Robot = require('./serverRobotModel.js');
 var Vector3 = require('./Vector3.js');
 
+// Temp map load for waypoint checker
+var mapJSON = require('./assets/course_2_oblong.json');
+var waypointCheck = require('./waypoints.js')(mapJSON,2);
+
 function Game(id, io, map) {
   console.log(this);
   this.id = id;
@@ -15,9 +19,6 @@ function Game(id, io, map) {
   this.numPlayers = 0;
   this.io = io;
   this.createUpdateLoop();
-  // setInterval(function() {
-  //   console.log('console marker...');
-  // }, 2000);
   
   this.updatePerSec = 20;
   //Mill Seconds
@@ -34,7 +35,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66))
+    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66)),
   };
   this.numPlayers++;
 }; 
@@ -70,6 +71,9 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
+      
+      waypointCheck(player.robotModel);
+
       objectsToSend[player.socketId] = {
         socketId: player.socketId,
         robotModel: {
@@ -78,6 +82,7 @@ Game.prototype.createUpdateLoop = function() {
           facing: player.robotModel.facing,
           position: player.robotModel.position,
           energy: player.robotModel.energy,
+          distance: player.robotModel.distance
         }
       };
     }

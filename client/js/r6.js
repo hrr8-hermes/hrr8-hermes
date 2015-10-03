@@ -27,6 +27,7 @@ function runScene(meshes) {
   // followcam
   window.camera = new BABYLON.TargetCamera('camera1', new BABYLON.Vector3(0,5,-10), scene);
   camera.attachControl(canvas,false);
+  scene.activeCamera = camera;
 
   // toggle to cam following our robot bob
   // radius is distance to maintain, height/rotation is as it sounds
@@ -133,6 +134,10 @@ function runScene(meshes) {
         meshes.bg1.play();
       }
       togglemusic = !togglemusic;
+    }
+
+    if (e.keyCode === 76) {
+     reportLap(bob.distance,scene);
     }
   });
   //Connect to server once the scene is loaded to not miss any events
