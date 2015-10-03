@@ -52,10 +52,13 @@ Death.prototype.update = function(robot,serverData){
   this._runCheck(robot); 
 };
 
-Death.prototype.enterState = function() {
-
+Death.prototype.enterState = function(robot) {
+  robot.mesh.isVisible = false; 
+  vfx.explosion(robot.mesh); 
+  console.log("entering death state");
 };
 
-Death.prototype.exitState = function() {
-
+Death.prototype.exitState = function(robot) {
+  robot.mesh.isVisible = true; 
+  console.log("exiting death state");
 };

@@ -104,17 +104,6 @@ Robot.prototype.getYOnGrid = function(map) {
 };
 
 Robot.prototype.update = function(input) {
-
-  //console.log(this.energy);
-  //console.log(this.state);
-  //if spacebar is pressed
-  if (input['K ']) {
-    this.startBoosting();
-    this.setState('boosting');
-  } else {
-    this.stopBoosting();
-    this.setState('running');
-  }
   this.state.update(this,input); 
 };
 

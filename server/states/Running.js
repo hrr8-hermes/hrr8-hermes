@@ -53,23 +53,33 @@ Running.prototype.run = function(robot, parsedInput) {
   robot.position.z += robot.velocity * robot.forwardNormY;
 };
 
-
+//the core update loop while in the running state
 Running.prototype.update = function(robot,inputObj){
-  var parsedInput = this._input(inputObj);
-  this.updateCounter++;
-  if (this.updateCounter === 20) {
-    robot.increaseEnergy(settings.runningHealthGain); 
-    this.updateCounter = 0;
+  //if you aren't changing states, do the running thing
+  if(!this.changeState(robot, inputObj)){
+    var parsedInput = this._input(inputObj);
+    this.updateCounter++;
+    if (this.updateCounter === 20) {
+      robot.increaseEnergy(settings.runningHealthGain); 
+      this.updateCounter = 0;
+    }
+    this.run(robot, parsedInput); 
   }
-  this.run(robot, parsedInput); 
+};
+//controls if the robot should change state. NOTE: Death isn't handled here. 
+Running.prototype.changeState = function(robot, inputObj){
+  if(inputObj['K ']){
+    robot.setState('boosting'); 
+    return true;
+  }
+  return false; 
+};
+Running.prototype.enterState = function(robot) {
+  robot.startRunning(); 
 };
 
-Running.prototype.enterState = function() {
-
-};
-
-Running.prototype.exitState = function() {
-
+Running.prototype.exitState = function(robot) {
+  robot.stopRunning(); 
 };
 
 module.exports = Running;
