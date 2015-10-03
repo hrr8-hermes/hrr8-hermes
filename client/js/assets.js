@@ -28,6 +28,14 @@ window.ASSETS = [
 
   { 'name' : 'bg1',
     'type' : 'sound',
-    'file' : 'sounds/bg/first.wav'}
+    'file' : 'sounds/bg/first.wav'},
+
+  { 'name' : 'boom1',
+    'type' : 'sound',
+    'file' : 'sounds/boom1.wav'},
+
+  { 'name' : 'step',
+    'type' : 'sound',
+    'file' : 'sounds/step.wav'}
 
 ];

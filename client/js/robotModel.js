@@ -49,11 +49,14 @@ Robot.prototype.setState = function(name){
 };
 Robot.prototype.startRunning = function(){
   console.log('started running');
+  sounds.step.loop = true;
+  sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 
 };
 Robot.prototype.stopRunning = function(){
   scene.beginAnimation(this.skeleton,1,10,true,1.0); 
+  sounds.step.stop();
   this.isRunning = false;
 };
 

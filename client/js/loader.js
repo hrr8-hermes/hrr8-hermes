@@ -26,7 +26,8 @@
  *  Will load all assets into GPU and scene, then pass created meshes into doStuff
  */
 
-var createdAssets = {};
+var newMeshes = {};
+var newSounds = {};
 var tasks = {};
 function loadAssets(assetArray, scale, scene, ENABLED, callback) {
 
@@ -49,7 +50,7 @@ function loadAssets(assetArray, scale, scene, ENABLED, callback) {
         } else {
           t.loadedMeshes[0].scaling = new BABYLON.Vector3(scale,scale,scale);
         }
-        createdAssets[asset.name] = t.loadedMeshes[0];
+        newMeshes[asset.name] = t.loadedMeshes[0];
       };
       tasks[asset.name].onError = function(t) {
         engine.loadingUIText = 'Error during '+t.name;
@@ -60,7 +61,7 @@ function loadAssets(assetArray, scale, scene, ENABLED, callback) {
       tasks[asset.name] = assetManager.addBinaryFileTask(asset.name+' loader', filePath+fileName);
       tasks[asset.name].onSuccess = function(t) {
         engine.loadingUIText = asset.name+' loaded';
-        createdAssets[asset.name] = new BABYLON.Sound(asset.name,t.data,scene,null);
+        newSounds[asset.name] = new BABYLON.Sound(asset.name,t.data,scene,null);
       };
       tasks[asset.name].onError = function(t) {
         engine.loadingUIText = 'Error during '+t.name;
@@ -69,7 +70,7 @@ function loadAssets(assetArray, scale, scene, ENABLED, callback) {
   });
 
   assetManager.onFinish = function(t) {
-    callback(createdAssets);
+    callback(newMeshes,newSounds);
   };
 
   assetManager.load();
