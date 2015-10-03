@@ -53,8 +53,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, 
-      new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
+    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
   };
   this.numPlayers++;
 }; 
@@ -91,6 +90,7 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
+<<<<<<< d94ae5276c90e90cd54194cbbb6cb878b12b973e
       
       waypointCheck(player.robotModel);
 
@@ -105,6 +105,9 @@ Game.prototype.createUpdateLoop = function() {
           distance: player.robotModel.distance
         }
       };
+=======
+      objectsToSend[player.socketId] = self.getSendablePlayer(player);
+>>>>>>> Start of attacking
     }
 
      if (updatesCount === 1) {
@@ -145,5 +148,31 @@ Game.prototype.playersAreColliding = function(player1, player2) {
 //   }
 // };
 };
+
+Game.prototype.playersInRadiusOfLocation = function(location, radius) {
+  var players = [];
+  for(var pid in this.players) {
+    var player = this.players[pid];
+    var pos = player.robotModel.position;
+    var dis = Math.sqrt(Math.pow(location.x - pos.x, 2) + Math.pow(location.z - pos.z, 2));
+    if(dis <= radius) {
+      players.push({player: player, distance: dis});
+    }
+  }
+  return players;
+}
+
+Game.prototype.getSendablePlayer = function(player) {
+  return {
+      socketId: player.socketId,
+      robotModel: {
+        velocity: player.robotModel.velocity,
+        state: player.robotModel.state,
+        facing: player.robotModel.facing,
+        position: player.robotModel.position,
+        energy: player.robotModel.energy,
+      }
+    };
+}
 
 module.exports = Game;

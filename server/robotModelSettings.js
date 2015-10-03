@@ -8,5 +8,7 @@ module.exports = {
   turnSpeed : 0.3,
   //these two are multiplied by velocity to determine damage
   playerCollisionDamage: 100, 
-  wallCollisionDamage: 100
+  wallCollisionDamage: 100,
+  attackDamage: 15,
 };
+
