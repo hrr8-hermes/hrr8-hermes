@@ -4,9 +4,9 @@ function Running(){
   this.isBoosting = false; 
 }
 
-Running.prototype._input = function(serverData){
+Running.prototype._input = function(serverData,robot){
   var parsed = {}; 
-  parsed.position =  new BABYLON.Vector3(serverData.robotModel.position.x, 1, serverData.robotModel.position.z);
+  parsed.position =  new BABYLON.Vector3(serverData.robotModel.position.x, robot.pivot.position.y, serverData.robotModel.position.z);
   parsed.rotation = new BABYLON.Vector3(0, serverData.robotModel.facing * 2  * Math.PI + Math.PI * 0.5, 0);
   parsed.velocity = serverData.robotModel.velocity;
   parsed.energy = serverData.robotModel.energy;
@@ -50,7 +50,7 @@ Running.prototype.run = function(robot, parsedInput) {
 
 
 Running.prototype.update = function(robot,serverData){
-  var parsedInput = this._input(serverData); 
+  var parsedInput = this._input(serverData,robot); 
   this.run(robot, parsedInput); 
   this._runCheck(robot); 
 };
