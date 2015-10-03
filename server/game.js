@@ -18,7 +18,7 @@ function Game(id, io, map) {
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
   this.io = io;
-  this.updatePerSec = 20;
+  this.timeBetweenUpdates = 10;
   //Mill Seconds
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
@@ -112,8 +112,8 @@ Game.prototype.createUpdateLoop = function() {
       updatesCount = 0;
      }
      updatesCount++;
-    setTimeout(updateLoop,self.updatePerSec);
-  },this.updatePerSec);
+    setTimeout(updateLoop,self.timeBetweenUpdates);
+  },this.timeBetweenUpdates);
 
 };
 
