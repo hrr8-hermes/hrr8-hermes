@@ -13,7 +13,7 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
-  this.startPos = {x: 200, y: 2.7, z : -66}
+  this.startPos = {x: 190, y: 2.7, z : -66}
   this.map = map;
   this.players = {};
   this.numPlayers = 0;
@@ -53,8 +53,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, 
-      new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
+    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
   };
   this.numPlayers++;
 }; 
@@ -67,7 +66,11 @@ Game.prototype.removePlayer = function(id) {
 
 Game.prototype.parseInput = function(inputObj, socketId) {
   var p = this.players[socketId];
-  p.input = inputObj;
+  //Techinally O(1) I think
+  for(var key in inputObj) {
+    p.input[key] = inputObj[key]
+  }
+  //p.input = inputObj;
 };
 
 Game.prototype.createUpdateLoop = function() {
@@ -94,24 +97,15 @@ Game.prototype.createUpdateLoop = function() {
       
       waypointCheck(player.robotModel);
 
-      objectsToSend[player.socketId] = {
-        socketId: player.socketId,
-        robotModel: {
-          velocity: player.robotModel.velocity,
-          state: player.robotModel.state,
-          facing: player.robotModel.facing,
-          position: player.robotModel.position,
-          energy: player.robotModel.energy,
-          distance: player.robotModel.distance
-        }
-      };
+      objectsToSend[player.socketId] = self.getSendablePlayer(player);
     }
 
-     if (updatesCount === 1) {
-      self.io.sockets.emit('positions', objectsToSend); 
+    if (updatesCount === 1) {
+      self.sendToClients("positions", objectsToSend)
+      
       updatesCount = 0;
-     }
-     updatesCount++;
+    }
+    updatesCount++;
     setTimeout(updateLoop,self.updatePerSec);
   },this.updatePerSec);
 
@@ -145,5 +139,49 @@ Game.prototype.playersAreColliding = function(player1, player2) {
 //   }
 // };
 };
+
+Game.prototype.playersInRadiusOfLocation = function(location, radius) {
+  var players = [];
+  for(var pid in this.players) {
+    var player = this.players[pid];
+    var pos = player.robotModel.position;
+    var dis = Math.sqrt(Math.pow(location.x - pos.x, 2) + Math.pow(location.z - pos.z, 2));
+    if(dis <= radius) {
+      players.push({player: player, distance: dis});
+    }
+  }
+  return players;
+}
+
+Game.prototype.getSendablePlayer = function(player) {
+  return {
+      socketId: player.socketId,
+      robotModel: {
+        velocity: player.robotModel.velocity,
+        state: player.robotModel.state,
+        facing: player.robotModel.facing,
+        position: player.robotModel.position,
+        energy: player.robotModel.energy,
+        distance: player.robotModel.distance,
+      }
+    };
+}
+
+//Sends to all connected players in this game the object argument
+//if the third argument exsits it will skip that socket to send too. 
+Game.prototype.sendToClients = function(event, obj,socket) {
+  if(socket) {
+    for(var playerId in this.players) {
+      if(socket.id !== playerId) {
+        this.io.to(playerId).emit(event, obj); 
+
+      }
+    }
+  } else {
+    for(var playerId in this.players) {
+      this.io.to(playerId).emit(event, obj); 
+    }
+  }
+}
 
 module.exports = Game;

@@ -69,32 +69,45 @@ function createGame() {
 io.on('connection', function(socket) {
   //add this player to the first open game
   var currentGame;
+  var maxPlayers = 0;
+  var numPlayers = 0;
   for (var i = 1; i < nextGameId; i++)  {
-    console.log(i);
-    if (games[i].numPlayers < games[i].maxPlayers) {
+
+    if (games[i].numPlayers < games[i].maxPlayers && !currentGame) {
       currentGame = games[i];
-      break;
     }
+    numPlayers += games[i].numPlayers;
+    maxPlayers += games[i].maxPlayers;
+  }
+  console.log(numPlayers / maxPlayers)
+  if(numPlayers / maxPlayers >= .75) {
+    createGame();
+    console.log("Creating another game. This is " + (nextGameId - 1)  + " games!")
   }
   currentGame.addPlayer(socket.id);
   //Gets the recently added player from game object
   var currentPlayer = currentGame.players[socket.id];
   //Let all the players know about the new player
-  socket.broadcast.emit("playerConnected", currentPlayer);
+  currentGame.sendToClients('playerConnected',currentGame.getSendablePlayer(currentPlayer),socket)
 
 
   //receive input from players, hand off to the appropriate game object to calculate positions
   socket.on('movementInput', function(inputObj) {
-    getGameBySocketId(socket.id).parseInput(inputObj, socket.id);
+    currentGame.parseInput(inputObj, socket.id);
   }); 
 
   socket.on('readyToRace', function() {
-    getGameBySocketId(socket.id).playerIsReady(socket.id);
+    currentGame.playerIsReady(socket.id);
   });
   
   //send all player info to recently connected player
   setTimeout(function() {
-    socket.emit("connected", currentGame.players);
+    var ps = {};
+    for(var pid in currentGame.players) {
+      var player = currentGame.players[pid];
+      ps[player.socketId] = currentGame.getSendablePlayer(player);
+    }
+    socket.emit("connected", ps);
   }, 500);
 
   //Handle when a player disconnects from server
@@ -102,7 +115,7 @@ io.on('connection', function(socket) {
     currentGame.removePlayer(socket.id);
     console.log('dc');
     //Tell all other players that he is disconnected
-    io.sockets.emit('playerDisconnected', currentPlayer);
+    io.sockets.emit('playerDisconnected', game.getSendablePlayer(currentPlayer));
   });
 });
 

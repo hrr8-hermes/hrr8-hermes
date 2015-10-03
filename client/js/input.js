@@ -10,7 +10,6 @@
 // Global object for all inputs
 // 1 = triggered
 // 0 = untriggered
-window.USER_INPUT = {};
 
 window.addEventListener('keydown', function(e) {
   //user has pressed Enter and wants to start a race
@@ -18,10 +17,13 @@ window.addEventListener('keydown', function(e) {
     socket.emit('readyToRace');
     return;
   }
-  USER_INPUT['K' + String.fromCharCode(e.keyCode)] = 1;
-  socket.emit('movementInput',USER_INPUT);
+  var obj = {};
+  obj['K' + String.fromCharCode(e.keyCode)] = 1;
+  socket.emit('movementInput',obj);
 });
 window.addEventListener('keyup', function(e) {
-  USER_INPUT['K' + String.fromCharCode(e.keyCode)] = 0;
-  socket.emit('movementInput',USER_INPUT);
+  //USER_INPUT['K' + String.fromCharCode(e.keyCode)] = 0;
+    var obj = {};
+  obj['K' + String.fromCharCode(e.keyCode)] = 0;
+  socket.emit('movementInput',obj);
 });
