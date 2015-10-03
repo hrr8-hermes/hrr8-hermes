@@ -66,7 +66,11 @@ Game.prototype.removePlayer = function(id) {
 
 Game.prototype.parseInput = function(inputObj, socketId) {
   var p = this.players[socketId];
-  p.input = inputObj;
+  //Techinally O(1) I think
+  for(var key in inputObj) {
+    p.input[key] = inputObj[key]
+  }
+  //p.input = inputObj;
 };
 
 Game.prototype.createUpdateLoop = function() {
