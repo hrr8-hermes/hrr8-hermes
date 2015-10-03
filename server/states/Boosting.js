@@ -49,22 +49,32 @@ Boosting.prototype.run = function(robot, parsedInput) {
 
 
 Boosting.prototype.update = function(robot,inputObj){
-  var parsedInput = this._input(inputObj); 
-  //deplete energy while boosting
-  this.updateCounter++;
-  if (this.updateCounter === 20) {
-      robot.decreaseEnergy(settings.boostingHealthDrain);
-      this.updateCounter = 0;
+  if(!this.changeState(robot, inputObj)){
+    var parsedInput = this._input(inputObj); 
+    //deplete energy while boosting
+    this.updateCounter++;
+    if (this.updateCounter === 20) {
+        robot.decreaseEnergy(settings.boostingHealthDrain);
+        this.updateCounter = 0;
+    }
+    this.run(robot, parsedInput); 
   }
-  this.run(robot, parsedInput); 
 };
 
-Boosting.prototype.enterState = function() {
-
+Boosting.prototype.changeState = function(robot,inputObj){
+  if(!inputObj['K ']){
+    robot.setState('running'); 
+    return true;
+  }
+  return false; 
 };
 
-Boosting.prototype.exitState = function() {
+Boosting.prototype.enterState = function(robot) {
+  robot.startBoosting(); 
+};
 
+Boosting.prototype.exitState = function(robot) {
+  robot.stopBoosting(); 
 };
 
 module.exports = Boosting;
