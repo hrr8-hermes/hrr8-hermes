@@ -53,6 +53,7 @@ Boosting.prototype.update = function(robot,inputObj){
     //deplete energy while boosting
     robot.decreaseEnergy(settings.boostingHealthDrain);
     this.run(robot, parsedInput); 
+
   }
 };
 

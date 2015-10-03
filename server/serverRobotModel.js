@@ -39,6 +39,7 @@ function Robot(game, delta,id,pos) {
   this.isRunning = false; 
   this.isBoosting = false; 
   this.pressed = false;
+  this.updateCounter = 0;
 
   this.position = pos; 
   this.setState('running'); //initial state
