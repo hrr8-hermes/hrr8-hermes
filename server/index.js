@@ -87,6 +87,10 @@ io.on('connection', function(socket) {
   socket.on('movementInput', function(inputObj) {
     getGameBySocketId(socket.id).parseInput(inputObj, socket.id);
   }); 
+
+  socket.on('readyToRace', function() {
+    getGameBySocketId(socket.id).playerIsReady(socket.id);
+  });
   
   //send all player info to recently connected player
   setTimeout(function() {

@@ -10,31 +10,53 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
+  this.startPos = {x: 200, y: 2.7, z : -66}
   this.map = map;
   this.players = {};
   this.numPlayers = 0;
+  this.numReadyPlayers = 0;
   this.io = io;
+  this.updatePerSec = 20;
+  //Mill Seconds
+  this.delta = {deltaValue: 0};
+  this.maxPlayers = 8;
   this.createUpdateLoop();
   // setInterval(function() {
   //   console.log('console marker...');
   // }, 2000);
   
-  this.updatePerSec = 20;
-  //Mill Seconds
-  this.delta = {deltaValue: 0};
-  this.maxPlayers = 8;
+
+};
+
+//when a player has pressed enter, set their isReady to true.  if all players are
+//ready, start a race.
+Game.prototype.playerIsReady = function(socketId) {
+  var readyPlayer = this.players[socketId];
+  if (!readyPlayer.isReady) {
+    readyPlayer.isReady = true;
+    this.numReadyPlayers++;
+    if (this.numReadyPlayers === this.Players) {
+      this.startRace();
+    }
+  }  
+};
+
+Game.prototype.startRace = function() {
+
 };
 
 //Adds a Player to the Game with their socket id.
 //Init position is 0,0
 Game.prototype.addPlayer = function(socketId) {
   this.players[socketId] = {
+    isReady: false,
     input: {}, 
     gid: this.id, 
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66))
+    robotModel: new Robot(this.delta, socketId, 
+      new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
   };
   this.numPlayers++;
 }; 
@@ -54,7 +76,8 @@ Game.prototype.createUpdateLoop = function() {
   //alias for this so we don't lose context inside setInterval
   var self = this;
   var last = new Date().getTime();
-  setTimeout(function l00p() {
+  var updatesCount = 0;
+  setTimeout(function updateLoop() {
     var current = new Date().getTime();
     self.delta.deltaValue = current - last;
     last = current;
@@ -81,10 +104,15 @@ Game.prototype.createUpdateLoop = function() {
         }
       };
     }
-    //console.log(objects)
-    self.io.sockets.emit('positions', objectsToSend); 
-    setTimeout(l00p,self.updatePerSec);
+
+     if (updatesCount === 1) {
+      self.io.sockets.emit('positions', objectsToSend); 
+      updatesCount = 0;
+     }
+     updatesCount++;
+    setTimeout(updateLoop,self.updatePerSec);
   },this.updatePerSec);
+
 };
 
 //player/player collision, under construction...
