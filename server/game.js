@@ -94,24 +94,10 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
-<<<<<<< d94ae5276c90e90cd54194cbbb6cb878b12b973e
       
       waypointCheck(player.robotModel);
 
-      objectsToSend[player.socketId] = {
-        socketId: player.socketId,
-        robotModel: {
-          velocity: player.robotModel.velocity,
-          state: player.robotModel.state,
-          facing: player.robotModel.facing,
-          position: player.robotModel.position,
-          energy: player.robotModel.energy,
-          distance: player.robotModel.distance
-        }
-      };
-=======
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
->>>>>>> Start of attacking
     }
 
      if (updatesCount === 1) {
@@ -175,6 +161,7 @@ Game.prototype.getSendablePlayer = function(player) {
         facing: player.robotModel.facing,
         position: player.robotModel.position,
         energy: player.robotModel.energy,
+        distance: player.robotModel.distance,
       }
     };
 }
