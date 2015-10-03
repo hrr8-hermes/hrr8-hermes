@@ -28,7 +28,7 @@ window.ASSETS = [
 
   { 'name' : 'bg1',
     'type' : 'sound',
-    'file' : 'sounds/bg/first.wav'},
+    'file' : 'sounds/bg/industrialfunk.wav'},
 
   { 'name' : 'boom1',
     'type' : 'sound',
