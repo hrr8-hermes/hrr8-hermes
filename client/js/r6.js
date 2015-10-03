@@ -103,13 +103,14 @@ function runScene(meshes) {
   var switchcam = 0;
   var switchdebug = true;
   var togglemusic = true;
+  scene.activeCamera = camera;
   window.addEventListener('keydown', function(e) {
     
     if (e.keyCode===70) {
-      if (switchcam===0) {
-        scene.activeCamera = camera;
-      } else if (switchcam===1) {
+      if (switchcam===0) {       
         scene.activeCamera = chaseCam;
+      } else if (switchcam===1) {
+        scene.activeCamera = camera;
       } else {
         freeCam.setTarget(origin.position);
         scene.activeCamera = freeCam;

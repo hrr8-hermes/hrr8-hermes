@@ -55,7 +55,7 @@ Game.prototype.createUpdateLoop = function() {
   //alias for this so we don't lose context inside setInterval
   var self = this;
   var last = new Date().getTime();
-
+  var updatesCount = 0;
   setTimeout(function updateLoop() {
     var current = new Date().getTime();
     self.delta.deltaValue = current - last;
@@ -83,7 +83,12 @@ Game.prototype.createUpdateLoop = function() {
         }
       };
     }
-    self.io.sockets.emit('positions', objectsToSend); 
+
+     if (updatesCount === 1) {
+      self.io.sockets.emit('positions', objectsToSend); 
+      updatesCount = 0;
+     }
+     updatesCount++;
     setTimeout(updateLoop,self.updatePerSec);
   },this.updatePerSec);
 
