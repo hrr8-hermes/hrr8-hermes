@@ -55,10 +55,9 @@ Game.prototype.createUpdateLoop = function() {
   //alias for this so we don't lose context inside setInterval
   var self = this;
   var last = new Date().getTime();
-  var counter = 0;
 
-  var updateLoop = function() {
-    var current = new Date().getTime(); 
+  setTimeout(function updateLoop() {
+    var current = new Date().getTime();
     self.delta.deltaValue = current - last;
     last = current;
     var objectsToSend = {};
@@ -84,15 +83,10 @@ Game.prototype.createUpdateLoop = function() {
         }
       };
     }
-    //console.log(objects)
-    if (counter ===3) {
-      self.io.sockets.emit('positions', objectsToSend); 
-      counter = 0;
-    }
-    counter++;  
-    setTimeout(updateLoop, this.updatePerSec);
-  };
-  updateLoop();
+    self.io.sockets.emit('positions', objectsToSend); 
+    setTimeout(updateLoop,self.updatePerSec);
+  },this.updatePerSec);
+
 };
 
 //player/player collision, under construction...

@@ -9,13 +9,17 @@
  *
  *  var assets = [
  *    {name : 'skitter',
+ *     type : 'mesh',
  *     file : 'Assets/skitter.babylon'},
- *    {name : '',
- *     file : 'Assets/environment.babylon'},
  *    {name : 'robot1',
+ *     type : 'mesh',
  *     file : 'Assets/robots.babylon'},
- *    {name : 'robot2',
- *     file : 'Assets/robots.babylon'}
+ *    {name : 'industfunk',
+ *     type : 'sound',
+ *     file : 'sounds/bg/industfunk.wav'},
+ *    {name : 'boom1',
+ *     type : 'sound',
+ *     file : 'sounds/boom1.wav'}
  *    ];
  *  loadAssets(assets, scale, scene, true, doStuff);
  *  
@@ -23,32 +27,52 @@
  */
 
 var createdAssets = {};
+var tasks = {};
 function loadAssets(assetArray, scale, scene, ENABLED, callback) {
 
-  var finished = readyGenerator(assetArray.length,callback);
+  engine.loadingUIBackgroundColor = 'black';
+  var assetManager = new BABYLON.AssetsManager(scene);
 
-  for (var i=0;i<assetArray.length;i++) {
-    //TODO: make file string usage betters
-    // as-is only accepts directory/name.ext
-    var splitFile = assetArray[i].file.split('/');
-    var dir = splitFile[0]+'/';
-
-    BABYLON.SceneLoader.ImportMesh(assetArray[i].name, dir, splitFile[1], scene, function(meshes,particles,skeletons) {
-      createdAssets[meshes[0].name] = meshes[0];
-      createdAssets[meshes[0].name].setEnabled(ENABLED);
-      createdAssets[meshes[0].name].scaling = new BABYLON.Vector3(scale,scale,scale);
-      finished(true);
-    });
-  }
-
-}
-
-function readyGenerator(waitUntil,cb) {
-  var count = 0;
-  return function(finished) {
-    if (finished) count++;
-    if (count===waitUntil) {
-      cb(createdAssets);
+  assetArray.forEach(function(asset) {
+    var filePath = asset.file.split('/');
+    var fileName = filePath.pop();
+    filePath = filePath.join('/')+'/';
+    
+    if (asset.type === 'mesh') {
+      tasks[asset.name] = assetManager.addMeshTask(asset.name+' loader', asset.name,filePath,fileName);
+      tasks[asset.name].onSuccess = function(t) {
+        engine.loadingUIText = asset.name+' loaded';
+        t.loadedMeshes[0].setEnabled(ENABLED);
+        //check if applying global or specific scale
+        if (asset.scale) {
+          t.loadedMeshes[0].scaling = new BABYLON.Vector3(asset.scale,asset.scale,asset.scale);
+        } else {
+          t.loadedMeshes[0].scaling = new BABYLON.Vector3(scale,scale,scale);
+        }
+        createdAssets[asset.name] = t.loadedMeshes[0];
+      };
+      tasks[asset.name].onError = function(t) {
+        engine.loadingUIText = 'Error during '+t.name;
+      };
     }
+
+    if (asset.type === 'sound') {
+      tasks[asset.name] = assetManager.addBinaryFileTask(asset.name+' loader', filePath+fileName);
+      tasks[asset.name].onSuccess = function(t) {
+        engine.loadingUIText = asset.name+' loaded';
+        createdAssets[asset.name] = new BABYLON.Sound(asset.name,t.data,scene,null);
+      };
+      tasks[asset.name].onError = function(t) {
+        engine.loadingUIText = 'Error during '+t.name;
+      };
+    }
+  });
+
+  assetManager.onFinish = function(t) {
+    callback(createdAssets);
   };
+
+  assetManager.load();
+
 }
+

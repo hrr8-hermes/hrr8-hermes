@@ -11,8 +11,8 @@ Death.prototype.update = function(robot,inputObj){
 Death.prototype.enterState = function(robot) {
   console.log('dead!');
   setTimeout(function(){
-    robot.setState('running')
-  },3000)
+    robot.setState('running');
+  },1000);
 };
 
 Death.prototype.exitState = function(robot) {

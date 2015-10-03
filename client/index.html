@@ -11,6 +11,8 @@
 <!-- Internal files -->
 <!-- Loading wrapper around Babylon's ImportMesh -->
 <script src="js/loader.js"></script>
+<!-- art helper functions -->
+<script src="js/artHelpers.js"></script>
 <!-- player (robot) states for robot -->
 <script src="js/running.js"></script>
 <script src="js/death.js"></script>
@@ -21,7 +23,10 @@
 <script src="js/input.js"></script>
 <!-- sets ASSETS array and ASSET_SCALE float -->
 <script src="js/assets.js"></script>
+<!-- defines materials for objects -->
 <script src="js/materials.js"></script>
+<!-- create particle systems to be called later -->
+<script src="js/particleSystems.js"></script>
 
 <!-- contains game scene set and render loop -->
 <script src="js/r6.js"></script>
@@ -50,9 +55,18 @@ html,body {
   height: 100%;
   touch-action: none;
 }
+#energy {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  top: 50px;
+  left: 50px;
+  clip: rect(0, 50px, 100px, 0);
+}
 </style>
 </head>
 <body>
+<img id='energy' src='/assets/energy.png'></img>
 <canvas id="renderCanvas"></canvas>
 <script>
 // connect to server

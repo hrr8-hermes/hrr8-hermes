@@ -8,5 +8,6 @@ app.use(express.static(__dirname + '/../client'));
 
 app.use('/Assets',express.static(__dirname + '/../assets'));
 app.use('/js/external',express.static(__dirname + '/../external'));
+app.use('/sounds',express.static(__dirname + '/../sounds'));
 
 module.exports = app;

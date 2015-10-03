@@ -1,3 +1,4 @@
+console.log("loaded art helpers");
 var modUpdateFunction = function (particles) {
     for (var index = 0; index < particles.length; index++) {
         var particle = particles[index];
