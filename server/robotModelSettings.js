@@ -13,4 +13,3 @@ module.exports = {
   //number of positions you will move back upon death
   savedPositions: 25
 };
-

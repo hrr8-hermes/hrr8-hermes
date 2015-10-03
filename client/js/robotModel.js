@@ -33,6 +33,7 @@ Robot.prototype.update = function(input){
   if(input.robotModel.state.name !== this.state.name) {
     this.setState(input.robotModel.state.name);
   }
+  if (this.distance !== input.robotModel.distance) reportLap(input.robotModel.distance,scene);
   this.distance = input.robotModel.distance;
   this.state.update(this,input); 
 };
