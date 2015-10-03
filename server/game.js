@@ -56,8 +56,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this.delta, socketId, 
-      new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
+    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
   };
   this.numPlayers++;
 }; 
@@ -70,7 +69,11 @@ Game.prototype.removePlayer = function(id) {
 
 Game.prototype.parseInput = function(inputObj, socketId) {
   var p = this.players[socketId];
-  p.input = inputObj;
+  //Techinally O(1) I think
+  for(var key in inputObj) {
+    p.input[key] = inputObj[key]
+  }
+  //p.input = inputObj;
 };
 
 Game.prototype.createUpdateLoop = function() {
@@ -97,17 +100,7 @@ Game.prototype.createUpdateLoop = function() {
       
       waypointCheck(player.robotModel);
 
-      objectsToSend[player.socketId] = {
-        socketId: player.socketId,
-        robotModel: {
-          velocity: player.robotModel.velocity,
-          state: player.robotModel.state,
-          facing: player.robotModel.facing,
-          position: player.robotModel.position,
-          energy: player.robotModel.energy,
-          distance: player.robotModel.distance
-        }
-      };
+      objectsToSend[player.socketId] = self.getSendablePlayer(player);
     }
 
      if (updatesCount === 1) {
@@ -148,5 +141,32 @@ Game.prototype.playersAreColliding = function(player1, player2) {
 //   }
 // };
 };
+
+Game.prototype.playersInRadiusOfLocation = function(location, radius) {
+  var players = [];
+  for(var pid in this.players) {
+    var player = this.players[pid];
+    var pos = player.robotModel.position;
+    var dis = Math.sqrt(Math.pow(location.x - pos.x, 2) + Math.pow(location.z - pos.z, 2));
+    if(dis <= radius) {
+      players.push({player: player, distance: dis});
+    }
+  }
+  return players;
+}
+
+Game.prototype.getSendablePlayer = function(player) {
+  return {
+      socketId: player.socketId,
+      robotModel: {
+        velocity: player.robotModel.velocity,
+        state: player.robotModel.state,
+        facing: player.robotModel.facing,
+        position: player.robotModel.position,
+        energy: player.robotModel.energy,
+        distance: player.robotModel.distance,
+      }
+    };
+}
 
 module.exports = Game;

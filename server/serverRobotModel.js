@@ -19,7 +19,8 @@ var Boosting = require('./states/Boosting.js');
 var settings = require('./robotModelSettings.js');
 
 
-function Robot(delta,id,pos) {
+function Robot(game, delta,id,pos) {
+  this.game = game;
   this.delta = delta;
   this.id = id;
   this.accelerationForward = 1; //in seconds
@@ -37,6 +38,8 @@ function Robot(delta,id,pos) {
   this.maxEnergy = 100;
   this.isRunning = false; 
   this.isBoosting = false; 
+  this.pressed = false;
+  this.updateCounter = 0;
 
   this.position = pos; 
   this.setState('running'); //initial state
@@ -106,6 +109,31 @@ Robot.prototype.getYOnGrid = function(map) {
 };
 
 Robot.prototype.update = function(input) {
+  if(input['KE'] && !this.pressed) {
+
+    this.pressed = true;
+    //Make 3 explosions
+    for(var i = 1; i < 4; i++) {
+      //Calulate 3 spots in fron of you
+      var x = this.forwardNormX * (i * 3) + this.position.x;
+      var y = this.forwardNormY * (i * 3) + this.position.z;
+      //Find players in that postition
+      var array = game.playersInRadiusOfLocation({x:x,z:y}, 4);
+      //Loop throught found players
+      for(var x = 0; x < array.length; x++) {
+        //Not yourself found
+        if(this.id !== array[x].player.socketId) {
+          //subtract there energy
+          array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (4 - array[x].distance))
+        }
+      }
+      //Allow attacking after a second
+      var self = this;
+      setTimeout(function() {
+        self.pressed = false;
+      }, 1000)
+    }
+  }
   this.state.update(this,input); 
 };
 

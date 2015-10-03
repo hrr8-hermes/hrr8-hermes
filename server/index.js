@@ -78,7 +78,7 @@ io.on('connection', function(socket) {
   //Gets the recently added player from game object
   var currentPlayer = currentGame.players[socket.id];
   //Let all the players know about the new player
-  socket.broadcast.emit("playerConnected", currentPlayer);
+  socket.broadcast.emit("playerConnected", currentGame.getSendablePlayer(currentPlayer));
 
 
   //receive input from players, hand off to the appropriate game object to calculate positions
@@ -92,7 +92,12 @@ io.on('connection', function(socket) {
   
   //send all player info to recently connected player
   setTimeout(function() {
-    socket.emit("connected", currentGame.players);
+    var ps = {};
+    for(var pid in currentGame.players) {
+      var player = currentGame.players[pid];
+      ps[player.socketId] = currentGame.getSendablePlayer(player);
+    }
+    socket.emit("connected", ps);
   }, 500);
 
   //Handle when a player disconnects from server
@@ -100,7 +105,7 @@ io.on('connection', function(socket) {
     currentGame.removePlayer(socket.id);
     console.log('dc');
     //Tell all other players that he is disconnected
-    io.sockets.emit('playerDisconnected', currentPlayer);
+    io.sockets.emit('playerDisconnected', game.getSendablePlayer(currentPlayer));
   });
 });
 

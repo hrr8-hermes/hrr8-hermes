@@ -15,6 +15,7 @@ Running.prototype._input = function(inputObj){
   var currentInput = []; 
   currentInput[0] = z; 
   currentInput[1] = x; 
+  currentInput[2] = inputObj.KE
   return currentInput; 
 };
 Running.prototype.run = function(robot, parsedInput) {
@@ -40,7 +41,6 @@ Running.prototype.run = function(robot, parsedInput) {
 
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
 
-  console.log(robot.lastPosition.length);
   if(robot.lastPosition.length >= settings.savedPositions) {
     robot.lastPosition.removeHead();
   }
@@ -49,6 +49,8 @@ Running.prototype.run = function(robot, parsedInput) {
   //advance position
   robot.position.x += robot.velocity * robot.forwardNormX;
   robot.position.z += robot.velocity * robot.forwardNormY;
+
+
 };
 
 //the core update loop while in the running state
