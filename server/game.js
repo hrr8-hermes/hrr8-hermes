@@ -53,12 +53,8 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-<<<<<<< HEAD
-    robotModel: new Robot(this.delta, socketId, new Vector3(200,1, -66)),
-=======
     robotModel: new Robot(this.delta, socketId, 
       new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
->>>>>>> prmerge
   };
   this.numPlayers++;
 }; 
