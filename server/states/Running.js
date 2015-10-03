@@ -73,10 +73,12 @@ Running.prototype.changeState = function(robot, inputObj){
   return false; 
 };
 Running.prototype.enterState = function(robot) {
+  console.log('robot id: ' + robot.id + ' enters running state');
   robot.startRunning(); 
 };
 
 Running.prototype.exitState = function(robot) {
+  console.log('robot id: ' + robot.id + ' exits running state');
   robot.stopRunning(); 
 };
 

@@ -16,6 +16,7 @@ var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
 var LinkedList = require('./LinkedList.js')
 var Boosting = require('./states/Boosting.js');
+var Waiting = require('./states/Waiting.js');
 var settings = require('./robotModelSettings.js');
 
 
@@ -30,7 +31,8 @@ function Robot(game, delta,id,pos) {
   this.maxRunSpeed = settings.maxRunSpeed; //clamps the magnidue of speed vector
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
-  this.facing = 0; 
+  //this.facing = 0.25; 
+  this.facing = 0;
   this.distance = 0; // waypoint count, not actual distance
   this.lastGridPosition = [0,0];
   this.energy = 100; 
@@ -63,11 +65,13 @@ Robot.prototype.hasWallCollision = function(map) {
 
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
-   //console.log('Babylon x: ', this.position.x);
-   //console.log('Babylon z: ', this.position.z);
+  console.log('Babylon x: ', this.position.x);
+  console.log('Babylon z: ', this.position.z);
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);
+  //console.log('xOnGrid: ', this.getXOnGrid(map));
+  //console.log('yOnGridL ', this.getYOnGrid(map));
 
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
@@ -86,23 +90,27 @@ Robot.prototype.handlePlayerCollision = function() {
   this.position.x = this.lastPosition.tail.value.x;
   this.position.z = this.lastPosition.tail.value.z;
 };
+Robot.prototype.stopMoving = function() {
+  this.velocity = 0;
+  this.stopRunning();
+};
 
 Robot.prototype.handleWallCollision = function() {
 
   this.decreaseEnergy(this.velocity * settings.wallCollisionDamage); //50% speed takes away 50 energy
-  //stop movement, stop running, move back to previous position
+  // //stop movement, stop running, move back to previous position
 
-   this.velocity = 0;
-   this.stopRunning();
 
-   this.position.x = this.lastPosition.tail.value.x;
-   this.position.z = this.lastPosition.tail.value.z;
+  this.stopMoving();
+  this.position.x = this.lastPosition.tail.value.x;
+  this.position.z = this.lastPosition.tail.value.z;
 
 };
 
 Robot.prototype.getXOnGrid = function(map) {
   return Math.round(this.position.x + map.width / 2);
 };
+
 
 Robot.prototype.getYOnGrid = function(map) {
   return Math.round(map.height / 2 - this.position.z);
@@ -168,7 +176,8 @@ Robot.prototype.stopBoosting = function() {
 Robot.states = {
   running: new Running(),
   death: new Death(),
-  boosting: new Boosting()
+  boosting: new Boosting(),
+  waiting: new Waiting()
 };
 
 module.exports = Robot;

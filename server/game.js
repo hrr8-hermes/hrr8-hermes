@@ -14,13 +14,18 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
-  this.startPos = {x: 200, y: 2.7, z : -66}
   this.map = map;
+  //this.startPos = {x: 200, y: 2.7, z : -66};
+  this.startPos = this.getStartingPosition();
+  console.log(this.startPos);
+  console.log(mapJSON.line);
+
   //HERE
   //this.waypointCounter = makeWaypointCounter(map.)
   this.players = {};
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
+  this.raceInProgress = false;
   this.io = io;
   this.timeBetweenUpdates = 10;
   //Mill Seconds
@@ -29,21 +34,53 @@ function Game(id, io, map) {
   this.createUpdateLoop();
 };
 
+Game.prototype.getStartingPosition = function() {
+  var startLineOnGrid = mapJSON.line;
+  // var startingX = startLineOnGrid.x1;
+  // var startingZ = startLineOnGrid.y1;
+  var startingX = startLineOnGrid.x1 - this.map.width / 2;
+  var startingZ = this.map.height / 2 - startLineOnGrid.y1;
+   //startPos.y never changes, vertical elevation above the track
+  return {x: startingX, y: 2.7, z: startingZ + 3};
+};
+
+Game.prototype.lineUpRacers = function() {
+  var count = 1;
+  for (var playerId in this.players) {
+    var playerModel = this.players[playerId].robotModel;
+    playerModel.position.x = this.startPos.x;
+    count++;
+    playerModel.position.z = this.startPos.z + 3.5 * count;
+    playerModel.stopMoving();
+    playerModel.facing = -.249999;
+    playerModel.setState('waiting');
+    //
+  
+   //   setTimeout(function() {
+   //     this.setState('running');
+   //     console.log('running again!');
+   // }.bind(playerModel), 2000);
+  }
+};
 //when a player has pressed enter, set their isReady to true.  if all players are
 //ready, start a race.
 Game.prototype.playerIsReady = function(socketId) {
   var readyPlayer = this.players[socketId];
   if (!readyPlayer.isReady) {
     readyPlayer.isReady = true;
+    console.log('set player to ready');
+    console.log(this.numReadyPlayers);
     this.numReadyPlayers++;
-    if (this.numReadyPlayers === this.Players) {
+    if (this.numReadyPlayers === this.numPlayers) {
+      console.log('about to start');
       this.startRace();
     }
   }  
 };
 
 Game.prototype.startRace = function() {
-
+  this.raceInProgress = true;
+  this.lineUpRacers();
 };
 
 //Adds a Player to the Game with their socket id.
@@ -56,7 +93,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
+    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x, this.startPos.y, this.startPos.z + 3.5 * this.numPlayers))
   };
   this.numPlayers++;
 }; 

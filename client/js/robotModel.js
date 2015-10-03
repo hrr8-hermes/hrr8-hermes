@@ -59,5 +59,6 @@ Robot.prototype.stopRunning = function(){
 Robot.states = {
   running: new Running(),
   death: new Death(), 
-  boosting: new Boosting()
+  boosting: new Boosting(),
+  waiting: new Waiting()
 };

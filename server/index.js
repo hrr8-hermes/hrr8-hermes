@@ -145,6 +145,7 @@ function processImageIntoBitArray(imageDataArray, width, height) {
     }
     bitArrayGrid.push(row);  
   }
+  console.log(bitArrayGrid[170][258]);
   findWhiteZone(bitArrayGrid);
   return bitArrayGrid;
 }
