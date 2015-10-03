@@ -49,6 +49,7 @@ Robot.prototype.setState = function(name){
 };
 Robot.prototype.startRunning = function(){
   console.log('started running');
+  sounds.step.stop();
   sounds.step.loop = true;
   sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
