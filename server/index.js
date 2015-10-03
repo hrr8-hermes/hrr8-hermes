@@ -6,8 +6,6 @@ var io = require('socket.io')(server);
 var PNG = require('pngjs2').PNG;
 var fs = require('fs');
 
-//For now one game; instantiated in loadMap
-
 
 //The list of games in the server
 var games = {};
@@ -19,7 +17,7 @@ var maps = {
     path: 'server/assets/scaledCircleMap.png',
     width: null,
     height: null,
-    grid: null
+    grid: null,
   },
   star: {
     name: 'Satan\'s Secret Star',
