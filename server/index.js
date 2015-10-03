@@ -34,6 +34,13 @@ var maps = {
     width: null,
     height: null,
     grid: null
+  },
+  city: {
+    name: 'The Careening City Course',
+    path: 'server/assets/course_3_city.png',
+    width: null,
+    height: null,
+    grid: null
   }
 };
 //Load up a map grid for collision detection and start a game
