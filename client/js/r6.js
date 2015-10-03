@@ -5,6 +5,7 @@
  */
 
 function runScene(meshes) {
+  window.NUM_LAPS = 2;
   createMaterials(); 
   var players = {};
   var startPos = { x: 200, y: 2.7, z : -66 };
