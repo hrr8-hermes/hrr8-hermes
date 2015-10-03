@@ -1,12 +1,14 @@
 module.exports = {
-  maxRunSpeed : 1,
+  maxRunSpeed : 2,
   maxBoostSpeed : 5,
-  boostingHealthDrain : 1,
-  runningHealthGain : .5,
-  runningAcclMultiplier : .02,
-  boostingAcclMultiplier: 1,
-  turnSpeed : .5,
+  boostingHealthDrain : .5,
+  runningHealthGain : .25,
+  runningAcclMultiplier : 0.4,
+  boostingAcclMultiplier: 1.4,
+  turnSpeed : 0.3,
   //these two are multiplied by velocity to determine damage
   playerCollisionDamage: 100, 
-  wallCollisionDamage: 100
+  wallCollisionDamage: 100,
+  attackDamage: 15,
+  savedPositions: 25,
 };

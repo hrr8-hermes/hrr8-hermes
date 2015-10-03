@@ -3,7 +3,7 @@
  * This module takes an object in the form:
  * { line : {x1,y1,x2,y2},
  *   half : {...},
- *   lap : [ line, way2 ] }
+ *   lap : [ 'line', 'half' ] }
  *
  * Where the waypoint lines can be named anything and the lap
  * value contains an array representing a lap -- this example
@@ -55,14 +55,16 @@ module.exports = function makeWayCounter(waypoints, laps) {
     var waypoint = waypoints[lap[(racer.distance+1) % lap_dist]];
 
     // TODO: refactor server model to keep separate x,y and convert once (setter?)
-    /*
     var pt = {};
-    pt.x = Math.round(racer.position.x + map.width / 2);
-    pt.y = Math.round(map.height / 2 - racer.position.z);
-    */
-    var pt = racer.position;
+    pt.x = 256 + (racer.position.x|0);
+    pt.y = 256 - (racer.position.z|0);
 
-    if (on_line_seg(waypoint,pt)) {
+    // hacky but workable, check X-shape w/ player in center
+    if (on_line_seg(waypoint,pt) ||
+        on_line_seg(waypoint,{x:pt.x-1,y:pt.y-1}) || 
+        on_line_seg(waypoint,{x:pt.x-1,y:pt.y+1}) ||
+        on_line_seg(waypoint,{x:pt.x+1,y:pt.y-1}) ||
+        on_line_seg(waypoint,{x:pt.x+1,y:pt.y+1})) {
       racer.distance++;
       return true;
     }

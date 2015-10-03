@@ -3,8 +3,7 @@ var settings = require('../robotModelSettings.js');
 function Boosting() {
   this.name = "boosting";
   this.isRunning = false; 
-  this.isBoosting = false;
-  this.updateCounter = 0; 
+  this.isBoosting = false; 
 }
 Boosting.prototype._input = function(inputObj){
   var x = 0;
@@ -37,7 +36,7 @@ Boosting.prototype.run = function(robot, parsedInput) {
   robot.forwardNormY = Math.cos(robot.facing * Math.PI * 2);
   //save this position before moving in case there is a collision
   robot.lastPosition.addToTail({x: robot.position.x, z: robot.position.z});
-  if(robot.lastPosition.length >= 2500) {
+  if(robot.lastPosition.length >= settings.savedPositions) {
     robot.lastPosition.removeHead();
   }
 
@@ -52,12 +51,9 @@ Boosting.prototype.update = function(robot,inputObj){
   if(!this.changeState(robot, inputObj)){
     var parsedInput = this._input(inputObj); 
     //deplete energy while boosting
-    this.updateCounter++;
-    if (this.updateCounter === 20) {
-        robot.decreaseEnergy(settings.boostingHealthDrain);
-        this.updateCounter = 0;
-    }
+    robot.decreaseEnergy(settings.boostingHealthDrain);
     this.run(robot, parsedInput); 
+
   }
 };
 
