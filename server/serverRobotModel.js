@@ -37,7 +37,7 @@ function Robot(game, delta,id,pos) {
   this.lastGridPosition = [0,0];
   this.energy = 100; 
   this.lastPosition = new LinkedList();
-  this.maxEnergym = 100;
+  this.maxEnergy = 100;
   this.isRunning = false; 
   this.isBoosting = false; 
   this.pressed = false;

@@ -28,6 +28,7 @@ function Game(id, io, map) {
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
   this.raceInProgress = false;
+  this.raceFinished = false;
   this.io = io;
   this.timeBetweenUpdates = 10;
   //Mill Seconds

@@ -177,7 +177,7 @@ function runScene(meshes) {
 
   socket.on('countdown', function() {
     console.log('counting down');
-    var countdown = document.getElementById('countdown');
+    var countdown = document.getElementById('info');
     var countdownText = ['3..', '2..', '1..', 'GO!', ''];
     var index = 0;
     var counter = function() {

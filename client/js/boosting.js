@@ -44,7 +44,6 @@ Boosting.prototype.run = function(robot, parsedInput) {
 Boosting.prototype.update = function(robot,serverData){
   var parsedInput = this._input(serverData,robot); 
   this.run(robot, parsedInput); 
-
 };
 
 Boosting.prototype.enterState = function() {
