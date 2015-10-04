@@ -175,6 +175,13 @@ function runScene(meshes) {
     reportLap(bob.distance,scene);
   });
 
+  socket.on('finished', function(numPlayersFinished) {
+    console.log('all done!');
+    var indexInPlaces = numPlayersFinished;
+    var places = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
+    document.getElementById('info').innerHTML = 'You finished in '
+      + places[indexInPlaces] + '!<br/>Press enter to start another race.';
+  });
   socket.on('countdown', function() {
     console.log('counting down');
     var countdown = document.getElementById('info');

@@ -50,7 +50,9 @@ module.exports = function makeWayCounter(waypoints, laps) {
   };
 
   return function(racer) {
-    if (racer.distance===max_dist) return;
+    console.log('racer dist: ',racer.distance);
+    console.log('max dist: ', max_dist);
+    if (racer.distance===max_dist) return 'finished';
     // current waypoint is current dist+1 modulo lap dist in lap array
     var waypoint = waypoints[lap[(racer.distance+1) % lap_dist]];
 

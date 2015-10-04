@@ -25,8 +25,10 @@ function Game(id, io, map) {
   //HERE
   //this.waypointCounter = makeWaypointCounter(map.)
   this.players = {};
+  this.results = {};
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
+  this.numFinishedPlayers = 0;
   this.raceInProgress = false;
   this.raceFinished = false;
   this.io = io;
@@ -64,7 +66,7 @@ Game.prototype.lineUpRacers = function() {
       gameContext.io.sockets.emit('raceStarting');
       gameContext.raceInProgress = true;
       if (this.distance === -1) {
-        console.log('setting distance to 0');
+        console.log('setting distance to 1');
         this.distance = 0;
       }
       this.setState('running');
@@ -124,6 +126,28 @@ Game.prototype.parseInput = function(inputObj, socketId) {
   //p.input = inputObj;
 };
 
+//close down this game object? more important is sending a message 
+//to each player as they finished
+Game.prototype.finishGame = function() {
+  this.io.sockets.emit('race over');
+};
+
+Game.prototype.updateRaceProgress = function(robotModel) {
+
+  if (!this.raceInProgress) return; 
+  //console.log(waypointCheck(robotModel));
+  if (waypointCheck(robotModel) === 'finished' && !robotModel.finished) {
+    //send them the number of finished players to know their place
+    console.log('server registered finished');
+    this.io.to(robotModel.id).emit('finished', this.numFinishedPlayers);
+    robotModel.finished = true;
+    this.numFinishedPlayers++;
+  }
+  if (this.numFinishedPlayers === this.numPlayers) {
+    this.finishGame();
+  }
+};
+
 Game.prototype.createUpdateLoop = function() {
   //alias for this so we don't lose context inside setInterval
   var self = this;
@@ -145,20 +169,21 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
-      
-      if (self.raceInProgress) {
-        //console.log('race in progress');
-        waypointCheck(player.robotModel);
-      } 
+      self.updateRaceProgress(player.robotModel);
+      // if (self.raceInProgress) {
+      //   //console.log('race in progress');
+      //   if (!player.robotModel.finished && waypointCheck(player.robotModel) === 'finished') {
+      //     self.numFinishedPlayers++;
+
+      //   }
+      // } 
 
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
     }
-
+    //only send every other update to reduce lag
     if (updatesCount === 1) {
-      self.sendToClients("positions", objectsToSend);
-      
+      self.sendToClients("positions", objectsToSend);     
       updatesCount = 0;
-
      }
      updatesCount++;
     setTimeout(updateLoop,self.timeBetweenUpdates);
@@ -207,7 +232,7 @@ Game.prototype.playersInRadiusOfLocation = function(location, radius) {
     }
   }
   return players;
-}
+};
 
 Game.prototype.getSendablePlayer = function(player) {
   return {
@@ -218,10 +243,10 @@ Game.prototype.getSendablePlayer = function(player) {
         facing: player.robotModel.facing,
         position: player.robotModel.position,
         energy: player.robotModel.energy,
-        distance: player.robotModel.distance,
+        distance: player.robotModel.distance
       }
     };
-}
+};
 
 //Sends to all connected players in this game the object argument
 //if the third argument exsits it will skip that socket to send too. 
@@ -238,6 +263,6 @@ Game.prototype.sendToClients = function(event, obj,socket) {
       this.io.to(playerId).emit(event, obj); 
     }
   }
-}
+};
 
 module.exports = Game;
