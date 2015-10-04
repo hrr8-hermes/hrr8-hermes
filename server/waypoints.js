@@ -29,8 +29,6 @@
 module.exports = function makeWayCounter(waypoints, laps) {
 
   var lap = waypoints.lap;
-  console.log(lap);
-  console.log(waypoints[lap[1]]);
   var lap_dist = lap.length;
   var max_dist = (laps * lap_dist);
 

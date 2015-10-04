@@ -33,11 +33,11 @@ function Robot(game, delta,id,pos) {
   this.velocity = 0; 
   //this.facing = 0.25; 
   this.facing = 0;
-  this.distance = 0; // waypoint count, not actual distance
+  this.distance = -1; // waypoint count, not actual distance
   this.lastGridPosition = [0,0];
   this.energy = 100; 
   this.lastPosition = new LinkedList();
-  this.maxEnergy = 100;
+  this.maxEnergym = 100;
   this.isRunning = false; 
   this.isBoosting = false; 
   this.pressed = false;
@@ -62,11 +62,11 @@ Robot.prototype.decreaseEnergy = function(num) {
 };
 
 Robot.prototype.hasWallCollision = function(map) {
-
+  //console.log('current server distance: ', this.distance);
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
-  console.log('Babylon x: ', this.position.x);
-  console.log('Babylon z: ', this.position.z);
+  //console.log('Babylon x: ', this.position.x);
+  //console.log('Babylon z: ', this.position.z);
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);

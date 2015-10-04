@@ -12,9 +12,9 @@ Waiting.prototype.update = function(robot,inputObj) {
 
 Waiting.prototype.enterState = function(robot) {
   console.log('waiting');
-  setTimeout(function() {
-    robot.setState('running');
-  }, 1500);
+  // setTimeout(function() {
+  //   robot.setState('running');
+  // }, 1500);
 
 };
 

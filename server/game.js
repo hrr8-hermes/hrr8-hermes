@@ -56,12 +56,21 @@ Game.prototype.lineUpRacers = function() {
     playerModel.stopMoving();
     playerModel.facing = -.249999;
     playerModel.setState('waiting');
-    //
+    var gameContext = this;
   
-   //   setTimeout(function() {
-   //     this.setState('running');
-   //     console.log('running again!');
-   // }.bind(playerModel), 2000);
+
+    setTimeout(function() {
+      gameContext.io.sockets.emit('raceStarting');
+      gameContext.raceInProgress = true;
+      if (this.distance === -1) {
+        console.log('setting distance to 0');
+        this.distance = 0;
+      }
+      this.setState('running');
+      console.log('running again!');
+      console.log('this.distance: ', this.distance);
+
+    }.bind(playerModel), 2000);
   }
 };
 //when a player has pressed enter, set their isReady to true.  if all players are
@@ -81,7 +90,6 @@ Game.prototype.playerIsReady = function(socketId) {
 };
 
 Game.prototype.startRace = function() {
-  this.raceInProgress = true;
   this.lineUpRacers();
 };
 
@@ -137,13 +145,16 @@ Game.prototype.createUpdateLoop = function() {
         player.robotModel.handlePlayerCollision();
       }
       
-      waypointCheck(player.robotModel);
+      if (self.raceInProgress) {
+        //console.log('race in progress');
+        waypointCheck(player.robotModel);
+      } 
 
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
     }
 
     if (updatesCount === 1) {
-      self.sendToClients("positions", objectsToSend)
+      self.sendToClients("positions", objectsToSend);
       
       updatesCount = 0;
 

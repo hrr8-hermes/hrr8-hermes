@@ -169,6 +169,11 @@ function runScene(meshes) {
     players[playerData.socketId] = set;
   });
   
+  socket.on('raceStarting', function() {
+    console.log('race started');
+    reportLap(bob.distance,scene);
+  });
+
   socket.on('connected', function(data) {
     //receives a object of connected players
     for (var playerId in data) {
