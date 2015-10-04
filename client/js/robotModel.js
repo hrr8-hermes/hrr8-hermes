@@ -33,8 +33,9 @@ Robot.prototype.update = function(input){
   if(input.robotModel.state.name !== this.state.name) {
     this.setState(input.robotModel.state.name);
   }
-  console.log('current distance, according to server: ', input.robotModel.distance);
-  if (this.distance !== input.robotModel.distance) reportLap(input.robotModel.distance,scene);
+  if (input.socketId === socket.id && this.distance !== input.robotModel.distance) {
+    reportLap(input.robotModel.distance,scene);
+  }  
   this.distance = input.robotModel.distance;
   this.state.update(this,input); 
 };
