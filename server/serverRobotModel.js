@@ -42,7 +42,12 @@ function Robot(game, delta,id,pos) {
   this.isBoosting = false; 
   this.pressed = false;
   this.updateCounter = 0;
+<<<<<<< HEAD
   this.finished = false;
+=======
+  this.attackBox = [];
+
+>>>>>>> 48d1c68cc22c2ff71a17b44e17e56404aa9238e1
   this.position = pos; 
   this.setState('running'); //initial state
   //make mesh, set position
@@ -118,29 +123,33 @@ Robot.prototype.getYOnGrid = function(map) {
 
 Robot.prototype.update = function(input) {
   if(input['KE'] && !this.pressed) {
-
+    this.decreaseEnergy(33);
     this.pressed = true;
-    //Make 3 explosions
-    for(var i = 1; i < 4; i++) {
-      //Calulate 3 spots in fron of you
-      var x = this.forwardNormX * (i * 3) + this.position.x;
-      var y = this.forwardNormY * (i * 3) + this.position.z;
-      //Find players in that postition
-      var array = game.playersInRadiusOfLocation({x:x,z:y}, 4);
-      //Loop throught found players
-      for(var x = 0; x < array.length; x++) {
-        //Not yourself found
-        if(this.id !== array[x].player.socketId) {
-          //subtract there energy
-          array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (4 - array[x].distance))
+    var self = this;
+    setTimeout(function() {
+      //Make 3 explosions
+      for(var i = 1; i < 4; i++) {
+        //Calulate 3 spots in fron of you
+        var x = (1 + self.velocity) * self.forwardNormX * (i * 6) + self.position.x;
+        var y = (1 + self.velocity) * self.forwardNormY * (i * 6) + self.position.z;
+        self.attackBox.push({x: x,z: y});
+        //Find players in that postition
+        var array = game.playersInRadiusOfLocation({x:x,z:y}, 10);
+        //Loop throught found players
+        for(var aqw = 0; aqw < array.length; aqw++) {
+          //Not yourself found
+          if(self.id !== array[aqw].player.socketId) {
+            //subtract there energy
+            array[aqw].player.robotModel.decreaseEnergy(settings.attackDamage * (10 - array[aqw].distance))
+          }
         }
+        //Allow attacking after time
+        setTimeout(function() {
+          self.pressed = false;
+        }, 200)
       }
-      //Allow attacking after a second
-      var self = this;
-      setTimeout(function() {
-        self.pressed = false;
-      }, 1000)
-    }
+      
+    }, 200)
   }
   this.state.update(this,input); 
 };

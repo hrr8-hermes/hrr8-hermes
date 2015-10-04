@@ -4,7 +4,8 @@
  * additional setup code
  */
 
-function runScene(meshes) {
+function runScene(meshes,sounds) {
+  window.sounds = sounds;
   window.NUM_LAPS = 2;
   createMaterials(); 
   var players = {};
@@ -81,10 +82,12 @@ function runScene(meshes) {
   meshes['Plane001'].receiveShadows = true;
   */
 
+
   meshes.bg1.loop = true;
   meshes.bg1.autoplay = true;
   meshes.bg1.setVolume(.05);
   meshes.bg1.play();
+
 
   // start rendering
   engine.runRenderLoop(function() {
@@ -133,9 +136,9 @@ function runScene(meshes) {
     // M to stop track
     if (e.keyCode === 77) {
       if (togglemusic) {
-        meshes.bg1.stop();
+        sounds.bg1.stop();
       } else {
-        meshes.bg1.play();
+        sounds.bg1.play();
       }
       togglemusic = !togglemusic;
     }

@@ -55,6 +55,7 @@ Death.prototype.update = function(robot,serverData){
 Death.prototype.enterState = function(robot) {
   robot.mesh.isVisible = false; 
   vfx.explosion(robot.mesh); 
+  sounds.boom1.play();
   console.log("entering death state");
 };
 

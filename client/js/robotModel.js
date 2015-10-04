@@ -30,6 +30,11 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
 };
 Robot.prototype.update = function(input){
+  if(input.robotModel.attackBox.length) {
+    for(var i = 0; i < input.robotModel.attackBox.length; i++) {
+      vfx.explosion(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 2, input.robotModel.attackBox[i].z));
+    }
+  } 
   if(input.robotModel.state.name !== this.state.name) {
     this.setState(input.robotModel.state.name);
   }
@@ -51,11 +56,15 @@ Robot.prototype.setState = function(name){
 };
 Robot.prototype.startRunning = function(){
   console.log('started running');
+  sounds.step.stop();
+  sounds.step.loop = true;
+  sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 
 };
 Robot.prototype.stopRunning = function(){
   scene.beginAnimation(this.skeleton,1,10,true,1.0); 
+  sounds.step.stop();
   this.isRunning = false;
 };
 
