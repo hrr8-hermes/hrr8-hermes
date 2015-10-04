@@ -118,18 +118,18 @@ Robot.prototype.update = function(input) {
       //Make 3 explosions
       for(var i = 1; i < 4; i++) {
         //Calulate 3 spots in fron of you
-        var x = self.forwardNormX * (i * 4) + self.position.x;
-        var y = self.forwardNormY * (i * 4) + self.position.z;
+        var x = self.velocity * self.forwardNormX * (i * 6) + self.position.x;
+        var y = self.velocity * self.forwardNormY * (i * 6) + self.position.z;
 
         self.attackBox.push({x: x,z: y});
         //Find players in that postition
-        var array = game.playersInRadiusOfLocation({x:x,z:y}, 5);
+        var array = game.playersInRadiusOfLocation({x:x,z:y}, 10);
         //Loop throught found players
         for(var x = 0; x < array.length; x++) {
           //Not yourself found
           if(self.id !== array[x].player.socketId) {
             //subtract there energy
-            array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (5 - array[x].distance))
+            array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (10 - array[x].distance))
           }
         }
         //Allow attacking after time
