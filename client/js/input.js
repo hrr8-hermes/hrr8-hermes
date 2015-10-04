@@ -7,9 +7,6 @@
  *
  */
 
-// Global object for all inputs
-// 1 = triggered
-// 0 = untriggered
 window.addEventListener('keydown', function(e) {
   //user has pressed Enter and wants to start a race, or enter a new one
   if (e.keyCode === 13) {
@@ -27,6 +24,9 @@ window.addEventListener('keydown', function(e) {
     }
     return;
   }
+  // Global object for all inputs
+  // 1 = triggered
+  // 0 = untriggered
   var obj = {};
   obj['K' + String.fromCharCode(e.keyCode)] = 1;
   socket.emit('movementInput',obj);
@@ -37,7 +37,3 @@ window.addEventListener('keyup', function(e) {
   obj['K' + String.fromCharCode(e.keyCode)] = 0;
   socket.emit('movementInput',obj);
 });
-
-var enterHandler = function() {
-  
-}
