@@ -111,7 +111,7 @@ Robot.prototype.getYOnGrid = function(map) {
 
 Robot.prototype.update = function(input) {
   if(input['KE'] && !this.pressed) {
-    console.log("attacking")
+    robot.decreaseEnergy(33);
     this.pressed = true;
     var self = this;
     setTimeout(function() {
@@ -138,10 +138,10 @@ Robot.prototype.update = function(input) {
         }, 15)
         setTimeout(function() {
           self.pressed = false;
-        }, 5000)
+        }, 200)
       }
       
-    }, 1000)
+    }, 200)
   }
   this.state.update(this,input); 
 };
