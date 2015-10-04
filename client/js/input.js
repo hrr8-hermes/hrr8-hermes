@@ -17,7 +17,7 @@ window.addEventListener('keydown', function(e) {
       //if you're the last one to press it
       setTimeout(function () {
         if (infoBox.innerHTML === '') infoBox.innerHTML = 'Ready...or are you?';
-      }, 25);  
+      }, 70);  
       window.readyPressed = true;
     } else if (window.finished) {
       window.location.reload();
