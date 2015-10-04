@@ -111,35 +111,33 @@ Robot.prototype.getYOnGrid = function(map) {
 
 Robot.prototype.update = function(input) {
   if(input['KE'] && !this.pressed) {
-    console.log("attacking")
-
+    this.decreaseEnergy(33);
     this.pressed = true;
-    //Make 3 explosions
-    for(var i = 1; i < 4; i++) {
-      //Calulate 3 spots in fron of you
-      var x = this.forwardNormX * (i * 4) + this.position.x;
-      var y = this.forwardNormY * (i * 4) + this.position.z;
-
-      this.attackBox.push({x: x,z: y});
-      //Find players in that postition
-      var array = game.playersInRadiusOfLocation({x:x,z:y}, 5);
-      //Loop throught found players
-      for(var x = 0; x < array.length; x++) {
-        //Not yourself found
-        if(this.id !== array[x].player.socketId) {
-          //subtract there energy
-          array[x].player.robotModel.decreaseEnergy(settings.attackDamage * (5 - array[x].distance))
+    var self = this;
+    setTimeout(function() {
+      //Make 3 explosions
+      for(var i = 1; i < 4; i++) {
+        //Calulate 3 spots in fron of you
+        var x = (1 + self.velocity) * self.forwardNormX * (i * 6) + self.position.x;
+        var y = (1 + self.velocity) * self.forwardNormY * (i * 6) + self.position.z;
+        self.attackBox.push({x: x,z: y});
+        //Find players in that postition
+        var array = game.playersInRadiusOfLocation({x:x,z:y}, 10);
+        //Loop throught found players
+        for(var aqw = 0; aqw < array.length; aqw++) {
+          //Not yourself found
+          if(self.id !== array[aqw].player.socketId) {
+            //subtract there energy
+            array[aqw].player.robotModel.decreaseEnergy(settings.attackDamage * (10 - array[aqw].distance))
+          }
         }
+        //Allow attacking after time
+        setTimeout(function() {
+          self.pressed = false;
+        }, 200)
       }
-      //Allow attacking after time
-      var self = this;
-      setTimeout(function() {
-        self.attackBox = [];
-      }, 15)
-      setTimeout(function() {
-        self.pressed = false;
-      }, 10000)
-    }
+      
+    }, 200)
   }
   this.state.update(this,input); 
 };

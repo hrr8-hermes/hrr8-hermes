@@ -98,6 +98,9 @@ Game.prototype.createUpdateLoop = function() {
       waypointCheck(player.robotModel);
 
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
+      if(player.robotModel.attackBox.length) {
+        player.robotModel.attackBox = [];
+      }
     }
 
     if (updatesCount === 1) {
