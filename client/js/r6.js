@@ -175,6 +175,21 @@ function runScene(meshes) {
     reportLap(bob.distance,scene);
   });
 
+  socket.on('countdown', function() {
+    console.log('counting down');
+    var countdown = document.getElementById('countdown');
+    var countdownText = ['3..', '2..', '1..', 'GO!', ''];
+    var index = 0;
+    var counter = function() {
+      countdown.innerHTML = countdownText[index];
+      index++;
+      if (index < countdownText.length) {
+        setTimeout(counter, 1000);
+      }
+    };
+    counter();
+  });
+
   socket.on('connected', function(data) {
     //receives a object of connected players
     for (var playerId in data) {

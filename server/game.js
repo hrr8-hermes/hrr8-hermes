@@ -58,7 +58,7 @@ Game.prototype.lineUpRacers = function() {
     playerModel.setState('waiting');
     var gameContext = this;
   
-
+    this.io.sockets.emit('countdown');
     setTimeout(function() {
       gameContext.io.sockets.emit('raceStarting');
       gameContext.raceInProgress = true;
@@ -70,7 +70,7 @@ Game.prototype.lineUpRacers = function() {
       console.log('running again!');
       console.log('this.distance: ', this.distance);
 
-    }.bind(playerModel), 2000);
+    }.bind(playerModel), 3000);
   }
 };
 //when a player has pressed enter, set their isReady to true.  if all players are

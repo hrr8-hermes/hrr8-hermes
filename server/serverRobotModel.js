@@ -62,7 +62,7 @@ Robot.prototype.decreaseEnergy = function(num) {
 };
 
 Robot.prototype.hasWallCollision = function(map) {
-  //console.log('current server distance: ', this.distance);
+  //wconsole.log('current server distance: ', this.distance);
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
   //console.log('Babylon x: ', this.position.x);
