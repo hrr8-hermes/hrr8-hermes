@@ -16,6 +16,7 @@ var Running = require('./states/Running.js')
 var Death = require('./states/Death.js')
 var LinkedList = require('./LinkedList.js')
 var Boosting = require('./states/Boosting.js');
+var Waiting = require('./states/Waiting.js');
 var settings = require('./robotModelSettings.js');
 
 
@@ -30,8 +31,9 @@ function Robot(game, delta,id,pos) {
   this.maxRunSpeed = settings.maxRunSpeed; //clamps the magnidue of speed vector
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
-  this.facing = 0; 
-  this.distance = 0; // waypoint count, not actual distance
+  //this.facing = 0.25; 
+  this.facing = 0;
+  this.distance = -1; // waypoint count, not actual distance
   this.lastGridPosition = [0,0];
   this.energy = 100; 
   this.lastPosition = new LinkedList();
@@ -40,8 +42,8 @@ function Robot(game, delta,id,pos) {
   this.isBoosting = false; 
   this.pressed = false;
   this.updateCounter = 0;
+  this.finished = false;
   this.attackBox = [];
-
   this.position = pos; 
   this.setState('running'); //initial state
   //make mesh, set position
@@ -61,14 +63,16 @@ Robot.prototype.decreaseEnergy = function(num) {
 };
 
 Robot.prototype.hasWallCollision = function(map) {
-
+  //wconsole.log('current server distance: ', this.distance);
   //compensate for the fact that 0,0 is the center of the 3d Babylon map,  
   //but is upper left of the 2d map
-  // console.log('Babylon x: ', this.position.x);
-  // console.log('Babylon z: ', this.position.z);
+  //console.log('Babylon x: ', this.position.x);
+  //console.log('Babylon z: ', this.position.z);
   //console.log(map);
   var xOnGrid = this.getXOnGrid(map);
   var yOnGrid = this.getYOnGrid(map);
+  //console.log('xOnGrid: ', this.getXOnGrid(map));
+  //console.log('yOnGridL ', this.getYOnGrid(map));
 
   //out of course bounds
   if (map.grid[yOnGrid] === undefined || map.grid[yOnGrid][xOnGrid] === undefined) {
@@ -76,9 +80,11 @@ Robot.prototype.hasWallCollision = function(map) {
     console.log('ERROR: out of course bounds');
   } else {
     //0 means a black pixel (wall) 
-    return (map.grid[yOnGrid][xOnGrid] === 0 || map.grid[yOnGrid + 1][xOnGrid] === 0
-    || map.grid[yOnGrid - 1][xOnGrid] === 0 || map.grid[yOnGrid][xOnGrid + 1] === 0 ||
-    map.grid[yOnGrid][xOnGrid - 1] === 0 || map.grid[yOnGrid + 1][xOnGrid + 1] === 0 || map.grid[yOnGrid + 1][xOnGrid - 1] === 0);
+
+    return (map.grid[yOnGrid][xOnGrid] === 0 || map.grid[yOnGrid + 1][xOnGrid] === 0 || 
+      map.grid[yOnGrid - 1][xOnGrid] === 0 || map.grid[yOnGrid][xOnGrid + 1] === 0 ||
+      map.grid[yOnGrid][xOnGrid - 1] === 0 || map.grid[yOnGrid + 1][xOnGrid + 1] === 0 || 
+      map.grid[yOnGrid + 1][xOnGrid - 1] === 0);
   }
 };
 
@@ -87,23 +93,27 @@ Robot.prototype.handlePlayerCollision = function() {
   this.position.x = this.lastPosition.tail.value.x;
   this.position.z = this.lastPosition.tail.value.z;
 };
+Robot.prototype.stopMoving = function() {
+  this.velocity = 0;
+  this.stopRunning();
+};
 
 Robot.prototype.handleWallCollision = function() {
 
   this.decreaseEnergy(this.velocity * settings.wallCollisionDamage); //50% speed takes away 50 energy
-  //stop movement, stop running, move back to previous position
+  // //stop movement, stop running, move back to previous position
 
-   this.velocity = 0;
-   this.stopRunning();
 
-   this.position.x = this.lastPosition.tail.value.x;
-   this.position.z = this.lastPosition.tail.value.z;
+  this.stopMoving();
+  this.position.x = this.lastPosition.tail.value.x;
+  this.position.z = this.lastPosition.tail.value.z;
 
 };
 
 Robot.prototype.getXOnGrid = function(map) {
   return Math.round(this.position.x + map.width / 2);
 };
+
 
 Robot.prototype.getYOnGrid = function(map) {
   return Math.round(map.height / 2 - this.position.z);
@@ -122,7 +132,7 @@ Robot.prototype.update = function(input) {
         var y = (1 + self.velocity) * self.forwardNormY * (i * 6) + self.position.z;
         self.attackBox.push({x: x,z: y});
         //Find players in that postition
-        var array = game.playersInRadiusOfLocation({x:x,z:y}, 10);
+        var array = self.game.playersInRadiusOfLocation({x:x,z:y}, 10);
         //Loop throught found players
         for(var aqw = 0; aqw < array.length; aqw++) {
           //Not yourself found
@@ -173,7 +183,8 @@ Robot.prototype.stopBoosting = function() {
 Robot.states = {
   running: new Running(),
   death: new Death(),
-  boosting: new Boosting()
+  boosting: new Boosting(),
+  waiting: new Waiting()
 };
 
 module.exports = Robot;

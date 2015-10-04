@@ -28,6 +28,7 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.isVisible = false; 
   this.camPivot.parent = this.pivot; 
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
+  this.stopRunning();
 };
 Robot.prototype.update = function(input){
   if(input.robotModel.attackBox.length) {
@@ -38,7 +39,9 @@ Robot.prototype.update = function(input){
   if(input.robotModel.state.name !== this.state.name) {
     this.setState(input.robotModel.state.name);
   }
-  if (this.distance !== input.robotModel.distance) reportLap(input.robotModel.distance,scene);
+  if (input.socketId === socket.id && this.distance !== input.robotModel.distance) {
+    reportLap(input.robotModel.distance,scene);
+  }  
   this.distance = input.robotModel.distance;
   this.state.update(this,input); 
 };
@@ -56,6 +59,7 @@ Robot.prototype.startRunning = function(){
   console.log('started running');
   sounds.step.stop();
   sounds.step.loop = true;
+  sounds.step.setVolume(.7);
   sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 
@@ -69,5 +73,6 @@ Robot.prototype.stopRunning = function(){
 Robot.states = {
   running: new Running(),
   death: new Death(), 
-  boosting: new Boosting()
+  boosting: new Boosting(),
+  waiting: new Waiting()
 };

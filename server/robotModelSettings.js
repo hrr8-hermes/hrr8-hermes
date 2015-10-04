@@ -10,5 +10,6 @@ module.exports = {
   playerCollisionDamage: 100, 
   wallCollisionDamage: 100,
   attackDamage: 35,
-  savedPositions: 25,
+    //number of positions you will move back upon death
+  savedPositions: 25
 };

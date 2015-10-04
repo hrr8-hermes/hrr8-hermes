@@ -6,8 +6,6 @@ var io = require('socket.io')(server);
 var PNG = require('pngjs2').PNG;
 var fs = require('fs');
 
-//For now one game; instantiated in loadMap
-
 
 //The list of games in the server
 var games = {};
@@ -19,7 +17,7 @@ var maps = {
     path: 'server/assets/scaledCircleMap.png',
     width: null,
     height: null,
-    grid: null
+    grid: null,
   },
   star: {
     name: 'Satan\'s Secret Star',
@@ -60,9 +58,10 @@ function loadMapGrid(mapName, callback) {
 }
 
 function createGame() {
-  game = new Game(nextGameId, io, maps[currentMapName]);
+  var game = new Game(nextGameId, io, maps[currentMapName]);
   games[nextGameId] = game;
   nextGameId++;
+  return game;
 }
 
 //Listen to connections from socket.io
@@ -73,11 +72,16 @@ io.on('connection', function(socket) {
   var numPlayers = 0;
   for (var i = 1; i < nextGameId; i++)  {
 
-    if (games[i].numPlayers < games[i].maxPlayers && !currentGame) {
+//only put a player in a game that has not already begun and is not full
+    if (!games[i].raceInProgress && games[i].numPlayers < games[i].maxPlayers && !currentGame) {
       currentGame = games[i];
     }
     numPlayers += games[i].numPlayers;
     maxPlayers += games[i].maxPlayers;
+  }
+  //if we haven't found a game that meets those conditions, create one.
+  if (currentGame === undefined) {
+    currentGame = createGame();
   }
   console.log(numPlayers / maxPlayers)
   if(numPlayers / maxPlayers >= .75) {
@@ -110,12 +114,15 @@ io.on('connection', function(socket) {
     socket.emit("connected", ps);
   }, 500);
 
+  socket.on('seeking new game', function() {
+
+  });
   //Handle when a player disconnects from server
   socket.on('disconnect', function() {
     currentGame.removePlayer(socket.id);
     console.log('dc');
     //Tell all other players that he is disconnected
-    io.sockets.emit('playerDisconnected', game.getSendablePlayer(currentPlayer));
+    io.sockets.emit('playerDisconnected', currentGame.getSendablePlayer(currentPlayer));
   });
 });
 
@@ -155,6 +162,7 @@ function processImageIntoBitArray(imageDataArray, width, height) {
     }
     bitArrayGrid.push(row);  
   }
+  //console.log(bitArrayGrid[170][258]);
   findWhiteZone(bitArrayGrid);
   return bitArrayGrid;
 }

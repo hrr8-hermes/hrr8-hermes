@@ -58,7 +58,6 @@ Running.prototype.update = function(robot,inputObj){
   //if you aren't changing states, do the running thing
   if(!this.changeState(robot, inputObj)){
     var parsedInput = this._input(inputObj);
-
     robot.increaseEnergy(settings.runningHealthGain); 
 
     this.run(robot, parsedInput); 
@@ -68,7 +67,7 @@ Running.prototype.update = function(robot,inputObj){
 Running.prototype.changeState = function(robot, inputObj){
   if(inputObj['K ']){
     robot.setState('boosting'); 
-    return true;
+    return true; 
   }
   return false; 
 };

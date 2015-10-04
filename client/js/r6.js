@@ -6,7 +6,10 @@
 
 function runScene(meshes,sounds) {
   window.sounds = sounds;
+  BABYLON.Engine.audioEngine.setGlobalVolume(0.1);
   window.NUM_LAPS = 2;
+  window.readyPressed = false;
+  window.finished = false;
   createMaterials(); 
   var players = {};
   var startPos = { x: 200, y: 2.7, z : -66 };
@@ -84,7 +87,9 @@ function runScene(meshes,sounds) {
 
   sounds.bg1.loop = true;
   sounds.bg1.autoplay = true;
+  sounds.bg1.setVolume(1.8);
   sounds.bg1.play();
+
 
   // start rendering
   engine.runRenderLoop(function() {
@@ -169,6 +174,35 @@ function runScene(meshes,sounds) {
     players[playerData.socketId] = set;
   });
   
+  socket.on('raceStarting', function() {
+    console.log('race started');
+    bob.distance = 0;
+    reportLap(bob.distance,scene);
+  });
+
+  socket.on('finished', function(numPlayersFinished) {
+    console.log('all done!');
+    var indexInPlaces = numPlayersFinished;
+    var places = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
+    document.getElementById('info').innerHTML = 'You finished in '
+      + places[indexInPlaces] + '!<br/>Press enter to join a new game.';
+    window.finished = true;  
+  });
+  socket.on('countdown', function() {
+    console.log('counting down');
+    var countdown = document.getElementById('info');
+    var countdownText = ['3..', '2..', '1..', 'GO!', ''];
+    var index = 0;
+    var counter = function() {
+      countdown.innerHTML = countdownText[index];
+      index++;
+      if (index < countdownText.length) {
+        setTimeout(counter, 1000);
+      }
+    };
+    counter();
+  });
+
   socket.on('connected', function(data) {
     //receives a object of connected players
     for (var playerId in data) {
