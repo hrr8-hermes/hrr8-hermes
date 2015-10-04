@@ -18,6 +18,8 @@ function runScene(meshes,sounds) {
 
   meshes['track'].setEnabled(true);
   meshes['track'].scaling = new BABYLON.Vector3(1,1,1);
+  meshes['buildings'].setEnabled(true);
+  meshes['buildings'].scaling = new BABYLON.Vector3(1,1,1);
 
   // creates free-floating camera w/ default controls
   // click-drag to look, arrows to move, standard FP controls

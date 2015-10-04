@@ -14,6 +14,7 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
+  this.startPos = {x: -974, y: 2.7, z : -999};
   this.map = map;
   //this.startPos = {x: 190, y: 2.7, z : -66};
   this.startPos = this.getStartingPosition();
@@ -32,7 +33,7 @@ function Game(id, io, map) {
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
   this.createUpdateLoop();
-};
+}
 
 Game.prototype.getStartingPosition = function() {
   var startLineOnGrid = mapJSON.line;

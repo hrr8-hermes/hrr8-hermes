@@ -17,19 +17,24 @@ function Robot(id,pos,mesh,skeleton) {
   this.isRunning = false; 
   this.isBoosting = false;
 }
+//creates the mesh and necissary pivot points
 Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.mesh = mesh.clone(this.id + '_mesh'); 
   this.skeleton = skeleton.clone(this.id + '_skeleton'); 
   this.mesh.skeleton = this.skeleton; 
   this.mesh.rotation = new BABYLON.Vector3(0, Math.PI * 0.5, 0);
-  this.pivot =  new BABYLON.Mesh.CreateBox(this.id + '_pivot',1,scene);
+  //The mesh is a child of the pivot, we never modify the mesh directly.
+  this.pivot =  new BABYLON.Mesh.CreateBox(this.ide + '_pivot',1,scene);
   this.pivot.isVisible = false; 
   this.mesh.parent = this.pivot; 
   this.mesh.position = BABYLON.Vector3.Zero(); 
+  //The camera doesn't support parent / child, so we set it's position to be the camPivot's pos
   this.camPivot =  new BABYLON.Mesh.CreateBox(this.id + '_pivot',1,scene);
   this.camPivot.isVisible = false; 
   this.camPivot.parent = this.pivot; 
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
+  this.boostPivot = new BABYLON.Mesh.CreateBox(this.id + '_boostPivot',1,scene);
+  this.boostPivot.attachToBone(this.skeleton.bones[27], this.mesh); 
   this.stopRunning();
 };
 Robot.prototype.update = function(input){
