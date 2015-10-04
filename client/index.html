@@ -17,6 +17,7 @@
 <script src="js/running.js"></script>
 <script src="js/death.js"></script>
 <script src="js/boosting.js"></script>
+<script src="js/waiting.js"></script>
 <!-- player (robot) object model -->
 <script src="js/robotModel.js"></script>
 <!-- register USER_INPUT array and listeners -->
@@ -65,14 +66,24 @@ html,body {
   left: 50px;
   clip: rect(0, 50px, 100px, 0);
 }
+#info {
+  position: absolute;
+  top: 25px;
+/*  left: 50%;*/
+  width: 100%;
+  margin: none;
+  text-align: center;
+}
+
 </style>
 </head>
 <body>
 <img id='energy' src='/assets/energy.png'></img>
 <canvas id="renderCanvas"></canvas>
+<h1 id='info'></h1>
 <script>
 // connect to server
-
+// TODO: socket connect here
 
 // BABYLON setup
 var canvas = document.getElementById('renderCanvas');

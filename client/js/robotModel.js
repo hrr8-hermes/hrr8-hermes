@@ -1,5 +1,7 @@
 function Robot(id,pos,mesh,skeleton) {
   this.id = id;
+  // hacking around this til network fix
+  this.socketid = false;
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.8; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
@@ -33,12 +35,22 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
   this.boostPivot = new BABYLON.Mesh.CreateBox(this.id + '_boostPivot',1,scene);
   this.boostPivot.attachToBone(this.skeleton.bones[27], this.mesh); 
+  this.stopRunning();
 };
 Robot.prototype.update = function(input){
+  //continued hack around bad socket setup
+  if (!this.socketid) this.socketid = socket.id;
+  if(input.robotModel.attackBox.length) {
+    for(var i = 0; i < input.robotModel.attackBox.length; i++) {
+      vfx.explosion(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 2, input.robotModel.attackBox[i].z));
+    }
+  } 
   if(input.robotModel.state.name !== this.state.name) {
     this.setState(input.robotModel.state.name);
   }
-  if (this.distance !== input.robotModel.distance) reportLap(input.robotModel.distance,scene);
+  if (input.socketId === socket.id && this.distance !== input.robotModel.distance) {
+    reportLap(input.robotModel.distance,scene);
+  }  
   this.distance = input.robotModel.distance;
   this.state.update(this,input); 
 };
@@ -53,17 +65,22 @@ Robot.prototype.setState = function(name){
   } 
 };
 Robot.prototype.startRunning = function(){
-  console.log('started running');
+  sounds.step.loop = true;
+  sounds.step.setVolume(.7);
+  // only play our steps (for now) TODO: 3D sound!
+  if (this.socketid===socket.id) sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 
 };
 Robot.prototype.stopRunning = function(){
   scene.beginAnimation(this.skeleton,1,10,true,1.0); 
+  sounds.step.stop();
   this.isRunning = false;
 };
 
 Robot.states = {
   running: new Running(),
   death: new Death(), 
-  boosting: new Boosting()
+  boosting: new Boosting(),
+  waiting: new Waiting()
 };

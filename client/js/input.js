@@ -7,16 +7,26 @@
  *
  */
 
-// Global object for all inputs
-// 1 = triggered
-// 0 = untriggered
-
 window.addEventListener('keydown', function(e) {
-  //user has pressed Enter and wants to start a race
+  //user has pressed Enter and wants to start a race, or enter a new one
   if (e.keyCode === 13) {
-    socket.emit('readyToRace');
+    if (!window.readyPressed) {
+      socket.emit('readyToRace');
+      var infoBox = document.getElementById('info');
+      //keeps this message from displaying for a split second
+      //if you're the last one to press it
+      setTimeout(function () {
+        if (infoBox.innerHTML === '') infoBox.innerHTML = 'Ready...or are you?';
+      }, 60);  
+      window.readyPressed = true;
+    } else if (window.finished) {
+      window.location.reload();
+    }
     return;
   }
+  // Global object for all inputs
+  // 1 = triggered
+  // 0 = untriggered
   var obj = {};
   obj['K' + String.fromCharCode(e.keyCode)] = 1;
   socket.emit('movementInput',obj);

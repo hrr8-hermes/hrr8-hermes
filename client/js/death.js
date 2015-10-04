@@ -53,8 +53,10 @@ Death.prototype.update = function(robot,serverData){
 };
 
 Death.prototype.enterState = function(robot) {
+  sounds.step.stop();
   robot.mesh.isVisible = false; 
   vfx.explosion(robot.mesh); 
+  sounds.boom1.play();
   console.log("entering death state");
 };
 

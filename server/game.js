@@ -5,6 +5,7 @@
 var Robot = require('./serverRobotModel.js');
 var Vector3 = require('./Vector3.js');
 
+
 // Temp map load for waypoint checker
 var mapJSON = require('./assets/course_2_oblong.json');
 var waypointCheck = require('./waypoints.js')(mapJSON,2);
@@ -15,32 +16,80 @@ function Game(id, io, map) {
   // width, and height (map dimensions).
   this.startPos = {x: -974, y: 2.7, z : -999};
   this.map = map;
+  //this.startPos = {x: 190, y: 2.7, z : -66};
+  this.startPos = this.getStartingPosition();
+  //HERE
+  //this.waypointCounter = makeWaypointCounter(map.)
   this.players = {};
+  this.results = {};
   this.numPlayers = 0;
   this.numReadyPlayers = 0;
+  this.numFinishedPlayers = 0;
+  this.raceInProgress = false;
+  this.raceFinished = false;
   this.io = io;
-  this.updatePerSec = 20;
-  //Mill Seconds
+  //milliseconds
+  this.timeBetweenUpdates = 10;
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
   this.createUpdateLoop();
 }
 
+Game.prototype.getStartingPosition = function() {
+  var startLineOnGrid = mapJSON.line;
+  // var startingX = startLineOnGrid.x1;
+  // var startingZ = startLineOnGrid.y1;
+  var startingX = startLineOnGrid.x1 - this.map.width / 2;
+  var startingZ = this.map.height / 2 - startLineOnGrid.y1;
+   //startPos.y never changes, vertical elevation above the track
+  return {x: startingX, y: 2.7, z: startingZ + 3};
+};
+
+Game.prototype.lineUpRacers = function() {
+  var count = 1;
+  for (var playerId in this.players) {
+    var playerModel = this.players[playerId].robotModel;
+    playerModel.position.x = this.startPos.x;
+    count++;
+    playerModel.position.z = this.startPos.z + 3.5 * count;
+    playerModel.stopMoving();
+    playerModel.facing = -.249999;
+    playerModel.setState('waiting');
+    var gameContext = this;
+  
+    this.io.sockets.emit('countdown');
+    setTimeout(function() {
+      gameContext.io.sockets.emit('raceStarting');
+      gameContext.raceInProgress = true;
+      if (this.distance === -1) {
+        console.log('setting distance to 1');
+        this.distance = 0;
+      }
+      this.setState('running');
+      console.log('running again!');
+      console.log('this.distance: ', this.distance);
+
+    }.bind(playerModel), 3000);
+  }
+};
 //when a player has pressed enter, set their isReady to true.  if all players are
 //ready, start a race.
 Game.prototype.playerIsReady = function(socketId) {
   var readyPlayer = this.players[socketId];
   if (!readyPlayer.isReady) {
     readyPlayer.isReady = true;
+    console.log('set player to ready');
+    console.log(this.numReadyPlayers);
     this.numReadyPlayers++;
-    if (this.numReadyPlayers === this.Players) {
+    if (this.numReadyPlayers === this.numPlayers) {
+      console.log('about to start');
       this.startRace();
     }
   }  
 };
 
 Game.prototype.startRace = function() {
-
+  this.lineUpRacers();
 };
 
 //Adds a Player to the Game with their socket id.
@@ -53,7 +102,7 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x + 3.5 * this.numPlayers, this.startPos.y, this.startPos.z))
+    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x, this.startPos.y, this.startPos.z + 3.5 * this.numPlayers))
   };
   this.numPlayers++;
 }; 
@@ -71,6 +120,28 @@ Game.prototype.parseInput = function(inputObj, socketId) {
     p.input[key] = inputObj[key]
   }
   //p.input = inputObj;
+};
+
+//close down this game object? more important is sending a message 
+//to each player as they finished
+Game.prototype.finishGame = function() {
+  this.io.sockets.emit('race over');
+};
+
+Game.prototype.updateRaceProgress = function(robotModel) {
+
+  if (!this.raceInProgress) return; 
+  //console.log(waypointCheck(robotModel));
+  if (waypointCheck(robotModel) === 'finished' && !robotModel.finished) {
+    //send them the number of finished players to know their place
+    console.log('server registered finished');
+    this.io.to(robotModel.id).emit('finished', this.numFinishedPlayers);
+    robotModel.finished = true;
+    this.numFinishedPlayers++;
+  }
+  if (this.numFinishedPlayers === this.numPlayers) {
+    this.finishGame();
+  }
 };
 
 Game.prototype.createUpdateLoop = function() {
@@ -94,20 +165,22 @@ Game.prototype.createUpdateLoop = function() {
       if (self.hasPlayerCollision(player)) {
         player.robotModel.handlePlayerCollision();
       }
-      
-      waypointCheck(player.robotModel);
+      self.updateRaceProgress(player.robotModel);
 
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
+      if(player.robotModel.attackBox.length) {
+        player.robotModel.attackBox = [];
+      }
     }
-
+    //only send every other update to reduce lag
     if (updatesCount === 1) {
-      self.sendToClients("positions", objectsToSend)
-      
+      self.sendToClients("positions", objectsToSend);     
       updatesCount = 0;
-    }
-    updatesCount++;
-    setTimeout(updateLoop,self.updatePerSec);
-  },this.updatePerSec);
+     }
+     updatesCount++;
+    setTimeout(updateLoop,self.timeBetweenUpdates);
+  },this.timeBetweenUpdates);
+
 
 };
 
@@ -127,8 +200,11 @@ Game.prototype.playersAreColliding = function(player1, player2) {
   var player2x = player2.robotModel.getXOnGrid(this.map);
   var player1y = player1.robotModel.getYOnGrid(this.map);
   var player2y = player2.robotModel.getYOnGrid(this.map);
-  return (player1x === player2x && player1y === player2y);
-//old bounding box algorithm, saving for later  
+
+  return Math.abs(player1x - player2x) <= 2 && Math.abs(player1y - player2y) <= 1;
+
+  
+//old bounding box algorithm, saving if we want to use it later 
 //   var temp = this.getPlayer(data.player1.socketId);
 //   var compare = this.getPlayer(data.player2.socketId);
 //   if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
@@ -163,6 +239,7 @@ Game.prototype.getSendablePlayer = function(player) {
         position: player.robotModel.position,
         energy: player.robotModel.energy,
         distance: player.robotModel.distance,
+        attackBox: player.robotModel.attackBox
       }
     };
 };
