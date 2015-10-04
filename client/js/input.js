@@ -16,10 +16,13 @@ window.addEventListener('keydown', function(e) {
     if (!window.readyPressed) {
       socket.emit('readyToRace');
       var infoBox = document.getElementById('info');
-      infoBox.innerHTML = 'Ready...or are you?';
+      //keeps this message from displaying for a split second
+      //if you're the last one to press it
+      setTimeout(function () {
+        if (infoBox.innerHTML === '') infoBox.innerHTML = 'Ready...or are you?';
+      }, 10);  
       window.readyPressed = true;
     } else if (window.finished) {
-      //socket.emit('seeking new game');
       window.location.reload();
     }
     return;
@@ -34,3 +37,7 @@ window.addEventListener('keyup', function(e) {
   obj['K' + String.fromCharCode(e.keyCode)] = 0;
   socket.emit('movementInput',obj);
 });
+
+var enterHandler = function() {
+  
+}
