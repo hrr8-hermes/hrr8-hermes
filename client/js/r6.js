@@ -6,7 +6,10 @@
 
 function runScene(meshes,sounds) {
   window.sounds = sounds;
+  BABYLON.Engine.audioEngine.setGlobalVolume(0.1);
   window.NUM_LAPS = 2;
+  window.readyPressed = false;
+  window.finished = false;
   createMaterials(); 
   var players = {};
   var startPos = { x: 200, y: 2.7, z : -66 };
@@ -82,11 +85,10 @@ function runScene(meshes,sounds) {
   meshes['Plane001'].receiveShadows = true;
   */
 
-
-  meshes.bg1.loop = true;
-  meshes.bg1.autoplay = true;
-  meshes.bg1.setVolume(.05);
-  meshes.bg1.play();
+  sounds.bg1.loop = true;
+  sounds.bg1.autoplay = true;
+  sounds.bg1.setVolume(1.8);
+  sounds.bg1.play();
 
 
   // start rendering
@@ -183,7 +185,8 @@ function runScene(meshes,sounds) {
     var indexInPlaces = numPlayersFinished;
     var places = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
     document.getElementById('info').innerHTML = 'You finished in '
-      + places[indexInPlaces] + '!<br/>Press enter to start another race.';
+      + places[indexInPlaces] + '!<br/>Press enter to join a new game.';
+    window.finished = true;  
   });
   socket.on('countdown', function() {
     console.log('counting down');

@@ -14,14 +14,9 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
-
-
   this.map = map;
   //this.startPos = {x: 190, y: 2.7, z : -66};
   this.startPos = this.getStartingPosition();
-  console.log(this.startPos);
-  console.log(mapJSON.line);
-
   //HERE
   //this.waypointCounter = makeWaypointCounter(map.)
   this.players = {};
@@ -32,8 +27,8 @@ function Game(id, io, map) {
   this.raceInProgress = false;
   this.raceFinished = false;
   this.io = io;
+  //milliseconds
   this.timeBetweenUpdates = 10;
-  //Mill Seconds
   this.delta = {deltaValue: 0};
   this.maxPlayers = 8;
   this.createUpdateLoop();
@@ -170,13 +165,6 @@ Game.prototype.createUpdateLoop = function() {
         player.robotModel.handlePlayerCollision();
       }
       self.updateRaceProgress(player.robotModel);
-      // if (self.raceInProgress) {
-      //   //console.log('race in progress');
-      //   if (!player.robotModel.finished && waypointCheck(player.robotModel) === 'finished') {
-      //     self.numFinishedPlayers++;
-
-      //   }
-      // } 
 
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
       if(player.robotModel.attackBox.length) {
@@ -211,8 +199,11 @@ Game.prototype.playersAreColliding = function(player1, player2) {
   var player2x = player2.robotModel.getXOnGrid(this.map);
   var player1y = player1.robotModel.getYOnGrid(this.map);
   var player2y = player2.robotModel.getYOnGrid(this.map);
-  return (player1x === player2x && player1y === player2y && player1.robotModel.state.name !== "death" && player2.robotModel.state.name !== "death") ;
-//old bounding box algorithm, saving for later  
+
+  return Math.abs(player1x - player2x) <= 2 && Math.abs(player1y - player2y) <= 1;
+
+  
+//old bounding box algorithm, saving if we want to use it later 
 //   var temp = this.getPlayer(data.player1.socketId);
 //   var compare = this.getPlayer(data.player2.socketId);
 //   if (!(temp.x < compare.x + 1 && temp.x + 1 > compare.x &&
@@ -246,7 +237,6 @@ Game.prototype.getSendablePlayer = function(player) {
         facing: player.robotModel.facing,
         position: player.robotModel.position,
         energy: player.robotModel.energy,
-
         distance: player.robotModel.distance,
         attackBox: player.robotModel.attackBox
       }

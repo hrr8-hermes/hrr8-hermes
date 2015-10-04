@@ -7,7 +7,6 @@ function Robot(id,pos,mesh,skeleton) {
   this.maxSpeed = 10; //clamps the magnidue of speed vector
   this.velocity = 0;
   this.distance = -1;
-  this.finished = false;
   this._buildRobot(mesh, skeleton);
   this.pivot.position = pos;
 
@@ -29,6 +28,7 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.isVisible = false; 
   this.camPivot.parent = this.pivot; 
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
+  this.stopRunning();
 };
 Robot.prototype.update = function(input){
   if(input.robotModel.attackBox.length) {
@@ -59,6 +59,7 @@ Robot.prototype.startRunning = function(){
   console.log('started running');
   sounds.step.stop();
   sounds.step.loop = true;
+  sounds.step.setVolume(.7);
   sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 

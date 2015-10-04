@@ -10,21 +10,17 @@
 // Global object for all inputs
 // 1 = triggered
 // 0 = untriggered
-var readyPressed = false;
 window.addEventListener('keydown', function(e) {
-  //user has pressed Enter and wants to start a race
+  //user has pressed Enter and wants to start a race, or enter a new one
   if (e.keyCode === 13) {
-    if (!readyPressed) {
+    if (!window.readyPressed) {
       socket.emit('readyToRace');
       var infoBox = document.getElementById('info');
       infoBox.innerHTML = 'Ready...or are you?';
-      readyPressed = true;
-      // setTimeout(function() {
-      //   if (infoBox.innerHTML === 'Ready...or are you?') {
-      //     infoBox.innerHTML = '';
-      //   }  
-
-      // }, 1500);
+      window.readyPressed = true;
+    } else if (window.finished) {
+      //socket.emit('seeking new game');
+      window.location.reload();
     }
     return;
   }

@@ -67,17 +67,15 @@ Running.prototype.update = function(robot,inputObj){
 Running.prototype.changeState = function(robot, inputObj){
   if(inputObj['K ']){
     robot.setState('boosting'); 
-    return true;
+    return true; 
   }
   return false; 
 };
 Running.prototype.enterState = function(robot) {
-  console.log('robot id: ' + robot.id + ' enters running state');
   robot.startRunning(); 
 };
 
 Running.prototype.exitState = function(robot) {
-  console.log('robot id: ' + robot.id + ' exits running state');
   robot.stopRunning(); 
 };
 
