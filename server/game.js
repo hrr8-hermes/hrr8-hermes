@@ -98,6 +98,9 @@ Game.prototype.createUpdateLoop = function() {
       waypointCheck(player.robotModel);
 
       objectsToSend[player.socketId] = self.getSendablePlayer(player);
+      if(player.robotModel.attackBox.length) {
+        player.robotModel.attackBox = [];
+      }
     }
 
     if (updatesCount === 1) {
@@ -127,7 +130,7 @@ Game.prototype.playersAreColliding = function(player1, player2) {
   var player2x = player2.robotModel.getXOnGrid(this.map);
   var player1y = player1.robotModel.getYOnGrid(this.map);
   var player2y = player2.robotModel.getYOnGrid(this.map);
-  return (player1x === player2x && player1y === player2y);
+  return (player1x === player2x && player1y === player2y && player1.robotModel.state.name !== "death" && player2.robotModel.state.name !== "death") ;
 //old bounding box algorithm, saving for later  
 //   var temp = this.getPlayer(data.player1.socketId);
 //   var compare = this.getPlayer(data.player2.socketId);
@@ -163,6 +166,7 @@ Game.prototype.getSendablePlayer = function(player) {
         position: player.robotModel.position,
         energy: player.robotModel.energy,
         distance: player.robotModel.distance,
+        attackBox: player.robotModel.attackBox,
       }
     };
 }

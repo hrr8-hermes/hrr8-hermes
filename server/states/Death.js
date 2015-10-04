@@ -20,6 +20,7 @@ Death.prototype.exitState = function(robot) {
   robot.position.x = pos.x;
   robot.position.z = pos.z;
   robot.energy = 100;
+  robot.velocity = 0;
 };
 
 module.exports = Death;

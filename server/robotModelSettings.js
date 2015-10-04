@@ -9,6 +9,6 @@ module.exports = {
   //these two are multiplied by velocity to determine damage
   playerCollisionDamage: 100, 
   wallCollisionDamage: 100,
-  attackDamage: 15,
+  attackDamage: 35,
   savedPositions: 25,
 };
