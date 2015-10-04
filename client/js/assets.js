@@ -13,9 +13,9 @@ window.ASSET_SCALE = 0.02;
 
 window.ASSETS = [
 
-  { 'name' : 'Skitter',
-    'type' : 'mesh',
-    'file' : 'Assets/enemy@idleRun.babylon' },
+  // { 'name' : 'Skitter',
+  //   'type' : 'mesh',
+  //   'file' : 'Assets/enemy@idleRun.babylon' },
 
   { 'name' : 'Robot',
     'type' : 'mesh',
