@@ -7,6 +7,7 @@ function Robot(id,pos,mesh,skeleton) {
   this.maxSpeed = 10; //clamps the magnidue of speed vector
   this.velocity = 0;
   this.distance = -1;
+  this.finished = false;
   this._buildRobot(mesh, skeleton);
   this.pivot.position = pos;
 

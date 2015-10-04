@@ -42,12 +42,8 @@ function Robot(game, delta,id,pos) {
   this.isBoosting = false; 
   this.pressed = false;
   this.updateCounter = 0;
-<<<<<<< HEAD
   this.finished = false;
-=======
   this.attackBox = [];
-
->>>>>>> 48d1c68cc22c2ff71a17b44e17e56404aa9238e1
   this.position = pos; 
   this.setState('running'); //initial state
   //make mesh, set position
