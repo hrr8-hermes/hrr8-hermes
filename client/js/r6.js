@@ -171,7 +171,7 @@ function runScene(meshes) {
   
   socket.on('raceStarting', function() {
     console.log('race started');
-    bob.distance = 1;
+    bob.distance = 0;
     reportLap(bob.distance,scene);
   });
 
