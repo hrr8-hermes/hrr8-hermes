@@ -14,28 +14,28 @@ var currentMapName = 'city';
 var maps = {
   circle: {
     name: 'Circle of Iniquity',
-    path: 'server/assets/scaledCircleMap.png',
+    path: 'server/assets/scaledCircleMap',
     width: null,
     height: null,
     grid: null,
   },
   star: {
     name: 'Satan\'s Secret Star',
-    path: 'server/assets/course_1_star.png',
+    path: 'server/assets/course_1_star',
     width: null,
     height: null,
     grid: null
   },
   oblong: {
     name: 'The Odious Oblong',
-    path: 'server/assets/course_2_oblong.png',
+    path: 'server/assets/course_2_oblong',
     width: null,
     height: null,
     grid: null
   },
   city: {
     name: 'The Careening City Course',
-    path: 'server/assets/course_3_city.png',
+    path: 'server/assets/course_3_city',
     width: null,
     height: null,
     grid: null
@@ -52,7 +52,7 @@ function initialize() {
 
 function loadMapGrid(mapName, callback) {
   var mapObj = maps[mapName]; 
-  fs.createReadStream(mapObj.path)
+  fs.createReadStream(mapObj.path+'.png')
     .pipe(new PNG({
       filterType: 4
     }))

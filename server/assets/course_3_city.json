@@ -1,0 +1,45 @@
+{
+  "line": { "x1" : 104,
+            "y1" : 2033,
+            "x2" : 104,
+            "y2" : 2000 },
+
+  "first_straight": { "x1" : 319,
+                      "y1" : 203,
+                      "x2" : 319,
+                      "y2" : 138},
+
+  "first_cross": { "x1" : 696,
+                   "y1" : 1104,
+                   "x2" : 766,
+                   "y2" : 1174 },
+
+  "second_cross": { "x1" : 964,
+                    "y1" : 974,
+                    "x2" : 860,
+                    "y2" : 870 },
+
+  "final_cross": { "x1" : 1479,
+                   "y1" : 541,
+                   "x2" : 1479,
+                   "y2" : 589 },
+
+  "widen": { "x1" : 1761,
+             "y1" : 665,
+             "x2" : 1707,
+             "y2" : 665 },
+
+  "widen_again": { "x1" : 1452,
+                   "y1" : 1337,
+                   "x2" : 1452,
+                   "y2" : 1246 },
+
+  "enter_city": { "x1" : 445,
+                  "y1" : 2033,
+                  "x2" : 445,
+                  "y2" : 2003 },
+
+  "lap" : [ "line", "first_straight", "first_cross", "second_cross",
+            "final_cross", "widen", "widen_again", "enter_city" ]
+}
+  

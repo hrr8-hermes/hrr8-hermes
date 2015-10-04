@@ -68,8 +68,8 @@ Robot.prototype.startRunning = function(){
   this.isRunning = true; 
 };
 Robot.prototype.stopRunning = function(){
-  scene.beginAnimation(this.skeleton,1,10,true,1.0); 
   sounds.step.stop();
+  scene.beginAnimation(this.skeleton,1,10,true,1.0); 
   this.isRunning = false;
 };
 
