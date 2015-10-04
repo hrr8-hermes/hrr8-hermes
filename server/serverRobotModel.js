@@ -132,7 +132,7 @@ Robot.prototype.update = function(input) {
         var y = (1 + self.velocity) * self.forwardNormY * (i * 6) + self.position.z;
         self.attackBox.push({x: x,z: y});
         //Find players in that postition
-        var array = game.playersInRadiusOfLocation({x:x,z:y}, 10);
+        var array = self.game.playersInRadiusOfLocation({x:x,z:y}, 10);
         //Loop throught found players
         for(var aqw = 0; aqw < array.length; aqw++) {
           //Not yourself found
