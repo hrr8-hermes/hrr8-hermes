@@ -81,6 +81,7 @@ Robot.prototype.hasWallCollision = function(map) {
   }
 };
 
+
 Robot.prototype.handlePlayerCollision = function() {
   this.decreaseEnergy(this.velocity * settings.playerCollisionDamage);
   this.position.x = this.lastPosition.tail.value.x;
