@@ -1,5 +1,7 @@
 function Robot(id,pos,mesh,skeleton) {
   this.id = id;
+  // hacking around this til network fix
+  this.socketid = false;
   this.accelerationForward = 1; //in seconds
   this.brakeSpeed = 0.8; //Acceleration removed per second
   this.speedDecay = 0.5; //percent of speed that dies per second 
@@ -31,6 +33,8 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.stopRunning();
 };
 Robot.prototype.update = function(input){
+  //continued hack around bad socket setup
+  if (!this.socketid) this.socketid = socket.id;
   if(input.robotModel.attackBox.length) {
     for(var i = 0; i < input.robotModel.attackBox.length; i++) {
       vfx.explosion(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 2, input.robotModel.attackBox[i].z));
@@ -56,11 +60,10 @@ Robot.prototype.setState = function(name){
   } 
 };
 Robot.prototype.startRunning = function(){
-  console.log('started running');
-  sounds.step.stop();
   sounds.step.loop = true;
   sounds.step.setVolume(.7);
-  sounds.step.play();
+  // only play our steps (for now) TODO: 3D sound!
+  if (this.socketid===socket.id) sounds.step.play();
   scene.beginAnimation(this.skeleton,15,38,true,1.0); 
   this.isRunning = true; 
 };
