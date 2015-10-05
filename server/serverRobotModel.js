@@ -32,7 +32,7 @@ function Robot(game, delta,id,pos) {
   this.maxBoostSpeed = settings.maxBoostSpeed;
   this.velocity = 0; 
   //this.facing = 0.25; 
-  this.facing = -.249999;
+  this.facing = .249999;
   this.distance = -1; // waypoint count, not actual distance
   this.lastGridPosition = [0,0];
   this.energy = 100; 

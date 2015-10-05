@@ -16,7 +16,10 @@ window.addEventListener('keydown', function(e) {
       //keeps this message from displaying for a split second
       //if you're the last one to press it
       setTimeout(function () {
-        if (infoBox.innerHTML === '') infoBox.innerHTML = 'Ready...or are you?';
+        if (infoBox.innerHTML === 'Press \'I\' to view the instructions.') {
+          infoBox.className = 'visible';
+          infoBox.innerHTML = 'Ready...or are you?';
+        } 
       }, 60);  
       window.readyPressed = true;
     } else if (window.finished) {
