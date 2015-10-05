@@ -20,7 +20,8 @@ var Waiting = require('./states/Waiting.js');
 var settings = require('./robotModelSettings.js');
 
 
-function Robot(game, delta,id,pos) {
+function Robot(game, delta,id,pos, color) {
+  this.color = color;
   this.game = game;
   this.delta = delta;
   this.id = id;
