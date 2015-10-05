@@ -15,7 +15,8 @@ function runScene(meshes,sounds) {
   var players = {};
   var startPos = { x: 200, y: 2.7, z : -66 };
   var bob = new Robot(0,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
-  bob.mesh.material = materials.robot; 
+  //This is set when connected
+  //bob.mesh.material = materials.robot; 
   
   scene.clearColor = new BABYLON.Color3(0,0,0);
 
@@ -116,7 +117,6 @@ function runScene(meshes,sounds) {
 
 //    freeCam.setTarget(bob.pivot.position);
     // keeps the spot at camera's location
-    console.log(bob.pivot.position);
     light3.position = camera.position;
 
     //freeCam.setTarget(bob.pivot.position);
@@ -195,7 +195,8 @@ function runScene(meshes,sounds) {
   //a new player has connected
   socket.on('playerConnected', function(playerData) {
     var set = new Robot(playerData.socketId,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
-    set.mesh.material = materials.robot; 
+    var color = (playerData.robotModel.color % 4) + 1;
+    set.mesh.material = materials['robot' + color]; 
     players[playerData.socketId] = set;
   });
   
@@ -236,9 +237,12 @@ function runScene(meshes,sounds) {
       if(player.socketId === socket.id) {
         bob.id = socket.id;
         set = bob;
+        var color = (player.robotModel.color % 4) + 1;
+        set.mesh.material = materials['robot' + color];
       } else {
         set = new Robot(player.socketId,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
-        set.mesh.material = materials.robot; 
+        var color = (player.robotModel.color % 4) + 1;
+        set.mesh.material = materials['robot' + color];  
       }  
       players[player.socketId] = set;
     }
