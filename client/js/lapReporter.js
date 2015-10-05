@@ -15,7 +15,7 @@ function reportLap(distance,scene) {
     $HUD.setAttribute('id','hud');
     $HUD.style.position = 'fixed';
     $HUD.style.top = '25px';
-    $HUD.style.width = '90%';
+    $HUD.style.width = '100%';
     $HUD.style.height = '35px';
     $HUD.style.right = '0';
     $HUD.style.font = '24px bold "Exo", sans-serif';
@@ -23,6 +23,7 @@ function reportLap(distance,scene) {
     var $lap = document.createElement('div');
     $lap.setAttribute('id','laphud');
     $lap.style.float = 'left';
+    $lap.style.marginLeft = '10px';
     var $timer = document.createElement('div');
     window.raceTimer = new stopWatch();
     $timer.style.marginRight = '10px';

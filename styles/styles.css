@@ -24,8 +24,10 @@ html,body {
   position: absolute;
   width: 400px;
   height: 50px;
-  top: 90%;
-  left:40%;
+  top: 89%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 
 }
 #info {
