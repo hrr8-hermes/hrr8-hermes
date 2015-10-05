@@ -27,7 +27,7 @@ Boosting.prototype.run = function(robot, parsedInput) {
   robot.velocity = parsedInput.velocity;
   if(robot.id === socket.id) {
     document.getElementById('energy').innerHTML = parsedInput.energy;
-    document.getElementById('energy').style.clip = 'rect(0, '+parsedInput.energy+'px, 100px, 0)';
+    document.getElementById('energy').style.clip = 'rect(0, '+parsedInput.energy * 4+'px, 100px, 0)';
     camera.position = robot.camPivot.getAbsolutePosition();
     camera.setTarget(robot.pivot.position); 
   } 
