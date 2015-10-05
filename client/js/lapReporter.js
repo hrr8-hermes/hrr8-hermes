@@ -18,7 +18,8 @@ function reportLap(distance,scene) {
     $HUD.style.width = '80%';
     $HUD.style.height = '35px';
     $HUD.style.right = '0';
-    $HUD.style.font = '24px bold ariel, sans-serif';
+    //$HUD.style.font = '24px bold ariel, sans-serif';
+    $HUD.style.font-family: "'Exo', sans-serif";
     $HUD.style.color = 'white';
     var $lap = document.createElement('div');
     $lap.setAttribute('id','laphud');
