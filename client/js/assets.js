@@ -32,14 +32,14 @@ window.ASSETS = [
 
   { 'name' : 'bg1',
     'type' : 'sound',
-    'file' : 'sounds/bg/industrialfunk.wav'},
+    'file' : 'sounds/bg/industrialfunk.mp3'},
 
   { 'name' : 'boom1',
     'type' : 'sound',
-    'file' : 'sounds/boom1.wav'},
+    'file' : 'sounds/boom1.mp3'},
 
   { 'name' : 'step',
     'type' : 'sound',
-    'file' : 'sounds/step.wav'}
+    'file' : 'sounds/step.mp3'}
 
 ];
