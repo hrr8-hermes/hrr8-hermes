@@ -14,13 +14,20 @@ html,body {
 
 #energy {
   position: absolute;
-  width: 100px;
+/*  width: 100px;
   height: 50px;
   top: 20px;
-  left: 10px;
+  left: 10px;*/
   clip: rect(0, 50px, 100px, 0);
 }
+.ene {
+  position: absolute;
+  width: 400px;
+  height: 50px;
+  top: 90%;
+  left:40%;
 
+}
 #info {
   position: absolute;
   top: 25px;
