@@ -40,10 +40,12 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.boostPivotL.isVisible = false; 
   this.stopRunning();
 };
+
 Robot.prototype.update = function(input){
+  //if we are attacking
   if(input.robotModel.attackBox.length) {
     for(var i = 0; i < input.robotModel.attackBox.length; i++) {
-      vfx.explosion(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 2, input.robotModel.attackBox[i].z));
+      vfx.attack(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 0, input.robotModel.attackBox[i].z));
     }
   } 
   if(input.robotModel.state.name !== this.state.name) {
@@ -55,6 +57,7 @@ Robot.prototype.update = function(input){
   this.distance = input.robotModel.distance;
   this.state.update(this,input); 
 };
+
 Robot.prototype.setState = function(name){
   var state = Robot.states[name];
   if(this.state && this.state.exitState){
@@ -65,22 +68,26 @@ Robot.prototype.setState = function(name){
     this.state.enterState(this);
   } 
 };
+
 Robot.prototype.startRunning = function(){
   sounds.step.loop = true;
-  sounds.step.setVolume(.7);
+  sounds.step.setVolume(0.7);
   if (this.id===socket.id) sounds.step.play();
   sounds.step.stop(2);
   scene.beginAnimation(this.skeleton,25,48,true,1.0); 
   this.isRunning = true; 
 };
+
 Robot.prototype.stopRunning = function(){
   scene.beginAnimation(this.skeleton,1,20,true,1.0); 
   sounds.step.stop();
   this.isRunning = false;
 };
+
 Robot.prototype.startBoosting = function(){
   scene.beginAnimation(this.skeleton,55,80,true,1.0); 
 };
+
 Robot.prototype.stopBoosting = function(){
   //stop playing sfx
 };
