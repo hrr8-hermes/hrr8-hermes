@@ -175,6 +175,7 @@ function runScene(meshes,sounds) {
     }
   });
   //Connect to server once the scene is loaded to not miss any events
+
   window.socket = socket = io();
   socket.on('connect', function() {
     console.log('Connected');
@@ -216,13 +217,16 @@ function runScene(meshes,sounds) {
   socket.on('countdown', function() {
     console.log('counting down');
     var countdown = document.getElementById('info');
+    countdown.className = 'visible';
     var countdownText = ['3..', '2..', '1..', 'GO!', ''];
     var index = 0;
     var counter = function() {
       countdown.innerHTML = countdownText[index];
       index++;
-      if (index < countdownText.length) {
+      if (index < countdownText.length - 1) {
         setTimeout(counter, 1000);
+      } else {
+        countdown.className = 'shortfade';
       }
     };
     counter();
@@ -250,6 +254,12 @@ function runScene(meshes,sounds) {
         delete players[player.socketId];
       }
   });
+
+  var info = document.getElementById('info');
+  info.innerHTML = 'Press \'I\' to view the instructions.';
+  info.className = 'longfade';
+
+
   //if we ever want to display the png client side (for testing or something)
   // socket.on('image data to display', function(data) {
   //   var canvas2 = document.createElement('CANVAS');

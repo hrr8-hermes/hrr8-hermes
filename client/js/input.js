@@ -23,6 +23,15 @@ window.addEventListener('keydown', function(e) {
       window.location.reload();
     }
     return;
+  } else {
+    if (e.keyCode === 73) {
+      var instructions = document.getElementById('instructions');
+      if (instructions.className === 'absent') {
+        instructions.className = 'visible';
+      } else {
+        instructions.className = 'absent';
+      }
+    }
   }
   // Global object for all inputs
   // 1 = triggered
