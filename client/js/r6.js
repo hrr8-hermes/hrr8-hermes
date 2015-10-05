@@ -83,21 +83,22 @@ function runScene(meshes,sounds) {
   */
 
   // shines light from freecamera position down/left/forward
-  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,10,20), new BABYLON.Vector3(0,-0.3,0), 0.8,4, scene);
+  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,5,0), new BABYLON.Vector3(0,-0.3,0.6), 0.8,4, scene);
   light3.diffuse = new BABYLON.Color3(1,1,1);
   light3.specular = new BABYLON.Color3(1,1,1);
   light3.parent = camera;
 
   // enable shadows for bob
-  /*
   var shadowGenerator = new BABYLON.ShadowGenerator(1024,light2);
   shadowGenerator.getShadowMap().renderList.push(bob.mesh);
   //shadowGenerator.getShadowMap().renderList.push(testBox);
-  // BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
+  //BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
   shadowGenerator.useBlurVarianceShadowMap = true;
-  */
-  var spotShadows = new BABYLON.ShadowGenerator(1024,light3);
+  /*
+  var spotShadows = new BABYLON.ShadowGenerator(2048,light3);
   spotShadows.getShadowMap().renderList.push(bob.mesh);
+  spotShadows.useBlurVarianceShadowMap = true;
+  */
   meshes['track'].receiveShadows = true;
   meshes['buildings'].receiveShadows = true;
   
@@ -113,7 +114,7 @@ function runScene(meshes,sounds) {
   engine.runRenderLoop(function() {
     // keep freecam on bob for now
     //freeCam.setTarget(bob.pivot.position);
-    light3.setDirectionToTarget(camera.position);
+    //light3.setDirectionToTarget(camera.position);
     scene.render();
     applyPositions(); 
   });
