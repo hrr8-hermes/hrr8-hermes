@@ -39,7 +39,7 @@
                   "x2" : 445,
                   "y2" : 2003 },
 
-  "lap" : [ "line", "first_straight", "first_cross", "second_cross",
-            "final_cross", "widen", "widen_again", "enter_city" ]
+  "lap" : [ "line","enter_city", "widen_again", "widen", 
+  "final_cross", "second_cross", "first_cross", "first_straight"]
 }
   

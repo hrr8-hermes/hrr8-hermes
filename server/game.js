@@ -12,9 +12,8 @@ function Game(id, io, map) {
   this.id = id;
   //this.map is an object with 3 properties: grid (2d array of 1s and 0s),
   // width, and height (map dimensions).
-  this.startPos = {x: -974, y: 2.7, z : -999};
+  //starting coords, for reference {x: -974, y: 2.7, z : -999};
   this.map = map;
-  //this.startPos = {x: 190, y: 2.7, z : -66};
   this.mapJSON = require('../'+map.path+'.json');
   this.waypointCheck = waypointFactory(this.mapJSON,2,map);
   this.startPos = this.getStartingPosition();
@@ -51,7 +50,7 @@ Game.prototype.lineUpRacers = function() {
     count++;
     playerModel.position.z = this.startPos.z + 3.5 * count;
     playerModel.stopMoving();
-    playerModel.facing = -.249999;
+    playerModel.facing = .249999;
     playerModel.setState('waiting');
     var gameContext = this;
   
