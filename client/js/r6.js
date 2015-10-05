@@ -219,12 +219,12 @@ function runScene(meshes,sounds) {
     console.log('counting down');
     var countdown = document.getElementById('info');
     countdown.className = 'visible';
-    var countdownText = ['3..', '2..', '1..', 'GO!', ''];
+    var countdownText = ['3..', '2..', '1..', 'GO!'];
     var index = 0;
     var counter = function() {
       countdown.innerHTML = countdownText[index];
       index++;
-      if (index < countdownText.length - 1) {
+      if (index < countdownText.length) {
         setTimeout(counter, 1000);
       } else {
         countdown.className = 'shortfade';
