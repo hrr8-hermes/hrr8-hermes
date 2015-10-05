@@ -67,6 +67,7 @@ function runScene(meshes,sounds) {
   light2.specular = new BABYLON.Color3(1,1,1);
   light2.parent = camera;
   light2.position = new BABYLON.Vector3(3,30,10);
+  light2.intensity = 10;
   // sphere to visualize light position
   /*
   var lightSphere = new BABYLON.Mesh.CreateSphere('lightPos', 10, 2, scene);
@@ -83,7 +84,7 @@ function runScene(meshes,sounds) {
   */
 
   // shines light from freecamera position down/left/forward
-  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,5,0), new BABYLON.Vector3(0,-0.3,0.6), 0.8,4, scene);
+  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,5,0), new BABYLON.Vector3(-1,0,0), 0.8,4, scene);
   light3.diffuse = new BABYLON.Color3(1,1,1);
   light3.specular = new BABYLON.Color3(1,1,1);
   light3.parent = camera;
@@ -100,7 +101,6 @@ function runScene(meshes,sounds) {
   spotShadows.useBlurVarianceShadowMap = true;
   */
   meshes['track'].receiveShadows = true;
-  meshes['buildings'].receiveShadows = true;
   
 
   sounds.bg1.loop = true;
