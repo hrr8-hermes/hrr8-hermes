@@ -31,8 +31,13 @@ Robot.prototype._buildRobot = function(mesh, skeleton) {
   this.camPivot.isVisible = false; 
   this.camPivot.parent = this.pivot; 
   this.camPivot.position = new BABYLON.Vector3(10,3, 0); 
-  this.boostPivot = new BABYLON.Mesh.CreateBox(this.id + '_boostPivot',1,scene);
-  this.boostPivot.attachToBone(this.skeleton.bones[27], this.mesh); 
+  //create an emitter for the boosting fx
+  this.boostPivotR = new BABYLON.Mesh.CreateBox(this.id + '_boostPivotR',1,scene);
+  this.boostPivotR.attachToBone(this.skeleton.bones[28], this.mesh); 
+  this.boostPivotR.isVisible = false; 
+  this.boostPivotL = new BABYLON.Mesh.CreateBox(this.id + '_boostPivotL',1,scene);
+  this.boostPivotL.attachToBone(this.skeleton.bones[29], this.mesh); 
+  this.boostPivotL.isVisible = false; 
   this.stopRunning();
 };
 Robot.prototype.update = function(input){
@@ -64,14 +69,19 @@ Robot.prototype.startRunning = function(){
   sounds.step.loop = true;
   sounds.step.setVolume(.7);
   if (this.id===socket.id) sounds.step.play();
-  sounds.step.stop(1);
-  scene.beginAnimation(this.skeleton,15,38,true,1.0); 
+  scene.beginAnimation(this.skeleton,25,48,true,1.0); 
   this.isRunning = true; 
 };
 Robot.prototype.stopRunning = function(){
+  scene.beginAnimation(this.skeleton,1,20,true,1.0); 
   sounds.step.stop();
-  scene.beginAnimation(this.skeleton,1,10,true,1.0); 
   this.isRunning = false;
+};
+Robot.prototype.startBoosting = function(){
+  scene.beginAnimation(this.skeleton,55,80,true,1.0); 
+};
+Robot.prototype.stopBoosting = function(){
+  //stop playing sfx
 };
 
 Robot.states = {

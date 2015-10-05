@@ -16,6 +16,8 @@ function runScene(meshes,sounds) {
   var startPos = { x: 200, y: 2.7, z : -66 };
   var bob = new Robot(0,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
   bob.mesh.material = materials.robot; 
+  
+  scene.clearColor = new BABYLON.Color3(0,0,0);
 
   meshes['track'].setEnabled(true);
   meshes['track'].scaling = new BABYLON.Vector3(1,1,1);
@@ -55,6 +57,7 @@ function runScene(meshes,sounds) {
   light.diffuse = new BABYLON.Color3(1,1,1);
   light.specular = new BABYLON.Color3(1,1,1);
   light.groundColor = new BABYLON.Color3(0,0,0);
+  light.rotation = new BABYLON.Vector3(Math.PI * 0.25,0,0);
 
   // ambient light that allows for shadows
   /*
