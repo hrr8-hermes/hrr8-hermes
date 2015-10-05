@@ -209,9 +209,11 @@ function runScene(meshes,sounds) {
 
   socket.on('finished', function(numPlayersFinished) {
     console.log('all done!');
+    var info = document.getElementById('info');
+    info.className = visible;
     var indexInPlaces = numPlayersFinished;
     var places = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
-    document.getElementById('info').innerHTML = 'You finished in '
+    info.innerHTML = 'You finished in '
       + places[indexInPlaces] + '!<br/>Press enter to join a new game.';
     window.finished = true;  
   });
