@@ -87,13 +87,16 @@ function runScene(meshes,sounds) {
   //BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
   //shadowGenerator.usePoissonSampling = true;
   shadowGenerator.useBlurVarianceShadowMap = true;
-  /*
-  var spotShadows = new BABYLON.ShadowGenerator(2048,light3);
-  spotShadows.getShadowMap().renderList.push(bob.mesh);
-  spotShadows.useBlurVarianceShadowMap = true;
-  */
+
   meshes['track'].receiveShadows = true;
   meshes['buildings'].receiveShadows = true;
+
+  // toggle shadows if turned on in GET
+  if (window.location.href.match(/shadows=1$/)) {
+    shadowGenerator.getShadowMap().refreshRate = 1;
+  } else {
+    shadowGenerator.getShadowMap().refreshRate = 0;
+  }
 
   sounds.bg1.loop = true;
   sounds.bg1.autoplay = true;
