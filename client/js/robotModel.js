@@ -44,6 +44,7 @@ Robot.prototype.update = function(input){
   if(input.robotModel.attackBox.length) {
     for(var i = 0; i < input.robotModel.attackBox.length; i++) {
       vfx.explosion(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 2, input.robotModel.attackBox[i].z));
+      console.log(new BABYLON.Vector3(input.robotModel.attackBox[i].x, 2, input.robotModel.attackBox[i].z))
     }
   } 
   if(input.robotModel.state.name !== this.state.name) {
