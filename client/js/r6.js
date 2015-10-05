@@ -13,7 +13,7 @@ function runScene(meshes,sounds) {
   window.finished = false;
   createMaterials(); 
   var players = {};
-  var startPos = { x: 200, y: 2.7, z : -66 };
+  var startPos = { x: 200, y: 1.7, z : -66 };
   var bob = new Robot(0,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
   //This is set when connected
   //bob.mesh.material = materials.robot; 
@@ -55,46 +55,31 @@ function runScene(meshes,sounds) {
 
   // light the entire scene with ambient
   /*
-  var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,10,0),scene);
-  light.diffuse = new BABYLON.Color3(1,1,1);
-  light.specular = new BABYLON.Color3(1,1,1);
+  var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,300,0),scene);
+  light.diffuse = new BABYLON.Color3(0.8,0.8,0.8);
+  light.specular = new BABYLON.Color3(0.8,0.8,0.8);
   light.groundColor = new BABYLON.Color3(0,0,0);
-  light.rotation = new BABYLON.Vector3(Math.PI * 0.25,0,0);
   */
 
   // ambient light that allows for shadows
-  var light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(0,0,0.2), scene);
+  var light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(0,-0.8,0.2), scene);
   light2.diffuse = new BABYLON.Color3(1,1,1);
   light2.specular = new BABYLON.Color3(1,1,1);
-  light2.parent = camera;
-  light2.position = new BABYLON.Vector3(3,30,10);
-  light2.intensity = 10;
-  // sphere to visualize light position
-  /*
-  var lightSphere = new BABYLON.Mesh.CreateSphere('lightPos', 10, 2, scene);
-  lightSphere.position = light2.position;
-  lightSphere.material = new BABYLON.StandardMaterial('lightPos1',scene);
-  lightSphere.material.emissiveColor = new BABYLON.Color3(1,1,0);
+  light2.position = new BABYLON.Vector3(0,150,0);
+  light2.intensity = 1;
 
-  // random box for light tests
-  /*
-  var testBox = new BABYLON.Mesh.CreateBox('tbox', 5, scene);
-  testBox.material = new BABYLON.StandardMaterial('tbox1',scene);
-  testBox.material.emissiveColor = new BABYLON.Color3(0,1,1);
-  testBox.position = new BABYLON.Vector3(0,0.5,10);
-  */
-
-  // shines light from freecamera position down/left/forward
-  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,5,0), new BABYLON.Vector3(-1,0,0), 0.8,4, scene);
-  light3.diffuse = new BABYLON.Color3(1,1,1);
-  light3.specular = new BABYLON.Color3(1,1,1);
-  light3.parent = camera;
+  //light buildings
+  var uplight = new BABYLON.DirectionalLight('uplight', new BABYLON.Vector3(0,1,0),scene);
+  uplight.diffuse = new BABYLON.Color3(1,1,1);
+  uplight.specular = new BABYLON.Color3(1,1,1);
+  uplight.position = new BABYLON.Vector3(0,0,0);
+  uplight.intensity = 5;
 
   // enable shadows for bob
-  var shadowGenerator = new BABYLON.ShadowGenerator(1024,light2);
+  var shadowGenerator = new BABYLON.ShadowGenerator(3300,light2);
   shadowGenerator.getShadowMap().renderList.push(bob.mesh);
-  //shadowGenerator.getShadowMap().renderList.push(testBox);
   //BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
+  //shadowGenerator.usePoissonSampling = true;
   shadowGenerator.useBlurVarianceShadowMap = true;
   /*
   var spotShadows = new BABYLON.ShadowGenerator(2048,light3);
@@ -102,7 +87,7 @@ function runScene(meshes,sounds) {
   spotShadows.useBlurVarianceShadowMap = true;
   */
   meshes['track'].receiveShadows = true;
-  
+  meshes['buildings'].receiveShadows = true;
 
   sounds.bg1.loop = true;
   sounds.bg1.autoplay = true;
@@ -113,15 +98,6 @@ function runScene(meshes,sounds) {
 
   // start rendering
   engine.runRenderLoop(function() {
-    // keep freecam on bob for now
-
-//    freeCam.setTarget(bob.pivot.position);
-    // keeps the spot at camera's location
-    light3.position = camera.position;
-
-    //freeCam.setTarget(bob.pivot.position);
-    //light3.setDirectionToTarget(camera.position);
-
     scene.render();
     applyPositions(); 
   });
