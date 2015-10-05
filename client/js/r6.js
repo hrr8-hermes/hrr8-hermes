@@ -75,6 +75,12 @@ function runScene(meshes,sounds) {
   uplight.position = new BABYLON.Vector3(0,0,0);
   uplight.intensity = 5;
 
+  var uplight2 = new BABYLON.DirectionalLight('uplight2', new BABYLON.Vector3(0,1,0.2),scene);
+  uplight2.diffuse = new BABYLON.Color3(1,1,1);
+  uplight2.specular = new BABYLON.Color3(1,1,1);
+  uplight2.position = new BABYLON.Vector3(0,0,0);
+  uplight2.intensity = 5;
+
   // enable shadows for bob
   var shadowGenerator = new BABYLON.ShadowGenerator(3300,light2);
   shadowGenerator.getShadowMap().renderList.push(bob.mesh);
