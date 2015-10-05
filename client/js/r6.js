@@ -14,7 +14,7 @@ function runScene(meshes,sounds) {
   createMaterials(); 
   var players = {};
   var startPos = { x: 200, y: 2.7, z : -66 };
-  window.bob = new Robot(0,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
+  var bob = new Robot(0,new BABYLON.Vector3(startPos.x, startPos.y, startPos.z),meshes['Robot'],meshes['Robot'].skeleton);
   bob.mesh.material = materials.robot; 
   
   scene.clearColor = new BABYLON.Color3(0,0,0);
