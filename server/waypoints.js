@@ -70,6 +70,7 @@ module.exports = function makeWayCounter(waypoints, laps, map) {
         on_line_seg(waypoint,{x:pt.x+1,y:pt.y-1}) ||
         on_line_seg(waypoint,{x:pt.x+1,y:pt.y+1})) {
       racer.distance++;
+    console.log(lap[racer.distance%lap_dist]);
       return true;
     }
     return false;
