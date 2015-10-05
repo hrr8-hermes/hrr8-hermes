@@ -55,10 +55,15 @@ Running.prototype.update = function(robot,serverData){
   this._runCheck(robot); 
 };
 
-Running.prototype.enterState = function() {
-
+Running.prototype.enterState = function(robot) {
+  if(robot.velocity === 0){
+    robot.stopRunning();
+  }
+  else{
+    robot.startRunning();
+  }
 };
 
-Running.prototype.exitState = function() {
-
+Running.prototype.exitState = function(robot) {
+  robot.isRunning = false; 
 };

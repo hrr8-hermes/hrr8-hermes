@@ -46,10 +46,17 @@ Boosting.prototype.update = function(robot,serverData){
   this.run(robot, parsedInput); 
 };
 
-Boosting.prototype.enterState = function() {
+Boosting.prototype.enterState = function(robot) {
+  robot.startBoosting();
+  robot.boostFX = []; 
+  robot.boostFX = robot.boostFX.concat(vfx.boost(robot.boostPivotL));
+  robot.boostFX = robot.boostFX.concat(vfx.boost(robot.boostPivotR));
 
 };
 
-Boosting.prototype.exitState = function() {
-
+Boosting.prototype.exitState = function(robot) {
+  robot.stopBoosting(); 
+  for(var i = 0; i < robot.boostFX.length; i ++){
+    robot.boostFX[i].stop(); 
+  }
 };
