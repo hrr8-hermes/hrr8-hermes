@@ -47,9 +47,9 @@ Boosting.prototype.update = function(robot,serverData){
 };
 
 Boosting.prototype.enterState = function() {
-
+  sounds.step.stop();
 };
 
 Boosting.prototype.exitState = function() {
-
+  sounds.step.stop();
 };

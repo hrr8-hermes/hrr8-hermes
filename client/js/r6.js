@@ -8,6 +8,7 @@ function runScene(meshes,sounds) {
   window.sounds = sounds;
   BABYLON.Engine.audioEngine.setGlobalVolume(0.1);
   window.NUM_LAPS = 2;
+  window.LAP_DIST = 8;
   window.readyPressed = false;
   window.finished = false;
   createMaterials(); 
