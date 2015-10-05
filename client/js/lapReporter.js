@@ -34,7 +34,7 @@ function reportLap(distance,scene) {
     window.timerInterval = setInterval(function() { $timer.textContent = raceTimer.time(); },1);
   }
   var $lap = document.getElementById('laphud');
-  var current_lap = 1+(distance/NUM_LAPS)|0;
+  var current_lap = 1+(distance/LAP_DIST)|0;
   if (current_lap>NUM_LAPS) {
     raceTimer.stop();
     clearInterval(timerInterval);

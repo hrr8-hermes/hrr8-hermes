@@ -21,16 +21,17 @@
  * check/update the object's distance. Distance should begin the race
  * at 0.
  *
- * Returns undefined if finished, true if incrementing distance, false otherwise
+ * Returns finished if finished, true if incrementing distance, false otherwise
  *
- * Currently dependent on map global and point conversion
+ * Don't forget to make slope=1 for integer grid
  */
 
-module.exports = function makeWayCounter(waypoints, laps) {
+module.exports = function makeWayCounter(waypoints, laps, map) {
 
   var lap = waypoints.lap;
   var lap_dist = lap.length;
   var max_dist = (laps * lap_dist);
+  var center_correct = (map.width/2)|0;
 
   // Determine if colinear (line seg has x1/x2/y1/y2)
   var colinear = function(line,pt) {
@@ -56,8 +57,10 @@ module.exports = function makeWayCounter(waypoints, laps) {
 
     // TODO: refactor server model to keep separate x,y and convert once (setter?)
     var pt = {};
-    pt.x = 256 + (racer.position.x|0);
-    pt.y = 256 - (racer.position.z|0);
+    pt.x = center_correct + Math.floor(racer.position.x);
+    pt.y = center_correct - Math.floor(racer.position.z);
+    // uncomment this log to run around and find coords for waypoints easily
+    //console.log('AT : ('+pt.x+','+pt.y+')');
 
     // hacky but workable, check X-shape w/ player in center
     if (on_line_seg(waypoint,pt) ||

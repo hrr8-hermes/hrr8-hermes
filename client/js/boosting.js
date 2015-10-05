@@ -51,11 +51,12 @@ Boosting.prototype.enterState = function(robot) {
   robot.boostFX = []; 
   robot.boostFX = robot.boostFX.concat(vfx.boost(robot.boostPivotL));
   robot.boostFX = robot.boostFX.concat(vfx.boost(robot.boostPivotR));
-
+  sounds.step.stop();
 };
 
 Boosting.prototype.exitState = function(robot) {
   robot.stopBoosting(); 
+  sounds.step.stop();
   for(var i = 0; i < robot.boostFX.length; i ++){
     robot.boostFX[i].stop(); 
   }

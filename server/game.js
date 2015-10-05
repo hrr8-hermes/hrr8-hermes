@@ -5,10 +5,8 @@
 var Robot = require('./serverRobotModel.js');
 var Vector3 = require('./Vector3.js');
 
-
-// Temp map load for waypoint checker
-var mapJSON = require('./assets/course_2_oblong.json');
-var waypointCheck = require('./waypoints.js')(mapJSON,2);
+// waypoint checker factory
+var waypointFactory = require('./waypoints.js');
 
 function Game(id, io, map) {
   this.id = id;
@@ -17,9 +15,9 @@ function Game(id, io, map) {
   this.startPos = {x: -974, y: 2.7, z : -999};
   this.map = map;
   //this.startPos = {x: 190, y: 2.7, z : -66};
+  this.mapJSON = require('../'+map.path+'.json');
+  this.waypointCheck = waypointFactory(this.mapJSON,2,map);
   this.startPos = this.getStartingPosition();
-  //HERE
-  //this.waypointCounter = makeWaypointCounter(map.)
   this.players = {};
   this.results = {};
   this.numPlayers = 0;
@@ -36,9 +34,8 @@ function Game(id, io, map) {
 }
 
 Game.prototype.getStartingPosition = function() {
-  var startLineOnGrid = mapJSON.line;
-  // var startingX = startLineOnGrid.x1;
-  // var startingZ = startLineOnGrid.y1;
+  console.log(this.raceFinished);
+  var startLineOnGrid = this.mapJSON.line;
   var startingX = startLineOnGrid.x1 - this.map.width / 2;
   var startingZ = this.map.height / 2 - startLineOnGrid.y1;
    //startPos.y never changes, vertical elevation above the track
@@ -131,8 +128,7 @@ Game.prototype.finishGame = function() {
 Game.prototype.updateRaceProgress = function(robotModel) {
 
   if (!this.raceInProgress) return; 
-  //console.log(waypointCheck(robotModel));
-  if (waypointCheck(robotModel) === 'finished' && !robotModel.finished) {
+  if (this.waypointCheck(robotModel) === 'finished' && !robotModel.finished) {
     //send them the number of finished players to know their place
     console.log('server registered finished');
     this.io.to(robotModel.id).emit('finished', this.numFinishedPlayers);
