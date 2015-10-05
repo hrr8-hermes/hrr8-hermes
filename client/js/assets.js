@@ -40,6 +40,10 @@ window.ASSETS = [
 
   { 'name' : 'step',
     'type' : 'sound',
-    'file' : 'sounds/step.mp3'}
+    'file' : 'sounds/step.mp3'},
+
+  { 'name' : 'booster',
+    'type' : 'sound',
+    'file' : 'sounds/booster.mp3' }
 
 ];

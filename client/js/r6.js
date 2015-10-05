@@ -69,7 +69,7 @@ function runScene(meshes,sounds) {
   light2.intensity = 1;
 
   //light buildings
-  var uplight = new BABYLON.DirectionalLight('uplight', new BABYLON.Vector3(0,1,0),scene);
+  var uplight = new BABYLON.DirectionalLight('uplight', new BABYLON.Vector3(0,1,-0.2),scene);
   uplight.diffuse = new BABYLON.Color3(1,1,1);
   uplight.specular = new BABYLON.Color3(1,1,1);
   uplight.position = new BABYLON.Vector3(0,0,0);
@@ -113,9 +113,15 @@ function runScene(meshes,sounds) {
   var switchcam = 0;
   var switchdebug = true;
   var togglemusic = true;
+  var shadowMode = 0;
 
   window.addEventListener('keydown', function(e) {
     
+    // L to stop shadows
+    if (e.keycode===76) {
+      //no idea how to make that happen
+    }
+
     if (e.keyCode===70) {
       if (switchcam===0) {       
         scene.activeCamera = chaseCam;
@@ -146,9 +152,6 @@ function runScene(meshes,sounds) {
       togglemusic = !togglemusic;
     }
 
-    if (e.keyCode === 76) {
-     reportLap(bob.distance,scene);
-    }
   });
   //Connect to server once the scene is loaded to not miss any events
 
@@ -238,32 +241,6 @@ function runScene(meshes,sounds) {
   var info = document.getElementById('info');
   info.innerHTML = 'Press \'I\' to view the instructions.';
   info.className = 'longfade';
-
-
-  //if we ever want to display the png client side (for testing or something)
-  // socket.on('image data to display', function(data) {
-  //   var canvas2 = document.createElement('CANVAS');
-  //    canvasWidth = 512;
-  //    canvasHeight = 512;
-  //    canvas2.width = canvasWidth;
-  //    canvas2.height = canvasHeight;
-  //    //canvas.id = 'canvas';
-  //    canvas2.style.position = 'absolute';
-  //    canvas2.style.top = '0';
-  //    canvas2.style.left = '0';
-  //   var context = canvas2.getContext('2d');
-  //   var imageData = context.createImageData(512, 512);
-  //   console.log(data[0]);
-  //   for (var i = 0; i < imageData.data.length; i++) {
-  //     imageData.data[i] = data[i];
-  //   }
-  //   console.log(imageData.data[4]);
-
-  //   context.putImageData(imageData, 0, 0);
-  //   document.body.appendChild(canvas2);
-  // });
-  // //roundabout way to process the .png
-
 
 }
 
