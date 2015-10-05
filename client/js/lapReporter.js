@@ -14,7 +14,7 @@ function reportLap(distance,scene) {
     var $HUD = document.createElement('div');
     $HUD.setAttribute('id','hud');
     $HUD.style.position = 'fixed';
-    $HUD.style.top = '25px';
+    $HUD.style.top = '20px';
     $HUD.style.width = '100%';
     $HUD.style.height = '35px';
     $HUD.style.right = '0';
@@ -23,10 +23,10 @@ function reportLap(distance,scene) {
     var $lap = document.createElement('div');
     $lap.setAttribute('id','laphud');
     $lap.style.float = 'left';
-    $lap.style.marginLeft = '10px';
+    $lap.style.marginLeft = '20px';
     var $timer = document.createElement('div');
     window.raceTimer = new stopWatch();
-    $timer.style.marginRight = '10px';
+    $timer.style.marginRight = '20px';
     $timer.style.float = 'right';
     $timer.textContent = '0:0:0';
     document.body.appendChild($HUD);
