@@ -113,8 +113,15 @@ function runScene(meshes,sounds) {
   // start rendering
   engine.runRenderLoop(function() {
     // keep freecam on bob for now
+
+//    freeCam.setTarget(bob.pivot.position);
+    // keeps the spot at camera's location
+    console.log(bob.pivot.position);
+    light3.position = camera.position;
+
     //freeCam.setTarget(bob.pivot.position);
     //light3.setDirectionToTarget(camera.position);
+
     scene.render();
     applyPositions(); 
   });
