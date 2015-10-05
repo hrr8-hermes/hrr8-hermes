@@ -1,6 +1,7 @@
 var expSettings = {}; 
 window.vfx = {}; 
 vfx.parts = {}; 
+vfx.count = 0; 
 expSettings.colorArray1 = [
     [0, new BABYLON.Color4(1, 0, 0, 1)],
     [40, new BABYLON.Color4(0.7, 0, 0, 1)],
@@ -19,7 +20,7 @@ expSettings.colorGradient2 = makeColorGradient(expSettings.colorArray2);
         
 vfx.parts.makeSpray = function(emitter){
     // Create a particle system
-    var spray = new BABYLON.ParticleSystem("sprayParticles", 2000, scene);
+    var spray = new BABYLON.ParticleSystem("sprayParticles" + vfx.count, 2000, scene);
 
     spray.particleTexture = new BABYLON.Texture("assets/Sprite_Smoke.png", scene);
     
@@ -52,11 +53,12 @@ vfx.parts.makeSpray = function(emitter){
     // Start the particle system
     spray.start();
     setTimeout(function(){spray.stop();}, 300);
+    vfx.count++; 
 };
 
 vfx.parts.makeFireball = function(emitter){
     // Create a particle system
-    fireball = new BABYLON.ParticleSystem("particles", 2000, scene);
+    fireball = new BABYLON.ParticleSystem("particles" + vfx.count, 2000, scene);
 
     fireball.particleTexture = new BABYLON.Texture("assets/Sprite_Smoke.png", scene);
     
@@ -117,11 +119,12 @@ vfx.parts.makeFireball = function(emitter){
     };
     fireball.start();
     setTimeout(function(){fireball.stop();}, 300);
+    vfx.count++; 
 };
 
 vfx.parts.makeFlash = function(emitter){
     // Create a particle system
-    flash = new BABYLON.ParticleSystem("flash", 2000, scene);
+    flash = new BABYLON.ParticleSystem("flash" + vfx.count, 2000, scene);
 
     flash.particleTexture = new BABYLON.Texture("assets/square.png", scene);
     
@@ -177,12 +180,13 @@ vfx.parts.makeFlash = function(emitter){
     // Start the particle system
     flash.start();
     setTimeout(function(){flash.stop();}, 300);
+    vfx.count++; 
 };
 
 
 vfx.parts.makeFlame = function(emitter, minSize, maxSize, color1, color2, colorEnd){
     // Create a particle system
-    flame = new BABYLON.ParticleSystem("flame", 2000, scene);
+    flame = new BABYLON.ParticleSystem("flame" + vfx.count, 2000, scene);
 
     flame.particleTexture = new BABYLON.Texture("assets/square.png", scene);
     
@@ -241,8 +245,134 @@ vfx.parts.makeFlame = function(emitter, minSize, maxSize, color1, color2, colorE
     };
     // Start the particle system
     flame.start();
+    vfx.count++; 
     return flame; 
 };
+
+
+vfx.parts.makeGreenInnerFlash = function(emitter){
+    // Create a particle system
+    greenFlash = new BABYLON.ParticleSystem("greenFlash" + vfx.count, 2000, scene);
+
+    greenFlash.particleTexture = new BABYLON.Texture("assets/square.png", scene);
+    
+    greenFlash.color1 = new BABYLON.Color4(0, 1, 0, 0.5);
+    greenFlash.color2 = new BABYLON.Color4(0.2, 1, 0.2, 0.5);
+    greenFlash.colorDead = new BABYLON.Color4(0,1,0,0);
+    greenFlash.minLifeTime = 0.05;
+    greenFlash.maxLifeTime = 0.2;
+    greenFlash.manualEmitCount = 2000; 
+    greenFlash.disposeOnStop = true; 
+    greenFlash.blendMode = 1;
+    
+    greenFlash.emitter = emitter; // the starting object, the emitter
+    greenFlash.minEmitBox = new BABYLON.Vector3(0, 0, 0); // Starting all from
+    greenFlash.maxEmitBox = new BABYLON.Vector3(0, 0, 0); // To...
+    greenFlash.minSize = 1;
+    greenFlash.maxSize = 2;
+    greenFlash.direction1 = new BABYLON.Vector3(1, 0.2, 1);
+    greenFlash.direction2 = new BABYLON.Vector3(-1, 0.2, -1);
+
+    // Angular speed, in radians
+    greenFlash.minAngularSpeed = -10;
+    greenFlash.maxAngularSpeed = -20;
+
+    // Speed
+    greenFlash.minEmitPower = 40;
+    greenFlash.maxEmitPower = 120;
+    greenFlash.updateSpeed = 0.005;
+    greenFlash.growth = 20;
+    // greenFlash.updateFunction = function (particles) {
+    //     for (var index = 0; index < particles.length; index++) {
+    //         var particle = particles[index];
+    //         particle.age += this._scaledUpdateSpeed;
+    //         if (particle.age >= particle.lifeTime) {
+    //             particle.lifeIndex = undefined; 
+    //             this.recycleParticle(particle);
+    //             index--;
+    //             continue;
+    //         }
+    //         else {
+    //             particle.size += this._scaledUpdateSpeed * this.growth;
+    //             if (particle.color.a < 0)
+    //                 particle.color.a = 0;
+    //             particle.angle += particle.angularSpeed * this._scaledUpdateSpeed;
+    //             particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection);
+    //             particle.position.addInPlace(this._scaledDirection);
+    //             this.gravity.scaleToRef(this._scaledUpdateSpeed, this._scaledGravity);
+    //             particle.direction.addInPlace(this._scaledGravity);
+    //         }
+    //     }
+    // };
+
+    // Start the particle system
+    greenFlash.start();
+    setTimeout(function(){greenFlash.stop();}, 0);
+    vfx.count++;
+};
+
+vfx.parts.makeEnergyBall = function(emitter, color1, color2, colorEnd, sizeMin, sizeMax){
+    // Create a particle system
+    energyBall = new BABYLON.ParticleSystem("energyBall" + vfx.count, 2000, scene);
+
+    energyBall.particleTexture = new BABYLON.Texture("assets/square.png", scene);
+    
+    energyBall.color1 = color1;
+    energyBall.color2 = color2;
+    energyBall.colorDead = colorEnd;
+    energyBall.minLifeTime = 0.1;
+    energyBall.maxLifeTime = 0.2;
+    energyBall.manualEmitCount = 50; 
+    energyBall.disposeOnStop = true; 
+    energyBall.blendMode = 1;
+    
+    energyBall.emitter = emitter; // the starting object, the emitter
+    energyBall.minEmitBox = new BABYLON.Vector3(0, 0, 0); // Starting all from
+    energyBall.maxEmitBox = new BABYLON.Vector3(0, 0, 0); // To...
+    energyBall.minSize = sizeMin;
+    energyBall.maxSize = sizeMax;
+    energyBall.direction1 = new BABYLON.Vector3(0.2, 1, 0.2);
+    energyBall.direction2 = new BABYLON.Vector3(-0.2, 1, -0.2);
+
+    // Angular speed, in radians
+    energyBall.minAngularSpeed = -10;
+    energyBall.maxAngularSpeed = -20;
+
+    // Speed
+    energyBall.minEmitPower = 40;
+    energyBall.maxEmitPower = 120;
+    energyBall.updateSpeed = 0.005;
+    energyBall.growth = 20;
+    // energyBall.updateFunction = function (particles) {
+    //     for (var index = 0; index < particles.length; index++) {
+    //         var particle = particles[index];
+    //         particle.age += this._scaledUpdateSpeed;
+    //         if (particle.age >= particle.lifeTime) {
+    //             particle.lifeIndex = undefined; 
+    //             this.recycleParticle(particle);
+    //             index--;
+    //             continue;
+    //         }
+    //         else {
+    //             particle.size += this._scaledUpdateSpeed * this.growth;
+    //             if (particle.color.a < 0)
+    //                 particle.color.a = 0;
+    //             particle.angle += particle.angularSpeed * this._scaledUpdateSpeed;
+    //             particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection);
+    //             particle.position.addInPlace(this._scaledDirection);
+    //             this.gravity.scaleToRef(this._scaledUpdateSpeed, this._scaledGravity);
+    //             particle.direction.addInPlace(this._scaledGravity);
+    //         }
+    //     }
+    // };
+
+    // Start the particle system
+    energyBall.start();
+    setTimeout(function(){energyBall.stop();}, 300);
+    vfx.count++;
+};
+
+//Compile effect parts
 
 vfx.explosion = function(emitter){
    // emitter = emitter.position.add(new BABYLON.Vector3(0,-1.7,0)); 
@@ -261,4 +391,11 @@ vfx.boost = function(emitter){
     boosts.push(vfx.parts.makeFlame(emitter, 0.2, 0.3,
      new BABYLON.Color4(1,1,1,1), new BABYLON.Color4(1,1,1,1), new BABYLON.Color4(0.8,0,0,0)));
     return boosts; 
+};
+
+vfx.attack = function(emitter){
+    console.log("attacking");
+    vfx.parts.makeGreenInnerFlash(emitter); 
+    vfx.parts.makeEnergyBall(emitter, new BABYLON.Color4(0,1,1,1), new BABYLON.Color4(1,1,1,1), new BABYLON.Color4(0,1,0.5,0),
+    0.5, 2);
 };

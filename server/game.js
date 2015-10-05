@@ -25,6 +25,7 @@ function Game(id, io, map) {
   this.raceInProgress = false;
   this.raceFinished = false;
   this.io = io;
+  this.nextColor = 0;
   //milliseconds
   this.timeBetweenUpdates = 10;
   this.delta = {deltaValue: 0};
@@ -98,9 +99,10 @@ Game.prototype.addPlayer = function(socketId) {
     socketId: socketId,
     x: 0, 
     y: 0, 
-    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x, this.startPos.y, this.startPos.z + 3.5 * this.numPlayers))
+    robotModel: new Robot(this, this.delta, socketId, new Vector3(this.startPos.x, this.startPos.y, this.startPos.z + 3.5 * this.numPlayers), this.nextColor)
   };
   this.numPlayers++;
+  this.nextColor++;
 }; 
 
 //Removes a player from game with socket id
@@ -234,7 +236,8 @@ Game.prototype.getSendablePlayer = function(player) {
         position: player.robotModel.position,
         energy: player.robotModel.energy,
         distance: player.robotModel.distance,
-        attackBox: player.robotModel.attackBox
+        attackBox: player.robotModel.attackBox,
+        color: player.robotModel.color,
       }
     };
 };
