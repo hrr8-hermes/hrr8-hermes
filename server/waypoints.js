@@ -57,6 +57,7 @@ module.exports = function makeWayCounter(waypoints, laps, map) {
 
     // TODO: refactor server model to keep separate x,y and convert once (setter?)
     var pt = {};
+
     pt.x = center_correct + Math.floor(racer.position.x);
     pt.y = center_correct - Math.floor(racer.position.z);
     // uncomment this log to run around and find coords for waypoints easily
@@ -69,6 +70,7 @@ module.exports = function makeWayCounter(waypoints, laps, map) {
         on_line_seg(waypoint,{x:pt.x+1,y:pt.y-1}) ||
         on_line_seg(waypoint,{x:pt.x+1,y:pt.y+1})) {
       racer.distance++;
+    console.log(lap[racer.distance%lap_dist]);
       return true;
     }
     return false;

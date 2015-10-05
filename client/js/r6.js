@@ -53,56 +53,75 @@ function runScene(meshes,sounds) {
   chaseCam.maxCameraSpeed = 10;
 
   // light the entire scene with ambient
+  /*
   var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,10,0),scene);
   light.diffuse = new BABYLON.Color3(1,1,1);
   light.specular = new BABYLON.Color3(1,1,1);
   light.groundColor = new BABYLON.Color3(0,0,0);
   light.rotation = new BABYLON.Vector3(Math.PI * 0.25,0,0);
+  */
 
   // ambient light that allows for shadows
-  /*
-  var light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(0,-1,0), scene);
-  light2.position = new BABYLON.Vector3(0,40,40);
+  var light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(0,0,0.2), scene);
+  light2.diffuse = new BABYLON.Color3(1,1,1);
+  light2.specular = new BABYLON.Color3(1,1,1);
+  light2.parent = camera;
+  light2.position = new BABYLON.Vector3(3,30,10);
   // sphere to visualize light position
+  /*
   var lightSphere = new BABYLON.Mesh.CreateSphere('lightPos', 10, 2, scene);
   lightSphere.position = light2.position;
   lightSphere.material = new BABYLON.StandardMaterial('lightPos1',scene);
   lightSphere.material.emissiveColor = new BABYLON.Color3(1,1,0);
 
   // random box for light tests
+  /*
   var testBox = new BABYLON.Mesh.CreateBox('tbox', 5, scene);
   testBox.material = new BABYLON.StandardMaterial('tbox1',scene);
   testBox.material.emissiveColor = new BABYLON.Color3(0,1,1);
   testBox.position = new BABYLON.Vector3(0,0.5,10);
   */
 
-  // shines red light from freecamera position down/left/forward
-  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(4,5,-10), new BABYLON.Vector3(-0.2,-0.4,1), 0.8,4, scene);
-  light3.diffuse = new BABYLON.Color3(1,0,0);
+  // shines light from freecamera position down/left/forward
+  var light3 = new BABYLON.SpotLight('spotlight', new BABYLON.Vector3(0,5,0), new BABYLON.Vector3(0,-0.3,0.6), 0.8,4, scene);
+  light3.diffuse = new BABYLON.Color3(1,1,1);
   light3.specular = new BABYLON.Color3(1,1,1);
+  light3.parent = camera;
 
   // enable shadows for bob
-  /*
   var shadowGenerator = new BABYLON.ShadowGenerator(1024,light2);
   shadowGenerator.getShadowMap().renderList.push(bob.mesh);
   //shadowGenerator.getShadowMap().renderList.push(testBox);
-  // BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
+  //BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
   shadowGenerator.useBlurVarianceShadowMap = true;
-  meshes['Plane001'].receiveShadows = true;
+  /*
+  var spotShadows = new BABYLON.ShadowGenerator(2048,light3);
+  spotShadows.getShadowMap().renderList.push(bob.mesh);
+  spotShadows.useBlurVarianceShadowMap = true;
   */
+  meshes['track'].receiveShadows = true;
+  meshes['buildings'].receiveShadows = true;
+  
 
   sounds.bg1.loop = true;
   sounds.bg1.autoplay = true;
   sounds.bg1.setVolume(1.8);
   sounds.bg1.play();
 
+  scene.clearColor = new BABYLON.Color3(0.05,0.05,0.05);
 
   // start rendering
   engine.runRenderLoop(function() {
     // keep freecam on bob for now
+
 //    freeCam.setTarget(bob.pivot.position);
     // keeps the spot at camera's location
+    console.log(bob.pivot.position);
     light3.position = camera.position;
+
+    //freeCam.setTarget(bob.pivot.position);
+    //light3.setDirectionToTarget(camera.position);
+
     scene.render();
     applyPositions(); 
   });

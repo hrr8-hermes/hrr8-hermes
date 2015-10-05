@@ -73,6 +73,7 @@ Robot.prototype.startRunning = function(){
   sounds.step.loop = true;
   sounds.step.setVolume(0.7);
   if (this.id===socket.id) sounds.step.play();
+  sounds.step.stop(2);
   scene.beginAnimation(this.skeleton,25,48,true,1.0); 
   this.isRunning = true; 
 };

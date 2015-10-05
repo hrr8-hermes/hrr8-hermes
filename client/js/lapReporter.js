@@ -14,11 +14,12 @@ function reportLap(distance,scene) {
     var $HUD = document.createElement('div');
     $HUD.setAttribute('id','hud');
     $HUD.style.position = 'fixed';
-    $HUD.style.top = '10px';
-    $HUD.style.width = '80%';
+    $HUD.style.top = '25px';
+    $HUD.style.width = '90%';
     $HUD.style.height = '35px';
     $HUD.style.right = '0';
-    $HUD.style.font = '24px bold ariel, sans-serif';
+    $HUD.style.font = '24px bold "Exo", sans-serif';
+    $HUD.style.color = 'white';
     var $lap = document.createElement('div');
     $lap.setAttribute('id','laphud');
     $lap.style.float = 'left';

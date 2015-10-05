@@ -197,7 +197,7 @@ Game.prototype.playersAreColliding = function(player1, player2) {
   var player1y = player1.robotModel.getYOnGrid(this.map);
   var player2y = player2.robotModel.getYOnGrid(this.map);
 
-  return Math.abs(player1x - player2x) <= 2 && Math.abs(player1y - player2y) <= 1;
+  return Math.abs(player1x - player2x) <= 2 && Math.abs(player1y - player2y) <= 1 && player1.robotModel.state.name !== "death" && player2.robotModel.state.name !== "death";
 
   
 //old bounding box algorithm, saving if we want to use it later 
