@@ -53,49 +53,43 @@ function runScene(meshes,sounds) {
   chaseCam.cameraAcceleration = 0.1;
   chaseCam.maxCameraSpeed = 10;
 
-  // light the entire scene with ambient
-  /*
-  var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,300,0),scene);
-  light.diffuse = new BABYLON.Color3(0.8,0.8,0.8);
-  light.specular = new BABYLON.Color3(0.8,0.8,0.8);
-  light.groundColor = new BABYLON.Color3(0,0,0);
-  */
-
-  // ambient light that allows for shadows
-  var light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(0,-0.8,0.2), scene);
-  light2.diffuse = new BABYLON.Color3(1,1,1);
-  light2.specular = new BABYLON.Color3(1,1,1);
-  light2.position = new BABYLON.Vector3(0,150,0);
-  light2.intensity = 1;
-
-  //light buildings
-  var uplight = new BABYLON.DirectionalLight('uplight', new BABYLON.Vector3(0,1,-0.2),scene);
-  uplight.diffuse = new BABYLON.Color3(1,1,1);
-  uplight.specular = new BABYLON.Color3(1,1,1);
-  uplight.position = new BABYLON.Vector3(0,0,0);
-  uplight.intensity = 5;
-
-  var uplight2 = new BABYLON.DirectionalLight('uplight2', new BABYLON.Vector3(0,1,0.2),scene);
-  uplight2.diffuse = new BABYLON.Color3(1,1,1);
-  uplight2.specular = new BABYLON.Color3(1,1,1);
-  uplight2.position = new BABYLON.Vector3(0,0,0);
-  uplight2.intensity = 5;
-
-  // enable shadows for bob
-  var shadowGenerator = new BABYLON.ShadowGenerator(3300,light2);
-  shadowGenerator.getShadowMap().renderList.push(bob.mesh);
-  //BlurVarianceShadowMap _needed_ to get shadow to render w/ directional light
-  //shadowGenerator.usePoissonSampling = true;
-  shadowGenerator.useBlurVarianceShadowMap = true;
-
-  meshes['track'].receiveShadows = true;
-  meshes['buildings'].receiveShadows = true;
-
   // toggle shadows if turned on in GET
   if (window.location.href.match(/shadows=1$/)) {
+    // ambient light that allows for shadows
+    var light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(0,-0.8,0.2), scene);
+    light2.diffuse = new BABYLON.Color3(1,1,1);
+    light2.specular = new BABYLON.Color3(1,1,1);
+    light2.position = new BABYLON.Vector3(0,150,0);
+    light2.intensity = 1;
+
+    //light buildings
+    var uplight = new BABYLON.DirectionalLight('uplight', new BABYLON.Vector3(0,1,-0.2),scene);
+    uplight.diffuse = new BABYLON.Color3(1,1,1);
+    uplight.specular = new BABYLON.Color3(1,1,1);
+    uplight.position = new BABYLON.Vector3(0,0,0);
+    uplight.intensity = 5;
+
+    var uplight2 = new BABYLON.DirectionalLight('uplight2', new BABYLON.Vector3(0,1,0.2),scene);
+    uplight2.diffuse = new BABYLON.Color3(1,1,1);
+    uplight2.specular = new BABYLON.Color3(1,1,1);
+    uplight2.position = new BABYLON.Vector3(0,0,0);
+    uplight2.intensity = 5;
+
+    // enable shadows for bob
+    var shadowGenerator = new BABYLON.ShadowGenerator(3300,light2);
+    shadowGenerator.getShadowMap().renderList.push(bob.mesh);
+    //shadowGenerator.usePoissonSampling = true;
+    shadowGenerator.useBlurVarianceShadowMap = true;
+
+    meshes['track'].receiveShadows = true;
+    meshes['buildings'].receiveShadows = true;
     shadowGenerator.getShadowMap().refreshRate = 1;
   } else {
-    shadowGenerator.getShadowMap().refreshRate = 0;
+    // light the entire scene with ambient
+    var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,300,0),scene);
+    light.diffuse = new BABYLON.Color3(0.8,0.8,0.8);
+    light.specular = new BABYLON.Color3(0.8,0.8,0.8);
+    light.groundColor = new BABYLON.Color3(0,0,0);
   }
 
   sounds.bg1.loop = true;
